@@ -1,0 +1,110 @@
+services:
+  traefik:
+    image: traefik
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - franklin-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=franklin-network"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.rule=Host(`localhost`)"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+
+  neo4j:
+    build:
+      context: ./neo4j/
+      dockerfile: Dockerfile
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./etc/configs/neo4j:/conf
+    healthcheck:
+        test: ["CMD", "curl", "-f", "localhost:7474"]
+        interval: 10s
+        timeout: 10s
+        retries: 3
+    networks:
+      - franklin-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=franklin-network"
+      - "traefik.http.routers.neo4j.rule=PathPrefix(`/neo4j`)"
+      - "traefik.http.routers.neo4j.entrypoints=web"
+      - "traefik.http.routers.neo4j.service=neo4j"
+      - "traefik.http.routers.neo4j.middlewares=neo4j-strip-prefix"
+      - "traefik.http.middlewares.neo4j-strip-prefix.stripprefix.prefixes=/neo4j"
+      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"
+      - "traefik.http.routers.neo4j-api.rule=PathPrefix(`/neo4j-api`)"
+      - "traefik.http.routers.neo4j-api.entrypoints=web"
+      - "traefik.http.routers.neo4j-api.service=neo4j-api"
+      - "traefik.http.routers.neo4j-api.middlewares=neo4j-api-strip-prefix"
+      - "traefik.http.middlewares.neo4j-api-strip-prefix.stripprefix.prefixes=/neo4j-api"
+      - "traefik.http.services.neo4j-api.loadbalancer.server.port=7687"
+
+  taipy:
+    build:
+      context: ./taipy/
+      dockerfile: Dockerfile
+    ports:
+      - 5050:5050
+    volumes:
+      - ./taipy/src:/app/src
+    networks:
+      - franklin-network
+    depends_on:
+      neo4j:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=franklin-network"
+      - "traefik.http.routers.chatbot.rule=PathPrefix(`/chatbot`)"
+      - "traefik.http.routers.chatbot.entrypoints=web"
+      - "traefik.http.routers.chatbot.service=chatbot"
+      - "traefik.http.routers.chatbot.middlewares=chatbot-strip-prefix"
+      - "traefik.http.middlewares.chatbot-strip-prefix.stripprefix.prefixes=/chatbot"
+      - "traefik.http.services.chatbot.loadbalancer.server.port=5050"
+
+  langfuse:
+    build:
+      context: https://github.com/langfuse/langfuse.git#production
+      dockerfile: ./web/Dockerfile
+      args:
+        - NEXT_PUBLIC_BASE_PATH=/langfuse
+    env_file:
+      - ./langfuse/etc/langfuse.env
+    networks:
+      - franklin-network
+    depends_on:
+      - postgres
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=franklin-network"
+      - "traefik.http.routers.langfuse.rule=PathPrefix(`/langfuse`)"
+      - "traefik.http.routers.langfuse.entrypoints=web"
+      - "traefik.http.routers.langfuse.service=langfuse"
+      - "traefik.http.services.langfuse.loadbalancer.server.port=3000"
+
+  postgres:
+    image: postgres:16.4-bullseye
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - franklin-network
+
+networks:
+  franklin-network:
+    name: franklin-network
