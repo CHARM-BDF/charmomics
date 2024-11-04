@@ -24,13 +24,13 @@ langfuse_handler = CallbackHandler(
 
 chain = GraphCypherQAChain.from_llm(
     ChatOllama(
-        model="llama3.1:70b",
+        model="llama3.2",
         temperature=0,
         max_tokens=None,
         timeout=None,
         max_retries=2,
         # api_key= os.getenv("OPENAI_API_KEY"),
-        base_url="http://138.26.49.202:11435",
+        base_url="http://138.26.49.205:11435",
         # organization="...",
         # other params...
     ),
@@ -82,6 +82,7 @@ def send_message(state):
             "content": state.query_message,
         }
     )
+    print(state)
     state.conv.update_content(state, create_conv(state))
     notify(state, "info", "Sending message...")
     state.messages.append(

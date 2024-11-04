@@ -21,89 +21,101 @@ services:
       - "traefik.http.routers.traefik.rule=Host(`localhost`)"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
-  neo4j:
+  frontend:
     build:
-      context: ./neo4j/
+      context: ./frontend/
+      target: development-stage
       dockerfile: Dockerfile
-    ports:
-      - 7474:7474
-      - 7687:7687
     volumes:
-      - ./etc/configs/neo4j:/conf
-    healthcheck:
-        test: ["CMD", "curl", "-f", "localhost:7474"]
-        interval: 10s
-        timeout: 10s
-        retries: 3
+      - ./frontend/src:/app/src
     networks:
       - franklin-network
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=franklin-network"
-      - "traefik.http.routers.neo4j.rule=PathPrefix(`/neo4j`)"
-      - "traefik.http.routers.neo4j.entrypoints=web"
-      - "traefik.http.routers.neo4j.service=neo4j"
-      - "traefik.http.routers.neo4j.middlewares=neo4j-strip-prefix"
-      - "traefik.http.middlewares.neo4j-strip-prefix.stripprefix.prefixes=/neo4j"
-      - "traefik.http.services.neo4j.loadbalancer.server.port=7474"
-      - "traefik.http.routers.neo4j-api.rule=PathPrefix(`/neo4j-api`)"
-      - "traefik.http.routers.neo4j-api.entrypoints=web"
-      - "traefik.http.routers.neo4j-api.service=neo4j-api"
-      - "traefik.http.routers.neo4j-api.middlewares=neo4j-api-strip-prefix"
-      - "traefik.http.middlewares.neo4j-api-strip-prefix.stripprefix.prefixes=/neo4j-api"
-      - "traefik.http.services.neo4j-api.loadbalancer.server.port=7687"
+      - "traefik.http.routers.frontend-franklin-router.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend-franklin-router.service=frontend-franklin-web-service"
+      - "traefik.http.services.frontend-franklin-web-service.loadbalancer.server.port=80"
 
-  taipy:
+  backend:
     build:
-      context: ./taipy/
+      context: ./backend/
+      target: development-stage
       dockerfile: Dockerfile
-    ports:
-      - 5050:5050
     volumes:
-      - ./taipy/src:/app/src
+      - ./backend:/app
     networks:
       - franklin-network
-    depends_on:
-      neo4j:
-        condition: service_healthy
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=franklin-network"
-      - "traefik.http.routers.chatbot.rule=PathPrefix(`/chatbot`)"
-      - "traefik.http.routers.chatbot.entrypoints=web"
-      - "traefik.http.routers.chatbot.service=chatbot"
-      - "traefik.http.routers.chatbot.middlewares=chatbot-strip-prefix"
-      - "traefik.http.middlewares.chatbot-strip-prefix.stripprefix.prefixes=/chatbot"
-      - "traefik.http.services.chatbot.loadbalancer.server.port=5050"
+      - "traefik.http.routers.backend-franklin-router.rule=Host(`localhost`)"
+      - "traefik.http.routers.backend-franklin-router.rule=PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend-franklin-router.service=backend-franklin-api-service"
+      - "traefik.http.routers.backend-franklin-router.middlewares=backend-franklin-strip-prefix"
+      - "traefik.http.middlewares.backend-franklin-strip-prefix.stripprefix.prefixes=/api/"
+      - "traefik.http.services.backend-franklin-api-service.loadbalancer.server.port=8000"
 
-  langfuse:
-    build:
-      context: https://github.com/langfuse/langfuse.git#production
-      dockerfile: ./web/Dockerfile
-      args:
-        - NEXT_PUBLIC_BASE_PATH=/langfuse
-    env_file:
-      - ./langfuse/etc/langfuse.env
-    networks:
-      - franklin-network
-    depends_on:
-      - postgres
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=franklin-network"
-      - "traefik.http.routers.langfuse.rule=PathPrefix(`/langfuse`)"
-      - "traefik.http.routers.langfuse.entrypoints=web"
-      - "traefik.http.routers.langfuse.service=langfuse"
-      - "traefik.http.services.langfuse.loadbalancer.server.port=3000"
+  # knowledge-graph:
+  #   build:
+  #     context: ./knowledge-graph/
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 7474:7474
+  #     - 7687:7687
+  #   volumes:
+  #     - ./etc/configs/neo4j:/conf
+  #   healthcheck:
+  #       test: ["CMD", "curl", "-f", "localhost:7474"]
+  #       interval: 10s
+  #       timeout: 10s
+  #       retries: 3
+  #   networks:
+  #     - franklin-network
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.docker.network=franklin-network"
+  #     - "traefik.http.routers.knowledge-graph.rule=PathPrefix(`/neo4j`)"
+  #     - "traefik.http.routers.knowledge-graph.entrypoints=web"
+  #     - "traefik.http.routers.knowledge-graph.service=neo4j"
+  #     - "traefik.http.routers.knowledge-graph.middlewares=neo4j-strip-prefix"
+  #     - "traefik.http.middlewares.knowledge-graph-strip-prefix.stripprefix.prefixes=/neo4j"
+  #     - "traefik.http.services.knowledge-graph.loadbalancer.server.port=7474"
+  #     - "traefik.http.routers.knowledge-graph-api.rule=PathPrefix(`/neo4j-api`)"
+  #     - "traefik.http.routers.knowledge-graph-api.entrypoints=web"
+  #     - "traefik.http.routers.knowledge-graph-api.service=knowledge-graph-api"
+  #     - "traefik.http.routers.knowledge-graph-api.middlewares=knowledge-graph-api-strip-prefix"
+  #     - "traefik.http.middlewares.knowledge-graph-api-strip-prefix.stripprefix.prefixes=/neo4j-api"
+  #     - "traefik.http.services.knowledge-graph-api.loadbalancer.server.port=7687"
 
-  postgres:
-    image: postgres:16.4-bullseye
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_PASSWORD: postgres
-    networks:
-      - franklin-network
+  # ai-observability:
+  #   build:
+  #     context: https://github.com/langfuse/langfuse.git#production
+  #     dockerfile: ./web/Dockerfile
+  #     args:
+  #       - NEXT_PUBLIC_BASE_PATH=/langfuse
+  #   env_file:
+  #     - ./langfuse/etc/langfuse.env
+  #   networks:
+  #     - franklin-network
+  #   depends_on:
+  #     - postgres
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.docker.network=franklin-network"
+  #     - "traefik.http.routers.langfuse.rule=PathPrefix(`/langfuse`)"
+  #     - "traefik.http.routers.langfuse.entrypoints=web"
+  #     - "traefik.http.routers.langfuse.service=langfuse"
+  #     - "traefik.http.services.langfuse.loadbalancer.server.port=3000"
+
+  # postgres:
+  #   image: postgres:16.4-bullseye
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_PASSWORD: postgres
+  #   networks:
+  #     - franklin-network
 
 networks:
   franklin-network:
