@@ -18,7 +18,6 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=franklin-network"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.rule=Host(`localhost`)"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
   frontend:

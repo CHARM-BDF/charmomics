@@ -1,9 +1,9 @@
+fastapi[all]==0.115.4
+
 langchain-community==0.3.3
 langchain==0.3.4
-langchain-ollama==0.2.0
-langchain-openai==0.2.4
+langchain_ollama==0.2.0
+# langchain-openai==0.2.4
 langfuse==2.48.0
 neo4j==5.22.0
 python-dotenv==1.0.1
-streamlit==1.38.0
-taipy==4.0.0
