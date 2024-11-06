@@ -17,7 +17,7 @@ message = [
 
 # FastAPI Setup
 
-app = FastAPI(root_path="/api/")
+app = FastAPI()
 
 @app.get("/")
 async def root():

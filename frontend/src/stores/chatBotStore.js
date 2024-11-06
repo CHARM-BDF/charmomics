@@ -1,15 +1,18 @@
 import { reactive } from 'vue';
 
-import Requests from '@/requests';
+import Requests from '@/requests.js';
 
 export const chatBotStore = reactive({
-    conversationMessages: [],
+    conversation: {},
 
     async sendMessage() {
-        const baseURL = '/api/query';
+        const baseURL = '/api';
         const urlQuery = '/';
-
+        const conversationResponse = await Requests.get(baseURL+ urlQuery);
+        Object.assign(this.conversation, conversationResponse)
         
+
+        // return await Requests.get(baseURL + urlQuery)
     },
 
-})
+});

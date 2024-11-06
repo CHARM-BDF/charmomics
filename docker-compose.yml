@@ -49,10 +49,10 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=franklin-network"
       - "traefik.http.routers.backend-franklin-router.rule=Host(`localhost`)"
-      - "traefik.http.routers.backend-franklin-router.rule=PathPrefix(`/api/`)"
+      - "traefik.http.routers.backend-franklin-router.rule=PathPrefix(`/api`)"
       - "traefik.http.routers.backend-franklin-router.service=backend-franklin-api-service"
       - "traefik.http.routers.backend-franklin-router.middlewares=backend-franklin-strip-prefix"
-      - "traefik.http.middlewares.backend-franklin-strip-prefix.stripprefix.prefixes=/api/"
+      - "traefik.http.middlewares.backend-franklin-strip-prefix.stripprefix.prefixes=/api"
       - "traefik.http.services.backend-franklin-api-service.loadbalancer.server.port=8000"
 
   # knowledge-graph:
