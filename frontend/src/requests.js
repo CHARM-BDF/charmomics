@@ -1,8 +1,5 @@
 export default {
-    async get(url) {
-        
-        console.log(url)
-        
+    async get(url) {        
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -10,9 +7,6 @@ export default {
             },
             mode: 'cors'
         });
-
-        console.log(response)
-        //console.log(await response)
 
         if ( response.ok != true )
             throw new Error('Status Code: ' + response.status +' '+ response.statusText);

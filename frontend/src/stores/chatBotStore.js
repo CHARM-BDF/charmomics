@@ -8,11 +8,9 @@ export const chatBotStore = reactive({
     async sendMessage() {
         const baseURL = '/api';
         const urlQuery = '/query';
-        const conversationResponse = await Requests.get(baseURL+ urlQuery);
-        Object.assign(this.conversation, conversationResponse)
         
-
-        // return await Requests.get(baseURL + urlQuery)
-    },
-
+        const conversationResponse = await Requests.get(baseURL+ urlQuery);
+        
+        Object.assign(this.conversation, conversationResponse)
+    }
 });
