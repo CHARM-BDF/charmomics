@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import (FastAPI, Form)
 
 from langchain.chat_models import init_chat_model
 
@@ -19,11 +19,13 @@ app = FastAPI()
 async def root():
     return { "message": "Hello World" }
 
-@app.get("/query")
-async def query():
-
+@app.post("/query")
+async def query(
+    sender: str = Form(...),
+    message: str = Form(...)
+):
     return configurable_model.invoke(
-        input = "Hello!",
+        input = message,
         config={
             "configurable": {
                 "model": "llama3.2",
@@ -34,6 +36,6 @@ async def query():
                 "max_retries": 2,
                 "num_thread": 16,
                 "base_url": "http://138.26.49.205:11435"
-            },
+            }
         }
     )
