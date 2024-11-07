@@ -7,7 +7,7 @@ export const chatBotStore = reactive({
 
     async sendMessage() {
         const baseURL = '/api';
-        const urlQuery = '/';
+        const urlQuery = '/query';
         const conversationResponse = await Requests.get(baseURL+ urlQuery);
         Object.assign(this.conversation, conversationResponse)
         

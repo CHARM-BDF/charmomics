@@ -11,7 +11,7 @@
 
 import { ref } from 'vue';
 
-import { chatBotStore } from '@/stores/ChatBotStore';
+import { chatBotStore } from '@/stores/chatBotStore.js';
 
 const franklinResponse = ref('Hello World??');
 
