@@ -5,3 +5,6 @@ python-dotenv==1.0.1
 langchain==0.3.7
 langfuse==2.53.9
 neo4j==5.26.0
+
+# Supported Language Models
+langchain-ollama==0.2.0
