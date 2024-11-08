@@ -1,36 +1,45 @@
 <template>
   <h1>Franklin</h1>
 
-  <p>{{ chatBotStore.conversation }}</p>
+  <ChatBotSection
+    :conversation="chatBotStore.conversation"
+  />
 
-  <input v-model="userPrompt" />
+  <input class="promptInput" v-model="userPrompt" />
 
-  <button @click="askFranklin()">Send Message</button>
+  <button class="sendMessageButton" @click="askFranklin()">Send Message</button>
 </template>
 
 <script setup>
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { chatBotStore } from '@/stores/chatBotStore.js';
+
+import ChatBotSection from './ChatBot/ChatBotSection.vue';
 
 let userPrompt = ref("");
 
 async function askFranklin() {
   
-  const prompt = {
-    "sender": "user",
+  const message = {
+    "user": "developer",
     "message": userPrompt.value
   }
 
-  console.log(prompt)
+  this.userPrompt = "";
 
   try {
-    await chatBotStore.sendPrompt(prompt)
+    await chatBotStore.sendMessage(message)
+    
   } catch (error) {
     console.log("Franklin Send Prompt: " + error);
   }
 }
+
+onMounted(async () => {
+  await chatBotStore.getConversation();
+})
 
 </script>
 
@@ -44,6 +53,14 @@ input {
   border-color: gainsboro;
   border-radius: 7px;
   margin-right: 10px;
+}
+
+.promptInput {
+  margin-top: .5rem;
+}
+
+.sendMessageButton {
+  margin-top: .5rem;
 }
 
 </style>
