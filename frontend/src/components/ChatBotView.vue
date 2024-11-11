@@ -4,7 +4,7 @@
   <ChatBotSection
     :conversation="chatBotStore.conversation"
   />
-
+  
   <input class="promptInput" v-model="userPrompt" />
 
   <button class="sendMessageButton" @click="askFranklin()">Send Message</button>

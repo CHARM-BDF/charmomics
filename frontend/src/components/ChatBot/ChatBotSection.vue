@@ -27,6 +27,8 @@ const props = defineProps({
 .conversationSection {
     display: grid;
     grid-template-rows: auto;
+    height: 100%;
+    overflow: scroll;
 }
 
 </style>
