@@ -1,12 +1,12 @@
 <template>
-    <div class="conversationSection">
-        <ChatBotMessage
-            v-for="message in props.conversation"
-            :key="message.message"
-            :user="message.user"
-            :message="message.message"
-        />
-    </div>
+  <div class="conversationSection">
+    <ChatBotMessage
+      v-for="message in props.conversation"
+      :key="message.message"
+      :user="message.user"
+      :message="message.message"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -16,7 +16,9 @@ import ChatBotMessage from '@/components/ChatBot/ChatBotMessage.vue';
 const props = defineProps({
     conversation: {
         type: Array,
-        default: []
+        default() {
+          return [];
+        }
     }
 });
 

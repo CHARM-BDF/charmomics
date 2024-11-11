@@ -1,7 +1,10 @@
 <template>
-    <div class="chatBubble" :class="isUser">
-        {{ message }}
-    </div>
+  <div
+    class="chatBubble"
+    :class="isUser"
+  >
+    {{ message }}
+  </div>
 </template>
 
 <script setup>

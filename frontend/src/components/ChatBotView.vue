@@ -5,9 +5,17 @@
     :conversation="chatBotStore.conversation"
   />
   
-  <input class="promptInput" v-model="userPrompt" />
+  <input
+    v-model="userPrompt"
+    class="promptInput"
+  >
 
-  <button class="sendMessageButton" @click="askFranklin()">Send Message</button>
+  <button
+    class="sendMessageButton"
+    @click="askFranklin()"
+  >
+    Send Message
+  </button>
 </template>
 
 <script setup>
