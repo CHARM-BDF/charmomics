@@ -1,31 +1,21 @@
-import { reactive } from 'vue';
+import {reactive} from 'vue';
 
-import Requests from '@/requests.js';
+import ChatBotModel from '@/models/chatBotModel.js';
 
-export const chatBotStore = reactive({
-    conversation: [],
+export const chatBotStore = {
+  conversation: reactive([]),
 
-    async getConversation() {
-        const baseURL = '/api';
-        const urlQuery = '/conversation';
+  async getConversation() {
+    const conversation = await ChatBotModel.getConversation();
 
-        const fetchedConversation = await Requests.get(baseURL + urlQuery);
+    Object.assign(this.conversation, conversation);
+  },
 
-        console.log(fetchedConversation)
+  async sendMessage(message) {
+    this.conversation.push(message);
 
-        Object.assign(this.conversation, fetchedConversation);
-    },
+    const botResponse = await ChatBotModel.sendMessage(message);
 
-    async sendMessage(data) {
-        const baseURL = '/api';
-        const urlQuery = '/query';
-
-        this.conversation.push(data)
-
-        console.log(data)
-        
-        const conversationResponse = await Requests.postForm(baseURL+ urlQuery, data);
-
-        this.conversation.push(conversationResponse);
-    }
-});
+    this.conversation.push(botResponse);
+  },
+};

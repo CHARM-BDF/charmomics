@@ -9,27 +9,28 @@
 
 <script setup>
 
-import { computed } from 'vue';
+import {computed} from 'vue';
 
 const props = defineProps({
-    user: {
-        type: String,
-        default: ''
-    },
-    message: {
-        type: String,
-        default: ''
-    }
+  user: {
+    type: String,
+    default: '',
+  },
+  message: {
+    type: String,
+    default: '',
+  },
 });
 
 const isUser = computed({
-    get() {
-        if(props.user == 'assistant')
-            return 'leftBubble';
-
-        return 'rightBubble';
+  get() {
+    if (props.user == 'assistant') {
+      return 'leftBubble';
     }
-})
+
+    return 'rightBubble';
+  },
+});
 
 </script>
 

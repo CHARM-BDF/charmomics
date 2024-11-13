@@ -4,15 +4,17 @@
   <ChatBotSection
     :conversation="chatBotStore.conversation"
   />
-  
+
   <input
     v-model="userPrompt"
     class="promptInput"
+    data-test="chat-bot-message-input"
   >
 
   <button
     class="sendMessageButton"
-    @click="askFranklin()"
+    data-test="chat-bot-send-message-button"
+    @click="sendMessage()"
   >
     Send Message
   </button>
@@ -20,34 +22,32 @@
 
 <script setup>
 
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 
-import { chatBotStore } from '@/stores/chatBotStore.js';
+import {chatBotStore} from '@/stores/chatBotStore.js';
 
-import ChatBotSection from './ChatBot/ChatBotSection.vue';
+import ChatBotSection from '@/components/ChatBot/ChatBotSection.vue';
 
-let userPrompt = ref("");
+const userPrompt = ref('');
 
-async function askFranklin() {
-  
+async function sendMessage() {
   const message = {
-    "user": "developer",
-    "message": userPrompt.value
-  }
+    'user': 'developer',
+    'message': userPrompt.value,
+  };
 
-  this.userPrompt = "";
+  this.userPrompt = '';
 
   try {
-    await chatBotStore.sendMessage(message)
-    
+    await chatBotStore.sendMessage(message);
   } catch (error) {
-    console.log("Franklin Send Prompt: " + error);
+    console.log('Franklin Send Prompt: ' + error);
   }
 }
 
 onMounted(async () => {
   await chatBotStore.getConversation();
-})
+});
 
 </script>
 

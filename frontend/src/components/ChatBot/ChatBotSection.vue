@@ -14,12 +14,12 @@
 import ChatBotMessage from '@/components/ChatBot/ChatBotMessage.vue';
 
 const props = defineProps({
-    conversation: {
-        type: Array,
-        default() {
-          return [];
-        }
-    }
+  conversation: {
+    type: Array,
+    default() {
+      return [];
+    },
+  },
 });
 
 </script>

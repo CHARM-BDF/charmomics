@@ -1,9 +1,11 @@
 import js from '@eslint/js';
 import pluginVue from 'eslint-plugin-vue';
 import globals from 'globals';
+import cgds from './eslint-config-cgds.js';
 
 export default [
   js.configs.recommended,
+  ...cgds,
   ...pluginVue.configs['flat/recommended'],
   {
     languageOptions: {
