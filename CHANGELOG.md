@@ -1,12 +1,9 @@
 # CHANGELOG
 
-Here is a changelog format you could use. Feel free to choose a format that works for the repo.
+## Franklin v0.1
 
-```txt
-YYYY-MM-DD  John Doe
+### Features
 
-* Big Change 1
-* Another Change 2
-```
+- ChatBot interface communicating with the OpenStack Ollama instance
 
 ---
