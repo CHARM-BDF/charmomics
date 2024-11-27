@@ -25,7 +25,7 @@ const props = defineProps({
 const isUser = computed({
   get() {
     if (props.user == 'assistant') {
-      return 'leftBubble';
+      return 'assistantBubble';
     }
 
     return 'rightBubble';
@@ -37,26 +37,26 @@ const isUser = computed({
 <style scoped>
 
 .chatBubble {
-    padding: .5rem;
-    margin: .25rem;
-    border: solid;
-    border-width: .115rem;
-    border-radius: .5rem;
-    white-space: pre-line;
+  padding: .5rem;
+  margin: .25rem;
+  
+  white-space: pre-line;
 }
 
-.leftBubble {
-    background-color: salmon;
-    text-align: left;
-    max-width: 75%;
-    justify-self: start;
+.assistantBubble {
+  text-align: left;
+  justify-self: start;
 }
 
 .rightBubble {
-    background-color: aquamarine;
-    text-align: left;
-    max-width: 75%;
-    justify-self: end;
+  background-color: #F9F9F9;
+  border: none;
+  border-width: .115rem;
+  border-radius: .5rem;
+  text-align: left;
+  max-width: 75%;
+  justify-self: end;
+  padding: .5rem 1rem .5rem 1rem;
 }
 
 </style>

@@ -5,19 +5,23 @@
     :conversation="chatBotStore.conversation"
   />
 
-  <input
-    v-model="userPrompt"
-    class="promptInput"
-    data-test="chat-bot-message-input"
-  >
+  <div>
+    <input
+      v-model="userPrompt"
+      class="promptInput"
+      data-test="chat-bot-message-input"
+    >
 
-  <button
-    class="sendMessageButton"
-    data-test="chat-bot-send-message-button"
-    @click="sendMessage()"
-  >
-    Send Message
-  </button>
+    <button
+      class="primary-button"
+      data-test="chat-bot-send-message-button"
+      @click="sendMessage()"
+    >
+      Send Message
+    </button>
+  </div>
+
+  
 </template>
 
 <script setup>
@@ -55,7 +59,7 @@ onMounted(async () => {
 
 input {
   height: 30px;
-  width: 450px;
+  width: 75%;
   border: solid;
   border-width: 3px;
   border-color: gainsboro;

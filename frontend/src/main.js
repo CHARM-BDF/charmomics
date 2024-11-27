@@ -5,7 +5,8 @@ import App from '@/App.vue';
 
 import ChatBotView from '@/views/ChatBotView.vue';
 
-import '@/styles/style.css';
+import '@/styles/main.css';
+import './styles/rosalution.css';
 
 const routes = [
   {path: '/', name: 'root', component: ChatBotView},
