@@ -1,7 +1,9 @@
 # .coveragerc to control unit testing done by coverage.py with pytest-cov
 [run]
 omit = 
+       *__init__.py
        src/main.py
+       src/config.py
        src/dependencies.py
        src/database.py
-       *__init__.py
+       

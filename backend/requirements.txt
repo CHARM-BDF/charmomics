@@ -1,8 +1,7 @@
 fastapi[all]==0.115.5
-
-python-dotenv==1.0.1
-
 langchain==0.3.7
+python-dotenv==1.0.1
+pymongo==4.10.1
 
 # Supported Language Models
 langchain-ollama==0.2.0
@@ -11,5 +10,5 @@ langchain-ollama==0.2.0
 pytest==8.3.3
 pytest-asyncio==0.24.0
 pytest-cov==6.0.0
-pylint==3.3.1
+pylint==3.0.0
 yapf==0.43.0

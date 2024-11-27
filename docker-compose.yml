@@ -55,6 +55,16 @@ services:
       - "traefik.http.middlewares.backend-franklin-strip-prefix.stripprefix.prefixes=/api"
       - "traefik.http.services.backend-franklin-api-service.loadbalancer.server.port=8000"
 
+  franklin-db:
+    image: mongo:8.0.3
+    ports:
+      - 27017:27017
+    networks:
+      - franklin-network
+    environment:
+      MONGO_INITDB_DATABASE: franklin_db
+
+
 networks:
   franklin-network:
     name: franklin-network

@@ -8,10 +8,9 @@ from langchain.chat_models import init_chat_model
 
 configurable_model = init_chat_model(configurable_fields=("model", "model_provider", "base_url", "num_thread"))
 
-conversation = [
-    {"user": "assistant", "message": "My name is Franklin and I will be your assistant, how can I help you today?"},
-    {"user": "developer", "message": "Hello!"}
-]
+conversation = [{
+    "user": "assistant", "message": "My name is Franklin and I will be your assistant, how can I help you today?"
+}, {"user": "developer", "message": "Hello!"}]
 
 # FastAPI Setup
 app = FastAPI()
