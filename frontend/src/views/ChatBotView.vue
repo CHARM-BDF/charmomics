@@ -20,8 +20,6 @@
       Send Message
     </button>
   </div>
-
-  
 </template>
 
 <script setup>

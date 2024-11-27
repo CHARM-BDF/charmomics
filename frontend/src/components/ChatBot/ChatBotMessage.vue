@@ -39,7 +39,7 @@ const isUser = computed({
 .chatBubble {
   padding: .5rem;
   margin: .25rem;
-  
+
   white-space: pre-line;
 }
 
