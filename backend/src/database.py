@@ -2,6 +2,10 @@
 
 # pylint: disable=too-few-public-methods
 
+from src.repository.annotation_config_collection import AnnotationConfigCollection
+from src.repository.annotation_manifest_collection import AnnotationManifestCollection
+from src.repository.genomic_unit_collection import GenomicUnitCollection
+
 
 class Database:
     """
@@ -21,7 +25,11 @@ class Database:
         #
         # https://pymongo.readthedocs.io/en/stable/tutorial.html#getting-a-collection
         self.database = self.database_client.franklin_db
-        self.collections = {}
+        self.collections = {
+            "annotation_config": AnnotationConfigCollection(self.database['annotation_config']),
+            "annotation_manifest": AnnotationManifestCollection(self.database['annotation_manifest']),
+            "genomic_unit": GenomicUnitCollection(self.database['genomic_units'])
+        }
 
     def __call__(self):
         """

@@ -1,7 +1,9 @@
 fastapi[all]==0.115.5
+jq==1.8.0
 langchain==0.3.7
 python-dotenv==1.0.1
 pymongo==4.10.1
+requests==2.32.3
 
 # Supported Language Models
 langchain-ollama==0.2.0

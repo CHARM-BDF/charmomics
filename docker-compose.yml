@@ -57,13 +57,15 @@ services:
 
   franklin-db:
     image: mongo:8.0.3
+    volumes:
+      - ./etc/fixtures/initial-seed/initial-db-seed.sh:/docker-entrypoint-initdb.d/initial-db-seed.sh
+      - ./etc/fixtures/:/tmp/fixtures
     ports:
       - 27017:27017
     networks:
       - franklin-network
     environment:
       MONGO_INITDB_DATABASE: franklin_db
-
 
 networks:
   franklin-network:
