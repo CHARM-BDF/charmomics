@@ -7,8 +7,20 @@
       "base_string":"{hgvs_variant}",
       "attribute":".hgvs_variant_without_transcript_version | split(\":\") as $transcript_split | $transcript_split[0] | split(\".\")[0] | . + \":\" + $transcript_split[1] | {\"hgvs_variant_without_transcript_version\": .}",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
+      "data_set":"ensembl_vep_vcf_string",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;refseq=1;vcf_string=1;",
+      "attribute":".[] | {\"ensembl_vep_vcf_string\": .vcf_string} ",
+      "versioning_type":"rest",
+      "dependencies":[
+         "hgvs_variant_without_transcript_version"
+      ],
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
       "data_set":"transcript_id",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -22,8 +34,7 @@
       "versioning_type":"rest",
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"Ensembl Gene Id",
       "data_source":"Ensembl",
       "genomic_unit_type":"gene",
@@ -33,8 +44,7 @@
       "versioning_type":"rest",
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"HGNC_ID",
       "data_source":"Ensembl",
       "genomic_unit_type":"gene",
@@ -44,20 +54,7 @@
       "versioning_type":"rest",
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
-      "data_set":"ClinVar_Variantion_Id",
-      "data_source":"Rosalution",
-      "genomic_unit_type":"hgvs_variant",
-      "annotation_source_type":"http",
-      "attribute":".[] | select(.colocated_variants != null) | .colocated_variants[] | select(.var_synonyms != null) | .var_synonyms | select( .ClinVar != null ) | select(.ClinVar != []) | .ClinVar[] | select(contains(\"VCV\")) | sub(\"VCV0+\"; \"\") | {\"ClinVar_Variantion_Id\": . } ",
-      "url":"http://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;clinvar=1;",
-      "versioning_type":"rosalution",
-      "dependencies":[
-         "hgvs_variant_without_transcript_version"
-      ]
-   },
-   {
+   },{
       "data_set":"OMIM_gene_search_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -65,8 +62,7 @@
       "base_string":"https://www.omim.org/search?index=entry&start=1&sort=score+desc%2C+prefix_sort+desc&search={gene}",
       "attribute":"{ \"OMIM_gene_search_url\": .OMIM_gene_search_url }",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"HPO_gene_search_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -74,8 +70,7 @@
       "base_string":"https://hpo.jax.org/app/browse/search?q={gene}&navFilter=all",
       "attribute":"{ \"HPO_gene_search_url\": .HPO_gene_search_url }",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Rat Gene Identifier",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -85,8 +80,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Mouse Gene Identifier",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -96,8 +90,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Zebrafish Gene Identifier",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -107,8 +100,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"C-Elegens Gene Identifier",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -118,8 +110,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Frog_General_Xenbase_Database_url",
       "data_source":"Alliance Genome",
       "annotation_source_type":"http",
@@ -129,8 +120,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"GTEx_Human_Gene_Expression_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -138,8 +128,7 @@
       "base_string":"https://gtexportal.org/home/gene/{gene}",
       "attribute":"{ \"GTEx_Human_Gene_Expression_url\": .GTEx_Human_Gene_Expression_url }",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Human_Protein_Atlas_Protein_Gene_Search_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -147,8 +136,7 @@
       "base_string":"https://www.proteinatlas.org/search/{gene}",
       "attribute":"{ \"Human_Protein_Atlas_Protein_Gene_Search_url\": .Human_Protein_Atlas_Protein_Gene_Search_url }",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Pharos_Target_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -156,8 +144,7 @@
       "base_string":"https://pharos.nih.gov/targets/{gene}",
       "attribute":"{ \"Pharos_Target_url\": .Pharos_Target_url }",
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Entrez Gene Id",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -168,8 +155,7 @@
          "HPO_NCBI_GENE_ID"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Gene Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -182,8 +168,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"ClinGen_gene_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -194,8 +179,7 @@
          "HGNC_ID"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"ClinVar_variant_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"hgvs_variant",
@@ -206,8 +190,18 @@
          "ClinVar_Variantion_Id"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
+      "data_set":"ClinVar_Variantion_Id",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "attribute":".[] | select(.colocated_variants != null) | .colocated_variants[] | select(.var_synonyms != null) | .var_synonyms | select( .ClinVar != null ) | select(.ClinVar != []) | .ClinVar[] | select(contains(\"VCV\")) | sub(\"VCV0+\"; \"\") | {\"ClinVar_Variantion_Id\": . } ",
+      "url":"http://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;clinvar=1;",
+      "versioning_type":"rosalution",
+      "dependencies":[
+         "hgvs_variant_without_transcript_version"
+      ]
+   },{
       "data_set":"NCBI_gene_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -218,8 +212,7 @@
          "Entrez Gene Id"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"gnomAD_gene_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -230,8 +223,26 @@
          "Ensembl Gene Id"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
+      "data_set":"gnomAD_variant_url",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"forge",
+      "base_string":"https://gnomad.broadinstitute.org/variant/{ensembl_vep_vcf_string}?dataset=gnomad_r4",
+      "attribute":"{ \"gnomAD_variant_url\": .gnomAD_variant_url }",
+      "dependencies":[
+         "ensembl_vep_vcf_string"
+      ],
+      "versioning_type":"rosalution"
+   },{
+      "data_set":"COSMIC_gene_url",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"gene",
+      "annotation_source_type":"forge",
+      "base_string":"https://cancer.sanger.ac.uk/cosmic/gene/analysis?ln={gene}",
+      "attribute":"{ \"COSMIC_gene_url\": .COSMIC_gene_url }",
+      "versioning_type":"rosalution"
+   },{
       "data_set":"HPO_NCBI_GENE_ID",
       "data_source":"HPO",
       "genomic_unit_type":"gene",
@@ -239,8 +250,18 @@
       "url":"https://ontology.jax.org/api/network/search/GENE?q={gene}&page=0&limit=10",
       "attribute":"{ \"HPO_NCBI_GENE_ID\": .results[] | select( .name == \"{gene}\") | .id }",
       "versioning_type":"date"
-   },
-   {
+   },{
+      "data_set":"gnomAD4",
+      "data_source":"OpenCravat",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://run.opencravat.org/submit/annotate?{opencravat_search_variant_vcf_string}&annotators=gnomad4",
+      "attribute":"{ \"gnomad4\": .gnomad4 }",
+      "dependencies":[
+         "opencravat_search_variant_vcf_string"
+      ],
+      "versioning_type":"date"
+   },{
       "data_set":"OMIM",
       "data_source":"HPO",
       "genomic_unit_type":"gene",
@@ -251,8 +272,7 @@
          "HPO_NCBI_GENE_ID"
       ],
       "versioning_type":"date"
-   },
-   {
+   },{
       "data_set":"HPO",
       "data_source":"HPO",
       "genomic_unit_type":"gene",
@@ -263,8 +283,7 @@
          "HPO_NCBI_GENE_ID"
       ],
       "versioning_type":"date"
-   },
-   {
+   },{
       "data_set":"Rat_Alliance_Genome_Automated_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -277,8 +296,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Rat_Alliance_Genome_RGD_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -291,8 +309,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Rat_Alliance_Genome_Models",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -305,8 +322,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Mouse_Alliance_Genome_Automated_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -319,8 +335,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Mouse_Alliance_Genome_MGI_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -333,22 +348,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
-      "data_set":"Mouse_Alliance_Genome_Models",
-      "data_source":"Alliance Genome",
-      "genomic_unit_type":"gene",
-      "annotation_source_type":"http",
-      "url":"https://www.alliancegenome.org/api/gene/{Mouse Gene Identifier}/models?limit=100",
-      "attribute":"{ \"Mouse_Alliance_Genome_Models\": [.results[]] }",
-      "dependencies":[
-         "Mouse Gene Identifier"
-      ],
-      "versioning_type":"rest",
-      "version_url":"https://www.alliancegenome.org/api/releaseInfo",
-      "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Zebrafish_Alliance_Genome_Automated_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -361,8 +361,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Zebrafish_Alliance_Genome_ZFIN_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -375,8 +374,20 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
+      "data_set":"Mouse_Alliance_Genome_Models",
+      "data_source":"Alliance Genome",
+      "genomic_unit_type":"gene",
+      "annotation_source_type":"http",
+      "url":"https://www.alliancegenome.org/api/gene/{Mouse Gene Identifier}/models?limit=100",
+      "attribute":"{ \"Mouse_Alliance_Genome_Models\": [.results[]] }",
+      "dependencies":[
+         "Mouse Gene Identifier"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://www.alliancegenome.org/api/releaseInfo",
+      "version_attribute":".releaseVersion"
+   },{
       "data_set":"Zebrafish_Alliance_Genome_Models",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -389,22 +400,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
-      "data_set":"C-Elegens_Alliance_Genome_Automated_Summary",
-      "data_source":"Alliance Genome",
-      "genomic_unit_type":"gene",
-      "annotation_source_type":"http",
-      "url":"https://www.alliancegenome.org/api/gene/{C-Elegens Gene Identifier}",
-      "attribute":"{ \"C-Elegens_Alliance_Genome_Automated_Summary\": .automatedGeneSynopsis }",
-      "dependencies":[
-         "C-Elegens Gene Identifier"
-      ],
-      "versioning_type":"rest",
-      "version_url":"https://www.alliancegenome.org/api/releaseInfo",
-      "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"C-Elegens_Alliance_Genome_WB_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
@@ -417,22 +413,20 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
-      "data_set":"C-Elegens_Alliance_Genome_Models",
+   },{
+      "data_set":"C-Elegens_Alliance_Genome_Automated_Summary",
       "data_source":"Alliance Genome",
       "genomic_unit_type":"gene",
       "annotation_source_type":"http",
-      "url":"https://www.alliancegenome.org/api/gene/{C-Elegens Gene Identifier}/models?limit=100",
-      "attribute":"{ \"C-Elegens_Alliance_Genome_Models\": [.results[]] }",
+      "url":"https://www.alliancegenome.org/api/gene/{C-Elegens Gene Identifier}",
+      "attribute":"{ \"C-Elegens_Alliance_Genome_Automated_Summary\": .automatedGeneSynopsis }",
       "dependencies":[
          "C-Elegens Gene Identifier"
       ],
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Polyphen Prediction",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -446,8 +440,20 @@
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
+      "data_set":"C-Elegens_Alliance_Genome_Models",
+      "data_source":"Alliance Genome",
+      "genomic_unit_type":"gene",
+      "annotation_source_type":"http",
+      "url":"https://www.alliancegenome.org/api/gene/{C-Elegens Gene Identifier}/models?limit=100",
+      "attribute":"{ \"C-Elegens_Alliance_Genome_Models\": [.results[]] }",
+      "dependencies":[
+         "C-Elegens Gene Identifier"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://www.alliancegenome.org/api/releaseInfo",
+      "version_attribute":".releaseVersion"
+   },{
       "data_set":"Polyphen Score",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -461,8 +467,7 @@
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"SIFT Prediction",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -476,8 +481,7 @@
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"SIFT Score",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -491,8 +495,7 @@
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"Consequences",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -506,8 +509,7 @@
       "versioning_type":"rest",
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
       "data_set":"CADD",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -521,8 +523,60 @@
       "versioning_type":"rest",
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
+   },{
+      "data_set":"alphamissense_classification",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;AlphaMissense=1;refseq=1;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { alphamissense: .alphamissense.am_class }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"alphamissense_pathogenicity",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;AlphaMissense=1;refseq=1;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { alphamissense: .alphamissense.am_pathogenicity }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"revel",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;AlphaMissense=1;refseq=1;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { revel: .revel }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"Human_Alliance_Genome_url",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"gene",
+      "annotation_source_type":"forge",
+      "base_string":"https://www.alliancegenome.org/gene/{HGNC_ID}",
+      "attribute":"{ \"Human_Alliance_Genome_url\": .Human_Alliance_Genome_url }",
+      "dependencies":[
+         "HGNC_ID"
+      ],
+      "versioning_type":"rosalution"
+   },{
       "data_set":"Impact",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
@@ -536,20 +590,7 @@
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
-   },
-   {
-      "data_set":"Human_Alliance_Genome_url",
-      "data_source":"Rosalution",
-      "genomic_unit_type":"gene",
-      "annotation_source_type":"forge",
-      "base_string":"https://www.alliancegenome.org/gene/{HGNC_ID}",
-      "attribute":"{ \"Human_Alliance_Genome_url\": .Human_Alliance_Genome_url }",
-      "dependencies":[
-         "HGNC_ID"
-      ],
-      "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Rat_Alliance_Genome_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -560,8 +601,7 @@
          "Rat Gene Identifier"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Rat_Rat_Genome_Database_url",
       "data_source":"Alliance Genome",
       "annotation_source_type":"http",
@@ -574,20 +614,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
-      "data_set":"Mouse_Alliance_Genome_url",
-      "data_source":"Rosalution",
-      "genomic_unit_type":"gene",
-      "annotation_source_type":"forge",
-      "base_string":"https://www.alliancegenome.org/gene/{Mouse Gene Identifier}",
-      "attribute":"{ \"Mouse_Alliance_Genome_url\": .Mouse_Alliance_Genome_url }",
-      "dependencies":[
-         "Mouse Gene Identifier"
-      ],
-      "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Mouse_Mouse_Genome_Database_url",
       "data_source":"Alliance Genome",
       "annotation_source_type":"http",
@@ -600,8 +627,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"Zebrafish_Alliance_Genome_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -612,8 +638,7 @@
          "Zebrafish Gene Identifier"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
       "data_set":"Zebrafish_Zebrafish_Information_Network_url",
       "data_source":"Alliance Genome",
       "annotation_source_type":"http",
@@ -626,8 +651,7 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
       "data_set":"C-Elegens_Worm_Base_url",
       "data_source":"Alliance Genome",
       "annotation_source_type":"http",
@@ -640,8 +664,18 @@
       "versioning_type":"rest",
       "version_url":"https://www.alliancegenome.org/api/releaseInfo",
       "version_attribute":".releaseVersion"
-   },
-   {
+   },{
+      "data_set":"Mouse_Alliance_Genome_url",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"gene",
+      "annotation_source_type":"forge",
+      "base_string":"https://www.alliancegenome.org/gene/{Mouse Gene Identifier}",
+      "attribute":"{ \"Mouse_Alliance_Genome_url\": .Mouse_Alliance_Genome_url }",
+      "dependencies":[
+         "Mouse Gene Identifier"
+      ],
+      "versioning_type":"rosalution"
+   },{
       "data_set":"C-Elegens_Alliance_Genome_url",
       "data_source":"Rosalution",
       "genomic_unit_type":"gene",
@@ -652,19 +686,152 @@
          "C-Elegens Gene Identifier"
       ],
       "versioning_type":"rosalution"
-   },
-   {
+   },{
+      "data_set":"SpliceAI_variant_linkout",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"forge",
+      "base_string":"https://spliceailookup.broadinstitute.org/#variant={hgvs_variant_without_transcript_version}&hg=38&bc=basic&distance=500&mask=0&ra=0",
+      "attribute":"{ \"SpliceAI_variant_linkout\": .SpliceAI_variant_linkout }",
+      "dependencies":[
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rosalution"
+   },{
       "data_set":"opencravat_search_variant_vcf_string",
       "data_source":"Ensembl",
       "genomic_unit_type":"hgvs_variant",
       "annotation_source_type":"http",
       "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;CADD=1;refseq=1;vcf_string=1;",
-      "attribute":".[] | .vcf_string | split(\"-\") | \"chrom=chr\" + .[0] + \"&pos=\" + .[1] + \"&ref_base=\" + .[2] + \"&alt_base=\" + .[3] | { \"opencravat_search_variant_vcf_string\": .}",
+      "attribute":".[] | .vcf_string | split(\"-\") | \"chrom=chr\" + .[0] + \"&pos=\" + .[1] + \"&ref_base=\" + .[2] + \"&alt_base=\" + .[3] | {\"opencravat_search_variant_vcf_string\": . }",
       "versioning_type":"rest",
       "dependencies":[
          "hgvs_variant_without_transcript_version"
       ],
       "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
       "version_attribute":".releases[]"
+   },{
+      "data_set":"spliceai_acceptor_loss",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;refseq=1;SpliceAI=2;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { spliceai_acceptor_loss: .spliceai.DS_AL }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"spliceai_donor_loss",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;refseq=1;SpliceAI=2;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { spliceai_donor_loss: .spliceai.DS_DL }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"spliceai_acceptor_gain",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;refseq=1;SpliceAI=2;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { spliceai_acceptor_loss: .spliceai.DS_AG }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },{
+      "data_set":"spliceai_donor_gain",
+      "data_source":"Ensembl",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"http",
+      "url":"https://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;refseq=1;SpliceAI=2;",
+      "attribute":".[].transcript_consequences[] | select( .transcript_id | contains(\"{transcript}\") ) | { spliceai_donor_gain: .spliceai.DS_DG }",
+      "dependencies":[
+         "transcript",
+         "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type":"rest",
+      "version_url":"https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute":".releases[]"
+   },
+   {
+      "data_set":"chrom",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"forge",
+      "base_string":"{ensembl_vep_vcf_string}",
+      "dependencies": [
+         "ensembl_vep_vcf_string"
+      ],
+      "attribute":".chrom | split(\"-\") | { \"chrom\": .[0] }",
+      "versioning_type":"rosalution"
+   },
+   {
+      "data_set":"pos",
+      "data_source":"Rosalution",
+      "genomic_unit_type":"hgvs_variant",
+      "annotation_source_type":"forge",
+      "base_string":"{ensembl_vep_vcf_string}",
+      "dependencies": [
+         "ensembl_vep_vcf_string"
+      ],
+      "attribute":".pos | split(\"-\") | { \"pos\": .[1] }",
+      "versioning_type":"rosalution"
+   },
+   {
+      "data_set": "transcript_without_version",
+      "data_source": "Rosalution",
+      "annotation_source_type": "forge",
+      "genomic_unit_type": "hgvs_variant",
+      "base_string": "{hgvs_variant_without_transcript_version}",
+      "attribute": ".transcript_without_version | split(\":\") | { \"transcript_without_version\": .[0] }",
+      "dependencies": [
+        "hgvs_variant_without_transcript_version"
+      ],
+      "versioning_type": "rosalution"
+    },
+    {
+      "data_set": "Ensembl_Transcript_Id",
+      "data_source": "Ensembl",
+      "genomic_unit_type": "hgvs_variant",
+      "annotation_source_type": "http",
+      "url": "https://rest.ensembl.org/xrefs/symbol/homo_sapiens/{transcript_without_version}?content-type=application/json;object_type=transcript",
+      "attribute": "{ \"Ensembl_Transcript_Id\": .[0].id }",
+      "dependencies": [
+        "transcript_without_version"
+      ],
+      "versioning_type": "rest",
+      "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
+      "version_attribute": ".releases[]"
+    },
+    {
+      "data_set": "ditto",
+      "data_source": "cgds",
+      "genomic_unit_type": "hgvs_variant",
+      "annotation_source_type": "subprocess",
+      "subprocess": "tabix https://s3.lts.rc.uab.edu/cgds-public/dittodb/DITTO_chr{chrom}.tsv.gz chr{chrom}:{pos}-{pos}",
+      "fieldnames": ["chrom", "pos", "ref", "alt", "transcript", "gene", "classification", "ditto"],
+      "delimiter": "\t",
+      "attribute": ".[] += (\"{ensembl_vep_vcf_string}\" | split(\"-\") | {\"vcf_string\": .}) | .[] | select( .chrom == (\"chr\" + .vcf_string[0]) and .vcf_string[1] == .pos and .vcf_string[2] == .ref and .vcf_string[3] == .alt and .transcript ==\"{Ensembl_Transcript_Id}\") | { \"ditto\": .ditto }",
+      "dependencies": [
+         "chrom",
+         "pos",
+         "Ensembl_Transcript_Id",
+         "ensembl_vep_vcf_string"
+      ],
+      "versioning_type": "rosalution"
    }
 ]

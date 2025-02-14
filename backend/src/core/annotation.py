@@ -111,7 +111,7 @@ class AnnotationService:
                         for missing_dataset_name in missing_dependencies:
                             logger.info("Missing dataset name: %s", missing_dataset_name)
                             annotation_manifest_dataset = annotation_manifest_collection.get_manifest_dataset_config(
-                                missing_dataset_name
+                                annotation_unit.get_genomic_unit(), missing_dataset_name
                             )
 
                             if annotation_manifest_dataset is None:

@@ -4,14 +4,18 @@ from unittest.mock import Mock, patch
 
 from datetime import date
 
+import copy
+import subprocess
 import pytest
 import requests
 
+
 from src.core.annotation_task import (
-    AnnotationTaskFactory, ForgeAnnotationTask, HttpAnnotationTask, VersionAnnotationTask
+    AnnotationTaskFactory, ForgeAnnotationTask, HttpAnnotationTask, VersionAnnotationTask, SubprocessAnnotationTask
 )
 from src.core.annotation_unit import AnnotationUnit
 from src.enums import GenomicUnitType
+
 
 def test_http_annotation_task_build_url(http_annotation_transcript_id):
     """ Verifies that the HTTP annotation task creates the base url using the 'url' and the genomic unit """
@@ -39,8 +43,8 @@ def test_annotation_task_create_http_task(hgvs_variant_annotation_unit):
 def test_annotate_forge_gene_linkout_dataset(forge_annotation_task_gene):
     """Verifies that the NCBI linkout dataset is structured as expected"""
     actual_annotation = forge_annotation_task_gene.annotate()
+
     assert "NCBI_linkout" in actual_annotation
-    print(actual_annotation['NCBI_linkout'])
     assert actual_annotation['NCBI_linkout'] == 'https://www.ncbi.nlm.nih.gov/gene?Db=gene&Cmd=DetailsSearch&Term=45614'
 
 
@@ -133,7 +137,7 @@ def test_process_annotation_versioning_all_types(genomic_unit, dataset_name, exp
     mock_response = Mock(spec=requests.Response)
     mock_response.json.return_value = {"releases": [112]}
 
-    with (patch("requests.get", return_value=mock_response), patch('src.core.annotation_task.date') as mock_date):
+    with patch("requests.get", return_value=mock_response), patch('src.core.annotation_task.date') as mock_date:
         mock_date.today.return_value = date(2024, 9, 16)
 
         task = get_version_task(genomic_unit, dataset_name)
@@ -154,6 +158,47 @@ def test_version_extraction(genomic_unit, dataset_name, expected, version_to_ext
     task = get_version_task(genomic_unit, dataset_name)
     actual_version_extraction = task.extract_version(version_to_extract)
     assert actual_version_extraction == expected
+
+
+def test_subprocess_annotation_build_command_with_dependency(subprocess_annotation_ditto_score_task):
+    """ Verifies the subprocess command is built properly to be executed programmatically """
+
+    command = subprocess_annotation_ditto_score_task.build_command()
+
+    actual = ['tabix', 'https://s3.lts.rc.uab.edu/cgds-public/dittodb/DITTO_chrX.tsv.gz', 'chrX:156134910-156134910']
+
+    assert command == actual
+
+
+def test_annotation_task_create_subprocess_task(hgvs_variant_ditto_annotation_unit):
+    """ Verifies the ditto dataset creates a subprocess task """
+    actual_task = AnnotationTaskFactory.create_annotation_task(hgvs_variant_ditto_annotation_unit)
+
+    assert isinstance(actual_task, SubprocessAnnotationTask)
+
+
+def test_ditto_subprocess_annotate(subprocess_annotation_ditto_score_task):
+    """ Tests the completion of a subprocess and extracting the correct result """
+    expected = [{
+        'chrom': 'chr1', 'pos': '156134910', 'ref': 'C', 'alt': 'A', 'transcript': 'ENST00000347559', 'gene': 'LMNA',
+        'classification': 'synonymous_variant', 'ditto': '0.00011253357'
+    }]
+
+    mock_response = Mock(spec=subprocess.CompletedProcess)
+    attrs = {
+        'args': [
+            'tabix', 'https://s3.lts.rc.uab.edu/cgds-public/dittodb/DITTO_chr1.tsv.gz', 'chr1:156134910-156134910'
+        ], 'returncode': 0,
+        'stdout': b'chr1\t156134910\tC\tA\tENST00000347559\tLMNA\tsynonymous_variant\t0.00011253357\n'
+    }
+    mock_response.configure_mock(**attrs)
+
+    with patch('subprocess.run', return_value=mock_response):
+        task = subprocess_annotation_ditto_score_task
+
+        actual_subprocess_result = task.annotate()
+
+        assert expected == actual_subprocess_result
 
 
 ## Fixtures ##
@@ -285,6 +330,24 @@ def fixture_polyphen_prediction_dataset():
     }
 
 
+@pytest.fixture(name="ditto_score_dataset")
+def fixture_ditto_score_dataset():
+    """ Returns a subprocess dataset specifically for ditto """
+    return {
+        "data_set": "ditto", "data_source": "cgds", "genomic_unit_type": "hgvs_variant",
+        "annotation_source_type": "subprocess", "subprocess":
+            "tabix https://s3.lts.rc.uab.edu/cgds-public/dittodb/DITTO_chr{chrom}.tsv.gz chr{chrom}:{pos}-{pos}",
+        "fieldnames": ["chrom", "pos", "ref", "alt", "transcript", "gene", "classification", "ditto"],
+        "delimiter": "\t",
+        "attribute":
+            ".[] += (\"{ensembl_vep_vcf_string}\" | split(\"-\") | {\"vcf_string\": .}) | .[] | select( .chrom == " \
+                  "(\"chr\" + .vcf_string[0]) and .vcf_string[1] == .pos and .vcf_string[2] == .ref and " \
+                  ".vcf_string[3] == .alt and .transcript ==\"{Ensembl_Transcript_Id}\") | { \"ditto\": .ditto }",
+        "dependencies": ["chrom", "pos", "Ensembl_Transcript_Id",
+                         "ensembl_vep_vcf_string"], "versioning_type": "rosalution"
+    }
+
+
 @pytest.fixture(name="hpo_annotation_response")
 def fixture_hpo_annotation_response():
     """ Returns an object that contains the actual return aoutput for GENE VMA21 for HPO terms """
@@ -361,5 +424,32 @@ def fixture_http_annotation_polyphen_prediction(hgvs_variant_genomic_unit, polyp
 
     annotation_unit = AnnotationUnit(hgvs_variant_genomic_unit, polyphen_prediction_dataset)
     task = HttpAnnotationTask(annotation_unit)
+
+    return task
+
+
+@pytest.fixture(name="hgvs_variant_ditto_annotation_unit")
+def fixture_hgvs_variant_ditto_annotation_unit(hgvs_variant_genomic_unit, ditto_score_dataset):
+    """ Creates and returns a ditto annotation unit with the required dependencies to run """
+
+    # Creating a copy of the variant fixture
+    ditto_hgvs_variant_genomic_unit = copy.deepcopy(hgvs_variant_genomic_unit)
+
+    # Adding dependencies to the genomic unit for ditto
+    ditto_hgvs_variant_genomic_unit["chrom"] = "X"
+    ditto_hgvs_variant_genomic_unit["pos"] = "156134910"
+    ditto_hgvs_variant_genomic_unit["Ensembl_Transcript_Id"] = "ENST00000368297"
+    ditto_hgvs_variant_genomic_unit["ensembl_vep_vcf_string"] = "1-156134910-C-T"
+
+    annotation_unit = AnnotationUnit(ditto_hgvs_variant_genomic_unit, ditto_score_dataset)
+
+    return annotation_unit
+
+
+@pytest.fixture(name="subprocess_annotation_ditto_score_task")
+def fixture_subprocess_annotation_ditto_score(hgvs_variant_ditto_annotation_unit):
+    """ Creates a subprocess task with the ditto annotation unit fixture """
+
+    task = SubprocessAnnotationTask(hgvs_variant_ditto_annotation_unit)
 
     return task

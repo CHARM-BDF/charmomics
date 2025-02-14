@@ -1,6 +1,7 @@
 """Tasks for annotating a genomic unit with datasets"""
 from abc import abstractmethod
 from datetime import date
+import csv
 import json
 from random import randint
 import time
@@ -8,6 +9,7 @@ import time
 import logging
 import jq
 import requests
+import subprocess
 
 from ..core.annotation_unit import AnnotationUnit
 
@@ -76,7 +78,7 @@ class AnnotationTaskInterface:
         jq_results = iter(jq.compile(jq_query).input(json_to_parse).all())
         return jq_results
 
-    def extract(self, incomming_json):
+    def extract(self, incoming_json):
         """ Interface extraction method for annotation tasks """
         annotations = []
 
@@ -92,11 +94,12 @@ class AnnotationTaskInterface:
             jq_results = empty_gen()
             try:
                 replaced_attributes = self.aggregate_string_replacements(self.annotation_unit.dataset['attribute'])
-                jq_results = self.__json_extract__(replaced_attributes, incomming_json)
+                jq_results = self.__json_extract__(replaced_attributes, incoming_json)
+
             except ValueError as value_error:
                 logger.info((
                     'Failed to annotate "%s" from "%s" on %s with error "%s"', annotation_unit_json['data_set'],
-                    annotation_unit_json['data_source'], json.dumps(incomming_json), value_error
+                    annotation_unit_json['data_source'], json.dumps(incoming_json), value_error
                 ))
             jq_result = next(jq_results, None)
             while jq_result is not None:
@@ -219,6 +222,35 @@ class HttpAnnotationTask(AnnotationTaskInterface):
         return self.aggregate_string_replacements(self.annotation_unit.dataset['url'])
 
 
+class SubprocessAnnotationTask(AnnotationTaskInterface):
+    """ Initializes the use of a Linux subprocess programmatically to fetch an annotation """
+
+    def __init__(self, annotation_unit):
+        """initializes the task with the annotation unit """
+        AnnotationTaskInterface.__init__(self, annotation_unit)
+
+    def annotate(self):
+        """ Runs a subprocess programmatically to retireve an annotation result and return as json """
+        result = subprocess.run(self.build_command(), stdout=subprocess.PIPE).stdout.decode('utf-8').split('\n')
+        reader = csv.DictReader(
+            result,
+            delimiter=self.annotation_unit.dataset['delimiter'],
+            fieldnames=self.annotation_unit.dataset['fieldnames']
+        )
+        json_result = []
+
+        for row in reader:
+            json_result.append(row)
+
+        return json_result
+
+    def build_command(self):
+        """
+        Builds the complete subprocess command by replacing variables with what is required for tha command to run
+        """
+        return self.aggregate_string_replacements(self.annotation_unit.dataset['subprocess']).split(' ')
+
+
 class VersionAnnotationTask(AnnotationTaskInterface):
     """An annotation task that gets the version of the annotation"""
 
@@ -275,7 +307,7 @@ class AnnotationTaskFactory:
 
     tasks = {
         "http": HttpAnnotationTask, "csv": CsvAnnotationTask, "none": NoneAnnotationTask, "forge": ForgeAnnotationTask,
-        "version": VersionAnnotationTask
+        "subprocess": SubprocessAnnotationTask, "version": VersionAnnotationTask
     }
 
     @classmethod

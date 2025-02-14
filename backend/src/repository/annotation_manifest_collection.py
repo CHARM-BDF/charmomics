@@ -2,6 +2,11 @@ from pymongo import ReturnDocument
 
 from src.core.annotation_unit import AnnotationUnit
 
+# create logger
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class AnnotationManifestCollection:
     """ Repository to keep track of which annotation versions are used in Franklin """
@@ -16,13 +21,20 @@ class AnnotationManifestCollection:
 
         return list(self.collection.find())
 
-    def get_manifest_dataset_config(self, dataset_name: str):
+    def get_manifest_dataset_config(self, genomic_unit: str, dataset_name: str):
         """ Returns an individual dataset manifest """
 
-        manifest_entry = self.collection.find_one({dataset_name: {'$exists': True}})
+        dataset_attribute = f"manifest.{dataset_name}"
 
-        if not manifest_entry:
+        projection = {"manifest.$": 1}
+        query = {"genomic_unit": genomic_unit, dataset_attribute: {'$exists': True}}
+        genomic_unit_manifest = self.collection.find_one(query, projection)
+
+        if not genomic_unit_manifest:
             return None
+
+        manifest_entry = next((dataset for dataset in genomic_unit_manifest['manifest'] if dataset_name in dataset),
+                              None)
 
         return {
             "data_set": dataset_name, "data_source": manifest_entry[dataset_name]['data_source'],
@@ -38,4 +50,9 @@ class AnnotationManifestCollection:
             }
         }
 
-        return self.collection.insert_one(dataset)
+        updated_document = self.collection.find_one_and_update({"genomic_unit": annotation_unit.genomic_unit['unit']},
+                                                               {"$push": {"manifest": dataset}},
+                                                               upsert=True,
+                                                               return_document=ReturnDocument.AFTER)
+
+        return updated_document

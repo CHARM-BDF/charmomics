@@ -14,7 +14,7 @@ def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annota
     annotation_service = AnnotationService(annotation_config_collection)
     mock_queue = Mock()
     annotation_service.queue_annotation_tasks(genomic_units_to_annotate, mock_queue)
-    assert mock_queue.put.call_count == 18
+    assert mock_queue.put.call_count == 20
 
     actual_queued_genomic_units = [put_call.args[0].genomic_unit['unit'] for put_call in mock_queue.put.call_args_list]
 
@@ -26,12 +26,13 @@ def test_processing_annotation_tasks(process_annotation_tasks):
     assert process_annotation_tasks['http'].call_count == 14
     assert process_annotation_tasks['none'].call_count == 0
     assert process_annotation_tasks['forge'].call_count == 4
+    assert process_annotation_tasks['subprocess'].call_count == 2
 
-    assert process_annotation_tasks['extract'].call_count == 18
+    assert process_annotation_tasks['extract'].call_count == 20
 
-    assert process_annotation_tasks['version'].call_count == 18
+    assert process_annotation_tasks['version'].call_count == 20
 
-    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 13
+    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 21
     process_annotation_tasks['genomic_unit_collection'].annotate_genomic_unit.assert_called()
 
 
@@ -73,7 +74,8 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
         extract_task_version_annotate, patch("src.core.annotation_task.VersionAnnotationTask.annotate") as
         version_task_annotate, patch("src.core.annotation_task.ForgeAnnotationTask.annotate") as forge_task_annotate,
         patch("src.core.annotation_task.HttpAnnotationTask.annotate") as http_task_annotate,
-        patch("src.core.annotation_task.NoneAnnotationTask.annotate") as none_task_annotate
+        patch("src.core.annotation_task.NoneAnnotationTask.annotate") as none_task_annotate,
+        patch("src.core.annotation_task.SubprocessAnnotationTask.annotate") as subprocess_task_annotate
     ):
         skip_depends = SkipDepedencies()
         mock_genomic_unit_collection = Mock(spec=GenomicUnitCollection)
@@ -81,7 +83,7 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
         mock_genomic_unit_collection.find_genomic_unit_annotation_value.side_effect = (
             skip_depends.skip_hgncid_get_value_first_time_mock
         )
-        dependency_dataset = get_dataset_manifest_config('HGNC_ID')
+        dependency_dataset = get_dataset_manifest_config("VMA21", 'HGNC_ID')
         mock_annotation_manifest_collection.get_manifest_dataset_config.return_value = dependency_dataset
         mock_genomic_unit_collection.annotation_exist.return_value = False
 
@@ -90,6 +92,6 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
         )
         yield {
             'extract': extract_task_annotate, 'version': version_task_annotate, 'http': http_task_annotate,
-            'none': none_task_annotate, 'forge': forge_task_annotate,
+            'none': none_task_annotate, 'forge': forge_task_annotate, 'subprocess': subprocess_task_annotate,
             'genomic_unit_collection': mock_genomic_unit_collection, 'extract_version': extract_task_version_annotate
         }

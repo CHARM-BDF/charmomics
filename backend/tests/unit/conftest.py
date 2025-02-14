@@ -10,6 +10,7 @@ from src.core.annotation_unit import AnnotationUnit
 from src.enums import GenomicUnitType
 from src.repository.annotation_config_collection import AnnotationConfigCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
+from src.repository.annotation_manifest_collection import AnnotationManifestCollection
 
 from ..test_utils import read_test_fixture, mock_mongo_collection
 
@@ -114,10 +115,14 @@ def fixture_cpam0046_annotation_queue(genomic_units_to_annotate, annotation_conf
 def get_dataset_manifest_config(annotation_manifest_collection_json):
     """Fixture factory method to create an dataset from the genomic unit information and name of the datset."""
 
-    def _create_dataset_manifest(dataset_name):
+    def _create_dataset_manifest(genomic_unit, dataset_name):
         """Method to create the dataset manifest config"""
 
-        dataset_manifest = next((item for item in annotation_manifest_collection_json if dataset_name in item), None)
+        genomic_unit_manifest = next(
+            (item for item in annotation_manifest_collection_json if item['genomic_unit'] == genomic_unit), None
+        )
+
+        dataset_manifest = next((item for item in genomic_unit_manifest['manifest'] if dataset_name in item), None)
 
         dataset_config = {
             "data_set": dataset_name, "data_source": dataset_manifest[dataset_name]['data_source'],
@@ -137,6 +142,18 @@ def fixture_genomic_unit_collection(genomic_unit_collection_json):
     mock_collection.find = Mock(return_value=genomic_unit_collection_json)
 
     return GenomicUnitCollection(mock_collection)
+
+
+@pytest.fixture(name="annotation_manifest_collection")
+def fixture_annotation_manifest_collection(annotation_manifest_collection_json):
+    """ Returns an annotation manifest collection """
+
+    mock_collection = mock_mongo_collection()
+    mock_collection.find = Mock(return_value=annotation_manifest_collection_json)
+    mock_collection.find_one = Mock()
+    mock_collection.find_one_and_update = Mock()
+
+    return AnnotationManifestCollection(mock_collection)
 
 
 @pytest.fixture(name='get_annotation_json')

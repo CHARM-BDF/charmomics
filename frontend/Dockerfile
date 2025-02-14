@@ -1,5 +1,5 @@
 # Local development stage
-FROM node:22.7-alpine3.19 as development-stage
+FROM node:22.7-alpine3.19 AS development-stage
 WORKDIR /app
 COPY package.json /app/
 COPY yarn.lock /app/
