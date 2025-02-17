@@ -1,15 +1,12 @@
-# Franklin Backend
+# CHARMomics Backend
 
-This is a prototype for demonstrating how a backend can support multiple protocols on accepting and processing client
-and user requests. As of now, the two protocols supported are HTTP in the form of REST and WebSockets to handle the
-broadcasting to all connected clients to recieve real-time updates on application state changes.
+CHARMomics' backend uses FastAPI as a Python REST endpoint framework to accept and process frontend and user requests.
 
-The design philosophy is that when a request comes in though HTTP, a normal operation will handle the state change on
-the data layer. Then, if the operation is successful, a broadcast message will send to all clients connected to the
-application to re-fetch the specific resource via HTTP.
+It is currently used to interact with MongoDB for state management, a web accessible Swagger API documentation, and
+to initate the annotation service when provided either a gene or variant to gather annotation data.
 
-As of now, the WebSocket only initiates the connection and keeps it alive in a thread. It is not set up to recieve data
-in any meaningful way on that protocol.
+**Note:** There is also a RESTful backend service that provides access to an AI deployment, but it is only accessible
+within UAB networks. The URL for the AI deployment can be swapped out for similar functionality if necessary.
 
 ## Setup
 
@@ -23,7 +20,7 @@ in any meaningful way on that protocol.
 To keep dependencies required for projects separate without changing global settings and packages we create
 isolated virtual environments for these projects.
 
-All packages necessary for Franklin development are installed into the `./backend/franklin_env/` virtual
+All packages necessary for CHARMomics development are installed into the `./backend/charmomics_env/` virtual
 environment in the setup.sh script.
 
 To create this isolation we use the python virtual environment [venv](https://docs.python.org/3.11/library/venv.html).
@@ -34,9 +31,9 @@ To use in your shell, activate the virtual environment by running the following 
 ```bash
 cd backend
 
-python3 -m venv franklin_env
+python3 -m venv charmomics_env
 
-source franklin_env/bin/activate
+source charmomics_env/bin/activate
 
 pip3 install -r requirements.txt
 ```
@@ -55,7 +52,7 @@ pylint src tests
 
 ## Formatting
 
-The Franklin uses `yapf` to format the python codebase.
+The CHARMomics uses `yapf` to format the python codebase.
 Configuration is maintained in `.style.yapf` within the `./backend` directory.
 
 To recursively format all Python files in place, run the following

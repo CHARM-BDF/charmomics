@@ -1,4 +1,4 @@
-""" Entry points for the Franklin backend """
+""" Entry points for the CHARMomics backend """
 import logging
 import logging.config
 
@@ -24,6 +24,6 @@ app.include_router(assistant_router.router)
 
 @app.get("/")
 async def root():
-    """ Root endpoint to ensure Franklin is working """
+    """ Root endpoint to ensure CHARMomics is working """
 
     return {"message": "Hello World"}

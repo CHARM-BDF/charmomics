@@ -9,12 +9,12 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """
-    Settings for Franklin.  See https://fastapi.tiangolo.com/advanced/settings/
+    Settings for CHARMomics.  See https://fastapi.tiangolo.com/advanced/settings/
     for more details.
     """
 
-    mongodb_host: str = "franklin-db"
-    mongodb_db: str = "franklin_db"
+    mongodb_host: str = "charmomics-db"
+    mongodb_db: str = "charmomics_db"
 
 
 @lru_cache()

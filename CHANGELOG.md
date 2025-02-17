@@ -1,9 +1,10 @@
 # CHANGELOG
 
-## Franklin v0.1
+## CHARMomics v0.1
 
 ### Features
 
+- Updated the documentation by renaming Franklin to CHARMomics, fixed documentation all around
 - Fixed an issue with the annotation manifest collection not keeping track of the genomic unit versions
 - Added new annotations to the annotation configuration to pull the ditto score
 - Added a new annotation task to allow for calling subprocesses and returning annotation data

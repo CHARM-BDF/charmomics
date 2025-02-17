@@ -7,7 +7,7 @@ router = APIRouter(prefix="/assistant", tags=['assistant'])
 configurable_model = init_chat_model(configurable_fields=("model", "model_provider", "base_url", "num_thread"))
 
 conversation = [{
-    "user": "assistant", "message": "My name is Franklin and I will be your assistant, how can I help you today?"
+    "user": "assistant", "message": "I am CHARMomics and can be your assistant, how can I help you today?"
 }, {"user": "developer", "message": "Hello!"}]
 
 

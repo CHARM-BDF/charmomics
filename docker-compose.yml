@@ -13,10 +13,10 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - franklin-network
+      - charmomics-network
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=franklin-network"
+      - "traefik.docker.network=charmomics-network"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
@@ -28,13 +28,13 @@ services:
     volumes:
       - ./frontend/src:/app/src
     networks:
-      - franklin-network
+      - charmomics-network
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=franklin-network"
-      - "traefik.http.routers.frontend-franklin-router.rule=Host(`localhost`)"
-      - "traefik.http.routers.frontend-franklin-router.service=frontend-franklin-web-service"
-      - "traefik.http.services.frontend-franklin-web-service.loadbalancer.server.port=80"
+      - "traefik.docker.network=charmomics-network"
+      - "traefik.http.routers.frontend-charmomics-router.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend-charmomics-router.service=frontend-charmomics-web-service"
+      - "traefik.http.services.frontend-charmomics-web-service.loadbalancer.server.port=80"
 
   backend:
     build:
@@ -44,18 +44,18 @@ services:
     volumes:
       - ./backend:/app
     networks:
-      - franklin-network
+      - charmomics-network
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=franklin-network"
-      - "traefik.http.routers.backend-franklin-router.rule=Host(`localhost`)"
-      - "traefik.http.routers.backend-franklin-router.rule=PathPrefix(`/api`)"
-      - "traefik.http.routers.backend-franklin-router.service=backend-franklin-api-service"
-      - "traefik.http.routers.backend-franklin-router.middlewares=backend-franklin-strip-prefix"
-      - "traefik.http.middlewares.backend-franklin-strip-prefix.stripprefix.prefixes=/api"
-      - "traefik.http.services.backend-franklin-api-service.loadbalancer.server.port=8000"
+      - "traefik.docker.network=charmomics-network"
+      - "traefik.http.routers.backend-charmomics-router.rule=Host(`localhost`)"
+      - "traefik.http.routers.backend-charmomics-router.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-charmomics-router.service=backend-charmomics-api-service"
+      - "traefik.http.routers.backend-charmomics-router.middlewares=backend-charmomics-strip-prefix"
+      - "traefik.http.middlewares.backend-charmomics-strip-prefix.stripprefix.prefixes=/api"
+      - "traefik.http.services.backend-charmomics-api-service.loadbalancer.server.port=8000"
 
-  franklin-db:
+  charmomics-db:
     image: mongo:8.0.3
     volumes:
       - ./etc/fixtures/initial-seed/initial-db-seed.sh:/docker-entrypoint-initdb.d/initial-db-seed.sh
@@ -63,10 +63,10 @@ services:
     ports:
       - 27017:27017
     networks:
-      - franklin-network
+      - charmomics-network
     environment:
-      MONGO_INITDB_DATABASE: franklin_db
+      MONGO_INITDB_DATABASE: charmomics_db
 
 networks:
-  franklin-network:
-    name: franklin-network
+  charmomics-network:
+    name: charmomics-network

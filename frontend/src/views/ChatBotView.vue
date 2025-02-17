@@ -1,5 +1,5 @@
 <template>
-  <h1>Franklin</h1>
+  <h1>CHARMomics</h1>
 
   <ChatBotSection
     :conversation="chatBotStore.conversation"
@@ -43,7 +43,7 @@ async function sendMessage() {
   try {
     await chatBotStore.sendMessage(message);
   } catch (error) {
-    console.log('Franklin Send Prompt: ' + error);
+    console.log('CHARMomics Send Prompt: ' + error);
   }
 }
 

@@ -1,4 +1,4 @@
-""" Franklin dependencies that are shared within the entire application """
+""" CHARMomics dependencies that are shared within the entire application """
 
 from pymongo import MongoClient
 

@@ -65,7 +65,7 @@ def fixture_genomic_units_to_annotate():
             {'unit': "NM_170707.3:c.745C>T", 'type': GenomicUnitType.HGVS_VARIANT}]
 
 
-# TODO: Carry over from Rosalution tests, no analysis in franklin, at least yet
+# TODO: Carry over from Rosalution tests, no analysis in charmomics, at least yet
 @pytest.fixture(name="genomic_units_with_types")
 def fixture_genomic_units_with_types(genomic_units_to_annotate):
     """Returns the multiple analyses being mocked as an array """

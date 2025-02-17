@@ -1,4 +1,4 @@
-""" Enumerations for the Franklin project. """
+""" Enumerations for the CHARMomics project. """
 
 from enum import Enum
 

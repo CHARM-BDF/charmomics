@@ -9,7 +9,7 @@ usage() {
   echo " -f Fixtures filepath"
   echo "    (default) /tmp/fixtures/initial-seed"
   echo " "
-  echo "Seeds the initial Franklin database with base fixtures for local development and system testing"
+  echo "Seeds the initial CHARMomics database with base fixtures for local development and system testing"
   exit
 }
 
@@ -30,11 +30,11 @@ if [[ ! -v fixture_filepath ]] ; then
   fixture_filepath="/tmp/fixtures/initial-seed"
 fi
 
-echo "Seeding Franklin database..."
+echo "Seeding CHARMomics database..."
 
-database="franklin_db"
+database="charmomics_db"
 
 echo "Importing Annotation Configuration file..."
 mongoimport --db "$database" --collection annotation_config --file "$fixture_filepath/annotation-config.json" --jsonArray
 
-echo "Seeding Franklin database...Complete"
+echo "Seeding CHARMomics database...Complete"

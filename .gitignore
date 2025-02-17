@@ -42,7 +42,7 @@ yarn-error.log*
 __pycache__/
 *.py[cod]
 *$py.class
-franklin_env/
+charmomics_env/
 
 # Python Unit test / coverage reports
 htmlcov/

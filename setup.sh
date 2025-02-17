@@ -33,7 +33,7 @@ clean_option="clean"
 
 if [[ $# -ne 0 ]] && [[ $1 -eq $clean_option ]]; then
     clean frontend
-    rm -rf backend/franklin_env
+    rm -rf backend/charmomics_env
 fi
 
 install frontend
@@ -43,8 +43,8 @@ cd backend || {
     echo "Failure to change to backend directory"
     exit 1
 }
-python3 -m venv franklin_env
-source franklin_env/bin/activate
+python3 -m venv charmomics_env
+source charmomics_env/bin/activate
 
 # install requirements
 pip3 install -r requirements.txt
@@ -55,4 +55,4 @@ cd - || {
     echo "Unable to change return to root directory"
     exit 1
 }
-echo "Use 'source backend/franklin_env/bin/activate' to activate the virtual environment"
+echo "Use 'source backend/charmomics_env/bin/activate' to activate the virtual environment"

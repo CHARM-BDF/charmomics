@@ -24,7 +24,7 @@ class Database:
         # operations within a constructor since there is not chance for failure creating allocating the object."
         #
         # https://pymongo.readthedocs.io/en/stable/tutorial.html#getting-a-collection
-        self.database = self.database_client.franklin_db
+        self.database = self.database_client.charmomics_db
         self.collections = {
             "annotation_config": AnnotationConfigCollection(self.database['annotation_config']),
             "annotation_manifest": AnnotationManifestCollection(self.database['annotation_manifest']),

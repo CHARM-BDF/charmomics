@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class AnnotationManifestCollection:
-    """ Repository to keep track of which annotation versions are used in Franklin """
+    """ Repository to keep track of which annotation versions are used in CHARMomics """
 
     def __init__(self, annotation_manifest_collection):
         """ Initalizes with the 'PyMongo' Collection object for the annotation manifest collection """
@@ -17,7 +17,7 @@ class AnnotationManifestCollection:
         self.collection = annotation_manifest_collection
 
     def all(self):
-        """ Returns all annotations available in Franklin with their versions """
+        """ Returns all annotations available in CHARMomics with their versions """
 
         return list(self.collection.find())
 
@@ -42,7 +42,7 @@ class AnnotationManifestCollection:
         }
 
     def add_dataset_to_manifest(self, annotation_unit: AnnotationUnit):
-        """ Adds this dataset and its version to the Franklin manifest. """
+        """ Adds this dataset and its version to the CHARMomics manifest. """
 
         dataset = {
             annotation_unit.get_dataset_name(): {

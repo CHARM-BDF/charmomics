@@ -1,14 +1,14 @@
 # Pull Request Template
 
-Thank you for contributing to Franklin! 😁
+Thank you for contributing to CHARMomics! 😁
 
 <!--- This project only accepts pull requests related to open issues -->
 <!--- If suggesting a new feature or change, please discuss it in an issue first -->
 <!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
 
 Any contributions to this repository should follow the
- [Contributing Guidelines](https://github.com/uab-cgds-worthey/franklin/blob/main/CONTRIBUTING.md)
- and [Code of Conduct](https://github.com/uab-cgds-worthey/franklin/blob/main/CODE_OF_CONDUCT.md).
+ [Contributing Guidelines](https://github.com/uab-cgds-worthey/charmomics/blob/main/CONTRIBUTING.md)
+ and [Code of Conduct](https://github.com/uab-cgds-worthey/charmomics/blob/main/CODE_OF_CONDUCT.md).
 
 <!-- Pull Request template begins here -->
 <!-- Delete everything from begining of file to here -->
