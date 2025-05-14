@@ -101,7 +101,7 @@ def get_standard_annotation_unit(annotation_config_collection_json, genomic_unit
 
 
 @pytest.fixture(name="annotation_queue")
-def fixture_cpam0046_annotation_queue(genomic_units_to_annotate, annotation_config_collection):
+def fixture_annotation_queue(genomic_units_to_annotate, annotation_config_collection):
     """ Returns an thread-safe annotation queue with tasks """
 
     test_queue = queue.Queue()

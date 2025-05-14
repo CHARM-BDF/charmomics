@@ -36,4 +36,5 @@ def mock_mongo_collection():
     mock_collection.update_one = Mock()
     mock_collection.insert_one = Mock()
     mock_collection.find_one_and_update = Mock()
+    mock_collection.count_documents = Mock()
     return mock_collection

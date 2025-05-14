@@ -3,7 +3,7 @@
 from pymongo import MongoClient
 
 from src.config import get_settings
-from src.core.annotation import AnnotationQueue
+from src.core.annotation_queue import AnnotationQueue
 from src.database import Database
 
 settings = get_settings()

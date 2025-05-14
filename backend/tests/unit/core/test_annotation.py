@@ -30,9 +30,9 @@ def test_processing_annotation_tasks(process_annotation_tasks):
 
     assert process_annotation_tasks['extract'].call_count == 20
 
-    assert process_annotation_tasks['version'].call_count == 20
+    assert process_annotation_tasks['version'].call_count == 3
 
-    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 21
+    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 20
     process_annotation_tasks['genomic_unit_collection'].annotate_genomic_unit.assert_called()
 
 
@@ -58,7 +58,7 @@ class SkipDepedencies:  # pylint: disable=too-few-public-methods
 @pytest.fixture(name="process_annotation_tasks")
 def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
     """
-    Emulates processing the annotations for the configured genomic unit's datasets within the CPAM0046 analysis.
+    Emulates processing the annotations for the VMA21's configured gene datasets
     """
     mock_extract_result = [{
         'data_set': 'mock_datset',

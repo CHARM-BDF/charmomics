@@ -67,11 +67,11 @@
        "versioning_type":"date"
     },
     {
-       "data_set":"ClinVar_Variantion_Id",
+       "data_set":"ClinVar_Variant_Id",
        "data_source":"Rosalution",
        "genomic_unit_type":"hgvs_variant",
        "annotation_source_type":"http",
-       "attribute":".[] | select(.colocated_variants != null) | .colocated_variants[] | select(.var_synonyms != null) | .var_synonyms | select( .ClinVar != null ) | select(.ClinVar != []) | .ClinVar[] | select(contains(\"VCV\")) | sub(\"VCV0+\"; \"\") | {\"ClinVar_Variantion_Id\": . } ",
+       "attribute":".[] | select(.colocated_variants != null) | .colocated_variants[] | select(.var_synonyms != null) | .var_synonyms | select( .ClinVar != null ) | select(.ClinVar != []) | .ClinVar[] | select(contains(\"VCV\")) | sub(\"VCV0+\"; \"\") | {\"ClinVar_Variant_Id\": . } ",
        "url":"http://rest.ensembl.org/vep/human/hgvs/{hgvs_variant_without_transcript_version}?content-type=application/json;clinvar=1;",
        "versioning_type":"rosalution",
        "dependencies":[

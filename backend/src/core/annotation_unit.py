@@ -27,9 +27,28 @@ class AnnotationUnit:
         """Returns the dataset's versioning type"""
         return self.dataset['versioning_type']
 
+    def does_source_and_version_match(self, data_source, version):
+        """Compares if an AnnotationUnit's """
+        return self.get_dataset_source() == data_source and self.version == version
+
     def is_transcript_dataset(self):
         """Returns true if the dataset is for a transcript"""
         return 'transcript' in self.dataset
+
+    def if_transcript_needs_provisioning(self):
+        """
+        Returns true if the dataset is a transcript, and will need
+        'transcript_id' to already exist as an annotation
+        """
+        return self.is_transcript_dataset() and self.get_dataset_name() != "transcript_id"
+
+    def set_transcript_provisioned(self, flag: bool):
+        """Update the transcript dataset indicating whether it is ready for annotation"""
+        self.transcript_provisioned = flag
+
+    def is_transcript_provisioned(self):
+        """Returns True when a Transcript dataset is transcript is provisioned to annotate."""
+        return self.transcript_provisioned
 
     def get_genomic_unit_type(self):
         """Return's 'genomic_unit_type' from dataset"""
@@ -128,3 +147,14 @@ class AnnotationUnit:
         """Checks if the Annotation Unit is versioned or not"""
         # This is currently a placeholder, and just returning True for now
         return self.version != ""
+
+    def get_missing_conditions(self):
+        """
+        Queries the list of missing conditions that the AnnotationUnit needs meet in order to be ready for
+        annotation. 
+        """
+        missing_conditions = [*self.get_missing_dependencies()]
+
+        if self.if_transcript_needs_provisioning() and not self.is_transcript_provisioned():
+            missing_conditions.append("transcript_id")
+        return missing_conditions

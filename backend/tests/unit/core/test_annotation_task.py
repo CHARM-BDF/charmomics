@@ -107,12 +107,13 @@ def test_annotation_extraction_value_error_exception(http_annotation_task_gene, 
 
     del hpo_annotation_response['diseaseAssoc']
 
-    actual_extractions = http_annotation_task_gene.extract(hpo_annotation_response)
-    assert len(actual_extractions) == 0
+    with pytest.raises(RuntimeError) as runtime_error:
+        http_annotation_task_gene.extract(hpo_annotation_response)
+        assert 'Failed to annotate "HPO"' in runtime_error
 
 
 @pytest.mark.parametrize(
-    "genomic_unit,dataset_name", [('VMA21', 'Entrez Gene Id'), ('NM_001017980.3:c.164G>T', 'ClinVar_Variantion_Id')]
+    "genomic_unit,dataset_name", [('VMA21', 'Entrez Gene Id'), ('NM_001017980.3:c.164G>T', 'ClinVar_Variant_Id')]
 )
 def test_annotation_versioning_task_created(genomic_unit, dataset_name, get_annotation_unit):
     """Verifies that the annotation task factory creates the correct version annotation task for the annotation unit"""
@@ -124,7 +125,7 @@ def test_annotation_versioning_task_created(genomic_unit, dataset_name, get_anno
 @pytest.mark.parametrize(
     "genomic_unit,dataset_name,expected", [
         ('VMA21', 'Entrez Gene Id', {"rosalution": "rosalution-manifest-00"}),
-        ('NM_001017980.3:c.164G>T', 'ClinVar_Variantion_Id', {"rosalution": "rosalution-manifest-00"}),
+        ('NM_001017980.3:c.164G>T', 'ClinVar_Variant_Id', {"rosalution": "rosalution-manifest-00"}),
         ('VMA21', 'Ensembl Gene Id', {"releases": [112]}),
         ('NM_001017980.3:c.164G>T', 'Polyphen Prediction', {"releases": [112]}),
         ('VMA21', 'HPO_NCBI_GENE_ID', {"date": "2024-09-16"}),
