@@ -6,35 +6,28 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/etc/traefik/config.yml"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - 80:80
+      - 443:443
       - 8080:8080
     volumes:
+      - ./etc/network/traefik/config.yml:/etc/traefik/config.yml:ro
+      - ./etc/network/.certificates:/etc/certs:ro
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - charmomics-network
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=charmomics-network"
+      - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.rule=Host(`localhost`)"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-
-  frontend:
-    build:
-      context: ./frontend/
-      target: development-stage
-      dockerfile: Dockerfile
-    volumes:
-      - ./frontend/src:/app/src
-    networks:
-      - charmomics-network
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=charmomics-network"
-      - "traefik.http.routers.frontend-charmomics-router.rule=Host(`localhost`)"
-      - "traefik.http.routers.frontend-charmomics-router.service=frontend-charmomics-web-service"
-      - "traefik.http.services.frontend-charmomics-web-service.loadbalancer.server.port=80"
 
   backend:
     build:
@@ -48,11 +41,12 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=charmomics-network"
-      - "traefik.http.routers.backend-charmomics-router.rule=Host(`localhost`)"
-      - "traefik.http.routers.backend-charmomics-router.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.backend-charmomics-router.tls=true"
+      - "traefik.http.routers.backend-charmomics-router.rule=Host(`local.charmomics.cgds`)"
+      - "traefik.http.routers.backend-charmomics-router.rule=PathPrefix(`/charmomics/api`)"
       - "traefik.http.routers.backend-charmomics-router.service=backend-charmomics-api-service"
       - "traefik.http.routers.backend-charmomics-router.middlewares=backend-charmomics-strip-prefix"
-      - "traefik.http.middlewares.backend-charmomics-strip-prefix.stripprefix.prefixes=/api"
+      - "traefik.http.middlewares.backend-charmomics-strip-prefix.stripprefix.prefixes=/charmomics/api"
       - "traefik.http.services.backend-charmomics-api-service.loadbalancer.server.port=8000"
 
   charmomics-db:

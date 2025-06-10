@@ -14,6 +14,7 @@ from src.repository.genomic_unit_collection import GenomicUnitCollection
 # create logger
 logger = logging.getLogger(__name__)
 
+
 def _create_temporary_annotation_unit(genomic_unit, manifest_dataset):
     """Private helper method to create a temporary annotation unit for finding within repository"""
 
@@ -24,13 +25,12 @@ def _create_temporary_annotation_unit(genomic_unit, manifest_dataset):
 
     return temp_annotation_unit
 
+
 class AnnotationProcess():
     """ Processes the annotation queue for annotations """
 
     def __init__(
-        self,
-        annotation_queue: AnnotationQueue,
-        annotation_manifest_collection: AnnotationManifestCollection,
+        self, annotation_queue: AnnotationQueue, annotation_manifest_collection: AnnotationManifestCollection,
         genomic_unit_collection: GenomicUnitCollection
     ):
         """
@@ -81,7 +81,7 @@ class AnnotationProcess():
         return self.version_cache[version_cache_id] != ""
 
     # Queue
-        # Why is this needed? Just use the Annotation Queue's built in empty function, as it is below
+    # Why is this needed? Just use the Annotation Queue's built in empty function, as it is below
     def annotation_unit_queue_empty(self) -> bool:
         """ Checks if the annotations queue is empty. """
         return self.queue.empty()
@@ -124,16 +124,15 @@ class AnnotationProcess():
         if self.is_version_cached(version_cache_id):
             cached_version = self.version_cache[version_cache_id]
             annotation_unit.set_latest_version(cached_version)
-            
+
             logger.info(
                 '%s Version Gathered from Cache %s...', format_annotation_logging(annotation_unit), cached_version
             )
-        
+
         self.queue.put(annotation_unit)
 
     def handle_annotation_unit_dependencies(self, annotation_unit: AnnotationUnit):
         """Retrieves the an annotation unit's dependencies if they exist."""
-
 
         missing_dependencies = annotation_unit.get_missing_dependencies()
 
@@ -145,8 +144,6 @@ class AnnotationProcess():
             if manifest_dataset is None:
                 continue
 
-            
-
             dependency_annotation_unit = _create_temporary_annotation_unit(
                 annotation_unit.genomic_unit, manifest_dataset
             )
@@ -157,7 +154,7 @@ class AnnotationProcess():
 
             if annotation_unit:
                 annotation_unit.set_annotation_for_dependency(missing_dataset_name, annotation_value)
-        
+
         if annotation_unit.if_transcript_needs_provisioning():
             transcript_id_manifest_dataset = self.annotation_manifest_collection.get_manifest_dataset_config(
                 annotation_unit.genomic_unit, "transcript_id"
@@ -204,7 +201,7 @@ class AnnotationProcess():
                     annotation_unit.get_missing_conditions()
                 )
             return
-        
+
         annotation_task = AnnotationTaskFactory.create_annotation_task(annotation_unit)
 
         logger.info('%s Creating Task To Annotate...', format_annotation_logging(annotation_unit))
@@ -251,7 +248,7 @@ class AnnotationProcess():
             logger.error('%s Exception [%s]', format_annotation_logging(annotation_unit), exception_error)
             logger.exception(exception_error)
             self.track_dataset_exception(annotation_unit, exception_error)
-        
+
         except RuntimeError as runtime_error:
             logger.error('%s Exception [%s] with [%s]', format_annotation_logging(annotation_unit), runtime_error, task)
             logger.exception(runtime_error)

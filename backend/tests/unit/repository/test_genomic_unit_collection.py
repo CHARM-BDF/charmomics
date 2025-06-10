@@ -63,6 +63,7 @@ def test_genomic_units_annotations_exists(
     )
     assert actual is expected
 
+
 @pytest.mark.parametrize(
     "genomic_unit,dataset_name,expected", [('VMA21', 'Entrez Gene Id', True), ('VMA21', 'Entrez Gene Id', False),
                                            ('NM_001017980.3:c.164G>T', 'ClinVar_Variant_Id', True)]
@@ -91,6 +92,7 @@ def test_genomic_units_annotations_exists(
         limit=1,
     )
     assert actual is expected
+
 
 @pytest.mark.parametrize(
     "genomic_unit,dataset_name,expected", [('VMA21', 'Entrez Gene Id', 'wup'), ('VMA21', 'Entrez Gene Id', None),
@@ -126,6 +128,7 @@ def test_find_genomic_unit_annotation_values(
     genomic_unit_collection.collection.find_one.assert_called_with(expected_find_filter, expected_find_projection)
 
     assert actual_value == expected
+
 
 def test_annotate_transcript_genomic_unit(genomic_unit_collection):
     """ Verifies that a transcript annotates a genomic unit properly """
@@ -280,8 +283,8 @@ def variant_with_datasets_annotation_unit(request, get_annotation_unit, get_anno
     annotation_unit = get_annotation_unit('NM_001017980.3:c.164G>T', dataset)
     annotation_unit.version = calculated_version
 
-    variant_in_database_json = get_annotation_json("NM_001017980.3:c.164G>T", GenomicUnitType.HGVS_VARIANT)                
-                
+    variant_in_database_json = get_annotation_json("NM_001017980.3:c.164G>T", GenomicUnitType.HGVS_VARIANT)
+
     if dataset == 'transcript_id':
         variant_in_database_json['transcripts'] = []
     else:

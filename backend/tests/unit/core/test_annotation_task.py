@@ -9,7 +9,6 @@ import subprocess
 import pytest
 import requests
 
-
 from src.core.annotation_task import (
     AnnotationTaskFactory, ForgeAnnotationTask, HttpAnnotationTask, VersionAnnotationTask, SubprocessAnnotationTask
 )

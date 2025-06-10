@@ -1,0 +1,19 @@
+services:
+  charmomics-db:
+    image: mongo:8.0.3
+    volumes:
+      - /mnt/persistent/db/bdf-charmomics/:/data/db
+    networks:
+      - charmomics-network
+    deploy:
+      placement:
+        constraints:
+          - node.labels.traefik-public.traefik-public-certificates == true
+    environment:
+      MONGO_INITDB_DATABASE: charmomics_db
+
+networks:
+  charmomics-network:
+    name: charmomics-network-dev
+    driver: overlay
+    attachable: true

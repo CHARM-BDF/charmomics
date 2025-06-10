@@ -1,0 +1,4 @@
+{
+  "mongodb_host": "fake-charmomics-db-host",
+  "mongodb_db": "fake-charmomics_db"
+}

@@ -7,14 +7,13 @@ from .annotation_process import AnnotationProcess
 from .annotation_queue import AnnotationQueue
 from .annotation_unit import AnnotationUnit
 
-
 from src.repository.annotation_config_collection import AnnotationConfigCollection
 from src.repository.annotation_manifest_collection import AnnotationManifestCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
 
-
 # create logger
 logger = logging.getLogger(__name__)
+
 
 class AnnotationService:
     """
@@ -38,8 +37,7 @@ class AnnotationService:
 
     @staticmethod
     def process_tasks(
-        annotation_queue: AnnotationQueue,
-        genomic_unit_collection: GenomicUnitCollection,
+        annotation_queue: AnnotationQueue, genomic_unit_collection: GenomicUnitCollection,
         annotation_manifest_collection: AnnotationManifestCollection
     ):  # pylint: disable=too-many-branches,too-many-locals
         """Processes items that have been added to the queue"""

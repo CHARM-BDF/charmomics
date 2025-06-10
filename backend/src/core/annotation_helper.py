@@ -1,5 +1,6 @@
 ANNOTATION_UNIT_PADDING = 75
 
+
 def annotation_log_label():
     """
     Provides a label for logging in the annotation section to make it easier to search on.

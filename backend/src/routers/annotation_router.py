@@ -99,10 +99,7 @@ def fetch_gene_annotations(
 
     genomic_unit_document = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
 
-    logger.info(genomic_unit_document)
-
     if genomic_unit_document is None:
-        logger.info("Is this happening?")
         raise HTTPException(status_code=404, detail=f"No annotations for '{gene}' found. Please queue annotations!")
 
     if "_id" in genomic_unit_document:
@@ -124,8 +121,6 @@ def fetch_variant_transcript_annotations(
     }
 
     genomic_unit_document = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
-
-    logger.info(genomic_unit_document)
 
     if genomic_unit_document is None:
         raise HTTPException(

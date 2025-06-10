@@ -1,5 +1,6 @@
 import queue
 
+
 class AnnotationQueue:
     """Wrapper for the queue to processes annotation tasks"""
 

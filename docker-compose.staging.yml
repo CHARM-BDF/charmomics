@@ -1,0 +1,24 @@
+services:
+  backend:
+    image: ghcr.io/uab-cgds-worthey/charmomics/backend:${CHARMOMICS_VERSION}
+    networks:
+      - charmomics-network
+      - traefik
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.http.routers.backend-charmomics-router.tls=true"
+        - "traefik.http.routers.backend-charmomics-router.rule=Host(`dev.cgds.uab.edu`) && PathPrefix(`/charmomics/api`)"
+        - "traefik.http.routers.backend-charmomics-router.service=backend-charmomics-api-service"
+        - "traefik.http.routers.backend-charmomics-router.middlewares=backend-charmomics-strip-prefix"
+        - "traefik.http.middlewares.backend-charmomics-strip-prefix.stripprefix.prefixes=/charmomics/api"
+        - "traefik.http.services.backend-charmomics-api-service.loadbalancer.server.port=8000"
+
+networks:
+  charmomics-network:
+    name: charmomics-network-dev
+    external: true
+  traefik:
+    name: traefik-public
+    external: true

@@ -14,6 +14,7 @@ from src.enums import GenomicUnitType
 
 logger = logging.getLogger(__name__)
 
+
 class GenomicUnitQuery():
     """ Represents the MongoDB query's filter and update arguments of an AnnotationUnit. """
 
@@ -26,7 +27,7 @@ class GenomicUnitQuery():
     def dataset_name(self):
         """Returns the name of the dataset for the genomic unit's annotation"""
         return self.genomic_annotation['data_set']
-    
+
     def provision_dataset_query_and_update(self):
         """Constructs a query's filter and update MongoDB arguments to provision a dataset for a genomic unit."""
 
@@ -61,7 +62,8 @@ class GenomicUnitQuery():
         arrays_filter = [{f"dataset.{self.dataset_name}": {'$exists': True}}]
 
         return query_filter, update_operation, arrays_filter
-    
+
+
 class AnnotationUnitQuery():
     """
     Represents the MongoDB query's filter and update arguments for an AnnotationUnit.
@@ -111,7 +113,8 @@ class AnnotationUnitQuery():
         }
         """
         return {f"annotations.{self.annotation_unit.get_dataset_name()}.$": 1, "_id": 0}
-    
+
+
 class GenomicUnitCollection:
     """ Repository for managing genomic units and their annotations """
 

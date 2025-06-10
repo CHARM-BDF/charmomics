@@ -40,7 +40,7 @@ class AnnotationTaskInterface:
 
                 if dependency_string in base:
                     return self.annotation_unit.genomic_unit[dependency]
-        
+
         return {}
 
     def aggregate_string_replacements(self, base_string) -> str:
@@ -158,7 +158,7 @@ class AnnotationTaskInterface:
                 jq_result = self.__json_extract__(jq_query, incoming_version_json)
             except ValueError as value_error:
                 raise RuntimeError(f"Failed to extract version from: {incoming_version_json}") from value_error
-            
+
             jq_result = next(jq_result, None)
             version = jq_result
 
@@ -346,6 +346,7 @@ class VersionAnnotationTask(AnnotationTaskInterface):
             return self.annotation_unit.dataset['version_url']
 
         return self.annotation_unit.dataset['versioning_type']
+
 
 class AnnotationTaskFactory:
     """
