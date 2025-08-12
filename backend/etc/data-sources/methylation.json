@@ -1,0 +1,220 @@
+[
+  {
+    "gene_symbol": "MGMT",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the MGMT promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of MGMT gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "MGMT promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced MGMT expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the MGMT promoter detected.",
+          "clinical_significance": "Suggests active MGMT expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "central_nervous_system": "MGMT methylation predicts response to temozolomide",
+        "colorectal": "MGMT methylation may be evaluated for its role in chemosensitivity",
+        "endometrial": "MGMT methylation may be evaluated for its role in chemosensitivity"
+      }
+    }
+  },
+  {
+    "gene_symbol": "MLH1",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the MLH1 promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of MLH1 gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "MLH1 promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced MLH1 expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the MLH1 promoter detected.",
+          "clinical_significance": "Suggests active MLH1 expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "central_nervous_system": "To evaluate mismatch repair (MMR) deficiency/microsatellite instability",
+        "colorectal": "Promoter hypermethylation is a common cause of sporadic MSI-high tumors",
+        "endometrial": "Promoter hypermethylation is a common cause of sporadic MSI-high tumors",
+        "hereditary": "Hypermethylation indicates a sporadic origin of Lynch-like tumors, ruling out germline mutation"
+      }
+    }
+  },
+  {
+    "gene_symbol": "CDKN2A",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the CDKN2A promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of CDKN2A gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "CDKN2A promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced CDKN2A expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the CDKN2A promoter detected.",
+          "clinical_significance": "Suggests active CDKN2A expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "central_nervous_system": "Hypermethylation associated with aggressive behavior in some gliomas",
+        "colorectal": "Screened for p16INK4a, may be methylated in some gastrointestinal tumors",
+        "endometrial": "Screened for p16INK4a, may be methylated in some gastrointestinal tumors",
+        "hematologic": "Methylation associated with prognosis in some leukemias and lymphomas"
+      }
+    }
+  },
+  {
+    "gene_symbol": "WT1",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the WT1 promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of WT1 gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "WT1 promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced WT1 expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the WT1 promoter detected.",
+          "clinical_significance": "Suggests active WT1 expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "hematologic": "Aberrantly methylated in Acute Myeloid Leukemia."
+      }
+    }
+  },
+  {
+    "gene_symbol": "BRCA1",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the BRCA1 promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of BRCA1 gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "BRCA1 promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced BRCA1 expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the BRCA1 promoter detected.",
+          "clinical_significance": "Suggests active BRCA1 expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "hereditary": "Promoter hypermethylation can be observed in some sporadic triple-negative breast cancers."
+      }
+    }
+  },
+  {
+    "gene_symbol": "CDKN2B",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the CDKN2B promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of CDKN2B gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "CDKN2B promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced CDKN2B expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the CDKN2B promoter detected.",
+          "clinical_significance": "Suggests active CDKN2B expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "hematologic": "Screened for p15INK4b, frequently methylated in acute lymphoblastic leukemia (ALL)"
+      }
+    }
+  },
+  {
+    "gene_symbol": "VHL",
+    "methylation": {
+      "result_interpretation": {
+        "hypermethylated": {
+          "interpretation": "High-level methylation of the VHL promoter detected.",
+          "clinical_significance": "Strongly associated with silencing of VHL gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+        },
+        "methylated": {
+          "interpretation": "VHL promoter methylation detected at a moderate level.",
+          "clinical_significance": "Suggests reduced VHL expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+        },
+        "unmethylated": {
+          "interpretation": "No significant methylation of the VHL promoter detected.",
+          "clinical_significance": "Suggests active VHL expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+        },
+        "indeterminate": {
+          "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+          "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+        },
+        "inconclusive": {
+          "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+          "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+        }
+      },
+      "cancer": {
+        "hereditary": "Methylation may be evaluated in the context of clear cell renal cell carcinoma."
+      }
+    }
+  }
+]

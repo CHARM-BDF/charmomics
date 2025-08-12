@@ -14,7 +14,7 @@ def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annota
     annotation_service = AnnotationService(annotation_config_collection)
     mock_queue = Mock()
     annotation_service.queue_annotation_tasks(genomic_units_to_annotate, mock_queue)
-    assert mock_queue.put.call_count == 20
+    assert mock_queue.put.call_count == 29
 
     actual_queued_genomic_units = [put_call.args[0].genomic_unit['unit'] for put_call in mock_queue.put.call_args_list]
 
@@ -23,16 +23,16 @@ def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annota
 
 def test_processing_annotation_tasks(process_annotation_tasks):
     """Verifies that each item on the annotation queue is read and executed"""
-    assert process_annotation_tasks['http'].call_count == 14
+    assert process_annotation_tasks['http'].call_count == 18
     assert process_annotation_tasks['none'].call_count == 0
-    assert process_annotation_tasks['forge'].call_count == 4
+    assert process_annotation_tasks['forge'].call_count == 6
     assert process_annotation_tasks['subprocess'].call_count == 2
 
-    assert process_annotation_tasks['extract'].call_count == 20
+    assert process_annotation_tasks['extract'].call_count == 29
 
-    assert process_annotation_tasks['version'].call_count == 3
+    assert process_annotation_tasks['version'].call_count == 4
 
-    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 20
+    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 23
     process_annotation_tasks['genomic_unit_collection'].annotate_genomic_unit.assert_called()
 
 

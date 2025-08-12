@@ -61,7 +61,8 @@ def fixture_genomic_units_to_annotate():
     """ Mock units to annotate, can handle a list of units """
 
     return [{'unit': "LMNA", 'type': GenomicUnitType.GENE}, {'unit': "VMA21", 'type': GenomicUnitType.GENE},
-            {'unit': "NM_001017980.3:c.164G>T", 'type': GenomicUnitType.HGVS_VARIANT},
+            {'unit': "MGMT",
+             'type': GenomicUnitType.GENE}, {'unit': "NM_001017980.3:c.164G>T", 'type': GenomicUnitType.HGVS_VARIANT},
             {'unit': "NM_170707.3:c.745C>T", 'type': GenomicUnitType.HGVS_VARIANT}]
 
 

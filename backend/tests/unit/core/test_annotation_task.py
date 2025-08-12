@@ -10,7 +10,8 @@ import pytest
 import requests
 
 from src.core.annotation_task import (
-    AnnotationTaskFactory, ForgeAnnotationTask, HttpAnnotationTask, VersionAnnotationTask, SubprocessAnnotationTask
+    AnnotationTaskFactory, ForgeAnnotationTask, HttpAnnotationTask, VersionAnnotationTask, SubprocessAnnotationTask,
+    JsonFileAnnotationTask
 )
 from src.core.annotation_unit import AnnotationUnit
 from src.enums import GenomicUnitType
@@ -147,14 +148,15 @@ def test_process_annotation_versioning_all_types(genomic_unit, dataset_name, exp
 
 
 @pytest.mark.parametrize(
-    "genomic_unit,dataset_name,version_to_extract,expected", [
-        ('VMA21', 'Entrez Gene Id', {"rosalution": "rosalution-manifest-00"}, "rosalution-manifest-00"),
-        ('VMA21', 'Ensembl Gene Id', {"releases": [112]}, 112),
-        ('LMNA', 'OMIM', {"date": "rosalution-manifest-00"}, "rosalution-manifest-00"),
-    ]
+    "genomic_unit,dataset_name,version_to_extract,expected",
+    [('VMA21', 'Entrez Gene Id', {"rosalution": "rosalution-manifest-00"}, "rosalution-manifest-00"),
+     ('VMA21', 'Ensembl Gene Id', {"releases": [112]}, 112),
+     ('LMNA', 'OMIM', {"date": "rosalution-manifest-00"}, "rosalution-manifest-00"),
+     ('MGMT', 'methylation', {"manual": "curated_07-29-2025"}, "curated_07-29-2025")]
 )
 def test_version_extraction(genomic_unit, dataset_name, expected, version_to_extract, get_version_task):
     """ Verifies extraction for datasets for all 3 versioning types - rest, date, rosalution"""
+
     task = get_version_task(genomic_unit, dataset_name)
     actual_version_extraction = task.extract_version(version_to_extract)
     assert actual_version_extraction == expected
@@ -201,6 +203,24 @@ def test_ditto_subprocess_annotate(subprocess_annotation_ditto_score_task):
         assert expected == actual_subprocess_result
 
 
+def test_annoate_json_file_gene_methylation(json_file_annotation_task):
+    """ Verifies the json file annotation task pulls the correct dataset from file """
+
+    actual_annotation = json_file_annotation_task.annotate()
+
+    assert len(actual_annotation) == 7
+
+
+def test_extraction_json_file_gene_methylation(json_file_annotation_task):
+    """ Verifies the extraction of a json file task in pulling the correct annotation for the gene MGMT """
+
+    annotation = json_file_annotation_task.annotate()
+    extracted_annotations = json_file_annotation_task.extract(annotation)
+
+    assert extracted_annotations[0]['data_set'] == "methylation"
+    assert extracted_annotations[0]['data_source'] == "curated_by_worthey"
+
+
 ## Fixtures ##
 
 
@@ -217,13 +237,23 @@ def get_version_annotation_task(get_annotation_unit):
     return _create_version_task
 
 
-@pytest.fixture(name="gene_genomic_unit")
-def fixture_gene_genomic_unit():
+@pytest.fixture(name="gene_genomic_unit_vma21")
+def fixture_gene_genomic_unit_vma21():
     """ Returns the genomic unit 'VMA21' to be annotated """
 
     return {
         "unit": "VMA21",
         "Entrez Gene Id": "45614",
+        "genomic_unit_type": GenomicUnitType.GENE,
+    }
+
+
+@pytest.fixture(name="gene_genomic_unit_mgmt")
+def fixture_gene_genomic_unit_mgmt():
+    """ Returns the genomic unit 'MGMT' to be annotated  """
+
+    return {
+        "unit": "MGMT",
         "genomic_unit_type": GenomicUnitType.GENE,
     }
 
@@ -313,6 +343,18 @@ def fixture_ncbi_linkout_dataset():
     }
 
 
+@pytest.fixture(name="gene_methylation_dataset")
+def fixture_methylation_dataset():
+    """ Returns the dict of methylation dataset """
+
+    return {
+        "data_set": "methylation", "data_source": "curated_by_worthey", "annotation_source_type": "json_file",
+        "filepath": "etc/data-sources/methylation.json", "genomic_unit_type": "gene",
+        "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation", "versioning_type": "manual",
+        "version": "curated_07-29-2025"
+    }
+
+
 @pytest.fixture(name="polyphen_prediction_dataset")
 def fixture_polyphen_prediction_dataset():
     """ Returns the dict of the polyphen_prediction dataset """
@@ -392,9 +434,9 @@ def fixture_http_annotation_transcript_id(hgvs_variant_genomic_unit, transcript_
 
 
 @pytest.fixture(name="http_annotation_task_gene")
-def fixture_http_annotation_empty(gene_genomic_unit, gene_hpo_dataset):
+def fixture_http_annotation_empty(gene_genomic_unit_vma21, gene_hpo_dataset):
     """Returns an HTTP annotation taskd"""
-    annotation_unit = AnnotationUnit(gene_genomic_unit, gene_hpo_dataset)
+    annotation_unit = AnnotationUnit(gene_genomic_unit_vma21, gene_hpo_dataset)
     task = HttpAnnotationTask(annotation_unit)
     return task
 
@@ -409,11 +451,21 @@ def fixture_hgvs_variant_annotation_unit(hgvs_variant_genomic_unit, transcript_i
 
 
 @pytest.fixture(name="forge_annotation_task_gene")
-def fixture_forge_annotation_task_gene_ncbi_linkout(gene_genomic_unit, gene_ncbi_linkout_dataset):
+def fixture_forge_annotation_task_gene_ncbi_linkout(gene_genomic_unit_vma21, gene_ncbi_linkout_dataset):
     """ Returns a Forge annotation task for the NCBI linkout for the VMA21 Gene genomic unit """
 
-    annotation_unit = AnnotationUnit(gene_genomic_unit, gene_ncbi_linkout_dataset)
+    annotation_unit = AnnotationUnit(gene_genomic_unit_vma21, gene_ncbi_linkout_dataset)
     task = ForgeAnnotationTask(annotation_unit)
+
+    return task
+
+
+@pytest.fixture(name="json_file_annotation_task")
+def fixture_json_file_annotation_task_gene_methylation(gene_genomic_unit_mgmt, gene_methylation_dataset):
+    """ Returns a JsonFile annotation task for the Meythylation annotation for MGMT gene genomic unit """
+
+    annotation_unit = AnnotationUnit(gene_genomic_unit_mgmt, gene_methylation_dataset)
+    task = JsonFileAnnotationTask(annotation_unit)
 
     return task
 

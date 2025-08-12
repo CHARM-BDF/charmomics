@@ -150,6 +150,8 @@ class AnnotationTaskInterface:
             version = incoming_version_json["rosalution"]
         elif versioning_type == "date":
             version = incoming_version_json["date"]
+        elif versioning_type == "manual":
+            version = incoming_version_json["manual"]
         else:
             jq_query = self.annotation_unit.dataset['version_attribute']
 
@@ -283,6 +285,21 @@ class SubprocessAnnotationTask(AnnotationTaskInterface):
         return self.aggregate_string_replacements(self.annotation_unit.dataset['subprocess']).split(' ')
 
 
+class JsonFileAnnotationTask(AnnotationTaskInterface):
+    """ An annotation task that reads Json from a file to fetch an annotation """
+
+    def __init__(self, annotation_unit):
+        """ Initalizes the json file task with an annotation unit """
+        AnnotationTaskInterface.__init__(self, annotation_unit)
+
+    def annotate(self):
+        """ Reads a json file to retireve an annotation and returns a json result """
+        with open(self.annotation_unit.dataset['filepath'], mode="r", encoding="utf-8") as json_file:
+            json_result = json.load(json_file)
+
+        return json_result
+
+
 class VersionAnnotationTask(AnnotationTaskInterface):
     """An annotation task that gets the version of the annotation"""
 
@@ -293,7 +310,7 @@ class VersionAnnotationTask(AnnotationTaskInterface):
         AnnotationTaskInterface.__init__(self, annotation_unit)
         self.version_types = {
             "rest": self.get_annotation_version_from_rest, "rosalution": self.get_annotation_version_from_rosalution,
-            "date": self.get_annotation_version_from_date
+            "date": self.get_annotation_version_from_date, "manual": self.get_annotation_version_from_curated
         }
 
     def annotate(self):
@@ -327,6 +344,12 @@ class VersionAnnotationTask(AnnotationTaskInterface):
 
         return version
 
+    def get_annotation_version_from_curated(self):
+        """ Gets version for the curated data sources and returns the version data """
+        version = {"manual": self.annotation_unit.dataset['version']}
+
+        return version
+
     def get_annotation_version_from_rosalution(self):
         """Gets version for rosalution type and returns the version data"""
 
@@ -356,7 +379,7 @@ class AnnotationTaskFactory:
 
     tasks = {
         "http": HttpAnnotationTask, "csv": CsvAnnotationTask, "none": NoneAnnotationTask, "forge": ForgeAnnotationTask,
-        "subprocess": SubprocessAnnotationTask, "version": VersionAnnotationTask
+        "json_file": JsonFileAnnotationTask, "subprocess": SubprocessAnnotationTask, "version": VersionAnnotationTask
     }
 
     @classmethod

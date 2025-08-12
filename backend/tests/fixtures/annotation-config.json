@@ -124,5 +124,15 @@
          "ensembl_vep_vcf_string"
       ],
       "versioning_type": "rosalution"
+   },
+      {
+      "data_set":"methylation",
+      "data_source":"curated_by_worthey",
+      "annotation_source_type":"json_file",
+      "filepath":"etc/data-sources/methylation.json",
+      "genomic_unit_type":"gene",
+      "attribute":".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation",
+      "versioning_type":"manual",
+      "version":"curated_07-29-2025"
    }
 ]
