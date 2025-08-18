@@ -86,8 +86,6 @@ class AnnotationUnitQuery():
         }
         """
 
-        logger.info("%s, %s", self.annotation_unit.get_dataset_name(), self.annotation_unit.genomic_unit)
-
         genomic_unit_type_string = self.annotation_unit.get_genomic_unit_type_string()
         genomic_unit_name = self.annotation_unit.get_genomic_unit()
         data_set_name = self.annotation_unit.get_dataset_name()

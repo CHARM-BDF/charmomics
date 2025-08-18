@@ -984,7 +984,7 @@
     "annotation_source_type": "json_file",
     "filepath": "etc/data-sources/methylation.json",
     "genomic_unit_type": "gene",
-    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation",
+    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"methylation\": .methylation }",
     "versioning_type": "manual",
     "version": "curated_07-29-2025"
   }

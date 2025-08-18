@@ -11,6 +11,8 @@ class AnnotationUnit:
         self.dataset = dataset
         self.version = ""
 
+        self.transcript_provisioned = False
+
     def get_genomic_unit(self):
         """Returns 'unit' from genomic_unit"""
         return self.genomic_unit['unit']

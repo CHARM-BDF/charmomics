@@ -1,13 +1,12 @@
 import logging
 import time
-from requests.exceptions import JSONDecodeError
+from requests.exceptions import JSONDecodeError, HTTPError
 
 from .annotation_helper import annotation_log_label, format_annotation_logging
 from .annotation_queue import AnnotationQueue
 from .annotation_task import AnnotationTaskFactory, VersionAnnotationTask
 from .annotation_unit import AnnotationUnit
 
-from src.repository.annotation_config_collection import AnnotationConfigCollection
 from src.repository.annotation_manifest_collection import AnnotationManifestCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
 
@@ -244,7 +243,7 @@ class AnnotationProcess():
             logger.exception(error)
             self.track_dataset_exception(annotation_unit, error)
 
-        except (JSONDecodeError, TypeError, ValueError) as exception_error:
+        except (JSONDecodeError, TypeError, ValueError, HTTPError) as exception_error:
             logger.error('%s Exception [%s]', format_annotation_logging(annotation_unit), exception_error)
             logger.exception(exception_error)
             self.track_dataset_exception(annotation_unit, exception_error)
