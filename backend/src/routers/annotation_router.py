@@ -3,131 +3,49 @@
 import logging
 import re
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from src.core.annotation import AnnotationService
 from src.dependencies import database, annotation_queue
-from src.enums import GenomicUnitType
+from src.enums import OmicUnitType
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/annotation", tags=["annotation"], dependencies=[Depends(database)])
 
 
-@router.post("/gene/{gene}")
-def annotation_gene_genomic_unit(
-    gene: str,
-    background_tasks: BackgroundTasks,
-    repositories=Depends(database),
-    annotation_task_queue=Depends(annotation_queue)
+@router.post("/")
+def annotate_omic_unit(
+    type: OmicUnitType, name: str, repositories=Depends(database), annotation_task_queue=Depends(annotation_queue)
 ):
-    """ Annotation endpoint to annotate a gene genomic unit """
-    units_to_annotate = [{"unit": gene, "type": GenomicUnitType.GENE}]
+    """ Initiates annotations for a given omic unit and returns the results when finished """
 
-    genomic_unit = {
-        'type': GenomicUnitType.GENE,
-        'unit': gene,
-    }
+    omic_unit = {'unit': name, 'type': type}
 
-    genomic_unit_exist = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
+    omic_unit_exist = repositories['genomic_unit'].find_genomic_unit(omic_unit)
 
-    if not genomic_unit_exist:
-        genomic_gene_data = {"gene_symbol": gene, "gene": gene, "annotations": []}
-        repositories['genomic_unit'].create_genomic_unit(genomic_gene_data)
+    if not omic_unit_exist:
+        new_genomic_unit = None
 
-    annotation_service = AnnotationService(repositories["annotation_config"])
-    annotation_service.queue_annotation_tasks(units_to_annotate, annotation_task_queue)
+        if omic_unit['type'] is OmicUnitType.GENE:
+            new_genomic_unit = {"gene_symbol": omic_unit['unit'], "gene": omic_unit['unit'], "annotations": []}
+        if omic_unit['type'] is OmicUnitType.HGVS_VARIANT:
+            new_genomic_unit = {"hgvs_variant": omic_unit['unit'], 'transcripts': [], 'annotations': []}
 
-    background_tasks.add_task(
-        AnnotationService.process_tasks, annotation_task_queue, repositories['annotation_manifest'],
-        repositories['genomic_unit']
+        repositories['genomic_unit'].create_genomic_unit(new_genomic_unit)
+
+    if omic_unit['type'] is OmicUnitType.HGVS_VARIANT:
+        transcript = omic_unit['unit'].split(':')[0]
+        transcript_without_version = re.sub(r'\..*', '', transcript)
+        omic_unit['genomic_build'] = 'hg19'
+        omic_unit['transcript'] = transcript_without_version
+
+    annotation_service = AnnotationService(repositories['annotation_config'])
+    annotation_service.queue_annotation_tasks([omic_unit], annotation_task_queue)
+
+    return annotation_service.process_tasks(
+        annotation_queue=annotation_task_queue,
+        genomic_unit_collection=repositories['genomic_unit'],
+        annotation_manifest_collection=repositories['annotation_manifest'],
+        omic_unit=omic_unit
     )
-
-    return {"name": f"{gene} annotations queued."}
-
-
-@router.post("/variant/{hgvs_variant}")
-def annotation_variant_transcript_genomic_unit(
-    hgvs_variant: str,
-    background_tasks: BackgroundTasks,
-    repositories=Depends(database),
-    annotation_task_queue=Depends(annotation_queue)
-):
-
-    genomic_unit = {
-        'type': GenomicUnitType.HGVS_VARIANT,
-        'unit': hgvs_variant,
-    }
-
-    genomic_unit_exist = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
-
-    if not genomic_unit_exist:
-        genomic_gene_data = {"hgvs_variant": hgvs_variant, "transcripts": [], "annotations": []}
-        repositories['genomic_unit'].create_genomic_unit(genomic_gene_data)
-
-    transcript = hgvs_variant.split(':')[0]
-    transcript_without_version = re.sub(r'\..*', '', transcript)
-
-    units_to_annotate = [{
-        "unit": hgvs_variant,
-        "type": GenomicUnitType.HGVS_VARIANT,
-        "genomic_build": 'hg19',
-        "transcript": transcript_without_version,
-    }]
-
-    annotation_service = AnnotationService(repositories["annotation_config"])
-    annotation_service.queue_annotation_tasks(units_to_annotate, annotation_task_queue)
-    background_tasks.add_task(
-        AnnotationService.process_tasks, annotation_task_queue, repositories['annotation_manifest'],
-        repositories['genomic_unit']
-    )
-
-    return {"name": f"{hgvs_variant} annotations queued."}
-
-
-@router.get("/gene/{gene}")
-def fetch_gene_annotations(
-    gene: str,
-    repositories=Depends(database),
-):
-    """ Annotation endpoint to fetch annotations for a gene genomic unit """
-
-    genomic_unit = {
-        'type': GenomicUnitType.GENE,
-        'unit': gene,
-    }
-
-    genomic_unit_document = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
-
-    if genomic_unit_document is None:
-        raise HTTPException(status_code=404, detail=f"No annotations for '{gene}' found. Please queue annotations!")
-
-    if "_id" in genomic_unit_document:
-        genomic_unit_document.pop("_id", None)
-
-    return genomic_unit_document
-
-
-@router.get("/variant/{hgvs_variant}")
-def fetch_variant_transcript_annotations(
-    hgvs_variant: str,
-    repositories=Depends(database),
-):
-    """ Annotation endpoint to fetch annotations for a gene genomic unit """
-
-    genomic_unit = {
-        'type': GenomicUnitType.HGVS_VARIANT,
-        'unit': hgvs_variant,
-    }
-
-    genomic_unit_document = repositories["genomic_unit"].find_genomic_unit(genomic_unit)
-
-    if genomic_unit_document is None:
-        raise HTTPException(
-            status_code=404, detail=f"No annotations for '{hgvs_variant}' found. Please queue annotations!"
-        )
-
-    if "_id" in genomic_unit_document:
-        genomic_unit_document.pop("_id", None)
-
-    return genomic_unit_document

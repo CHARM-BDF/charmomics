@@ -103,6 +103,9 @@ class AnnotationTaskInterface:
                 "version": self.annotation_unit.version
             }
 
+            if 'cache' in self.annotation_unit.dataset:
+                annotation_unit_json['cache'] = self.annotation_unit.dataset['cache']
+
             jq_results = empty_gen()
             try:
                 replaced_attributes = self.aggregate_string_replacements(self.annotation_unit.dataset['attribute'])

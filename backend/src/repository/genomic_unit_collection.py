@@ -10,7 +10,7 @@ from pymongo import ReturnDocument
 from .genomic_unit_collection_for_transcripts import GenomicUnitCollectionForTranscripts
 
 from src.core.annotation_unit import AnnotationUnit
-from src.enums import GenomicUnitType
+from src.enums import OmicUnitType
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +37,9 @@ class GenomicUnitQuery():
         }
 
         update_operation = {'$addToSet': {"annotations": {self.dataset_name: []}}}
+
+        if 'cache' in self.genomic_annotation:
+            update_operation['$addToSet']['annotations']['cache'] = self.genomic_annotation['cache']
 
         return query_filter, update_operation
 
@@ -171,6 +174,20 @@ class GenomicUnitCollection:
             genomic_unit['type'].value: genomic_unit['unit'],
         })
 
+    def find_genomic_unit_without_cache(self, genomic_unit):
+        """ Returns the given genomic unit from the genomic unit collection without the caches datasets """
+
+        find_query = {genomic_unit['type'].value: genomic_unit['unit']}
+
+        result = self.collection.find_one(find_query, {"_id": 0})
+
+        if result is None:
+            return None
+
+        result['annotations'] = [dataset for dataset in result['annotations'] if 'cache' not in dataset]
+
+        return result
+
     def update_genomic_unit_by_mongo_id(self, genomic_unit_document):
         """ Takes a genomic unit and overwrites the existing object based on the object's id """
         genomic_unit_id = genomic_unit_document['_id']
@@ -268,7 +285,7 @@ class GenomicUnitCollection:
         """
         Takes a genomic_unit and adds it to the collection if it doesn't already exist (exact match).
         """
-        type_to_save = GenomicUnitType.string_types() & genomic_unit.keys()
+        type_to_save = OmicUnitType.string_types() & genomic_unit.keys()
 
         if len(type_to_save) != 1:
             logger.error(

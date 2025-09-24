@@ -134,5 +134,18 @@
       "attribute":".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation",
       "versioning_type":"manual",
       "version":"curated_07-29-2025"
-   }
+   },
+   {
+      "data_set": "HPO_GENE_CALL_CACHE",
+      "data_source": "HPO",
+      "genomic_unit_type": "gene",
+      "annotation_source_type": "http",
+      "url": "https://ontology.jax.org/api/network/annotation/{HPO_NCBI_GENE_ID}",
+      "attribute": "{ HPO_GENE_CALL_CACHE: .}",
+      "dependencies": [
+      "HPO_NCBI_GENE_ID"
+      ],
+      "versioning_type": "date",
+      "cache": true
+  }
 ]

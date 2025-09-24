@@ -38,7 +38,7 @@ class AnnotationService:
     @staticmethod
     def process_tasks(
         annotation_queue: AnnotationQueue, genomic_unit_collection: GenomicUnitCollection,
-        annotation_manifest_collection: AnnotationManifestCollection
+        annotation_manifest_collection: AnnotationManifestCollection, omic_unit: dict
     ):  # pylint: disable=too-many-branches,too-many-locals
         """Processes items that have been added to the queue"""
         logger.info("%s Processing annotation tasks queue ...", annotation_log_label())
@@ -60,3 +60,5 @@ class AnnotationService:
 
         processor.log_dataset_failures()
         logger.info("%s Annotation BackgroundTask thread ending", annotation_log_label())
+
+        return genomic_unit_collection.find_genomic_unit_without_cache(omic_unit)

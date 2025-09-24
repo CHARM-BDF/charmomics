@@ -431,7 +431,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Zebrafish_Zebrafish_Information_Network_url | { Zebrafish_Alliance_Genome_Automated_Summary: .automatedGeneSynopsis }",
+    "attribute": ".Zebrafish_Alliance_Genome_Automated_Summary | { Zebrafish_Alliance_Genome_Automated_Summary: .automatedGeneSynopsis }",
     "dependencies": [
       "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -446,7 +446,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Zebrafish_Zebrafish_Information_Network_url | { Zebrafish_Alliance_Genome_ZFIN_Summary: .geneSynopsis }",
+    "attribute": ".Zebrafish_Alliance_Genome_ZFIN_Summary | { Zebrafish_Alliance_Genome_ZFIN_Summary: .geneSynopsis }",
     "dependencies": [
       "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -900,7 +900,8 @@
     ],
     "versioning_type": "rest",
     "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
-    "version_attribute": ".releases[]"
+    "version_attribute": ".releases[]",
+    "cache": true
   },
   {
     "data_set": "HGNC_GENE_NAMES_CALL_CACHE",
@@ -911,7 +912,8 @@
     "attribute": ".response | .docs[] | select( .symbol | contains(\"{gene}\")) | { \"HGNC_GENE_NAMES_CALL_CACHE\": .}",
     "versioning_type": "rest",
     "version_url": "https://rest.genenames.org/info",
-    "version_attribute": ".lastModified | split(\"T\")[0]"
+    "version_attribute": ".lastModified | split(\"T\")[0]",
+    "cache": true
   },
   {
     "data_set": "HPO_GENE_CALL_CACHE",
@@ -923,7 +925,8 @@
     "dependencies": [
       "HPO_NCBI_GENE_ID"
     ],
-    "versioning_type": "date"
+    "versioning_type": "date",
+    "cache": true
   },
   {
     "data_set": "ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE",
@@ -934,7 +937,8 @@
     "attribute": "{ ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE: .results}",
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
-    "version_attribute": ".releaseVersion"
+    "version_attribute": ".releaseVersion",
+    "cache": true
   },
   {
     "data_set": "MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE",
@@ -948,7 +952,8 @@
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
-    "version_attribute": ".releaseVersion"
+    "version_attribute": ".releaseVersion",
+    "cache": true
   },
   {
     "data_set": "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE",
@@ -962,7 +967,8 @@
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
-    "version_attribute": ".releaseVersion"
+    "version_attribute": ".releaseVersion",
+    "cache": true
   },
   {
     "data_set": "RAT_SUMMARY_ALLIANCE_GENOME_CACHE",
@@ -976,7 +982,8 @@
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
-    "version_attribute": ".releaseVersion"
+    "version_attribute": ".releaseVersion",
+    "cache": true
   },
   {
     "data_set": "methylation",

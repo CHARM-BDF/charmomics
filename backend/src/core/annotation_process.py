@@ -29,8 +29,10 @@ class AnnotationProcess():
     """ Processes the annotation queue for annotations """
 
     def __init__(
-        self, annotation_queue: AnnotationQueue, annotation_manifest_collection: AnnotationManifestCollection,
-        genomic_unit_collection: GenomicUnitCollection
+        self,
+        annotation_queue: AnnotationQueue,
+        genomic_unit_collection: GenomicUnitCollection,
+        annotation_manifest_collection: AnnotationManifestCollection,
     ):
         """
         Initializes the annotation process to take a queue of AnnotationUnits and run the tasks to annotate them.

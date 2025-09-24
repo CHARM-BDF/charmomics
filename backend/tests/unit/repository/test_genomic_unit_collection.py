@@ -4,7 +4,7 @@ import pytest
 from bson import ObjectId
 from unittest.mock import Mock
 
-from src.enums import GenomicUnitType
+from src.enums import OmicUnitType
 
 
 def test_find_genomic_units(genomic_unit_collection):
@@ -132,7 +132,7 @@ def test_find_genomic_unit_annotation_values(
 
 def test_annotate_transcript_genomic_unit(genomic_unit_collection):
     """ Verifies that a transcript annotates a genomic unit properly """
-    genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': GenomicUnitType.HGVS_VARIANT}
+    genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': OmicUnitType.HGVS_VARIANT}
     transcript_annotation_unit = {
         "data_set": "SIFT Prediction",
         "data_source": "Ensembl",
@@ -178,8 +178,8 @@ def test_annotate_genomic_unit(prepare_test_annotate, genomic_unit_collection):
 
 def test_annotation_genomic_unit_with_file(genomic_unit_collection, get_annotation_json):
     """ Accepts a file and adds it as an annotation to the given genomic unit """
-    genomic_unit = get_annotation_json('NM_001017980.3:c.164G>T', GenomicUnitType.HGVS_VARIANT)
-    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': GenomicUnitType.HGVS_VARIANT}
+    genomic_unit = get_annotation_json('NM_001017980.3:c.164G>T', OmicUnitType.HGVS_VARIANT)
+    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': OmicUnitType.HGVS_VARIANT}
     annotation_unit = {
         "data_set": 'GeneHomology_Multi-SequenceAlignment', "data_source": "rosalution_manual", "version": "1979-01-01",
         "value": {"file_id": "fake-image-id-1", "created_date": "1979-01-01 00:00:00"}
@@ -206,8 +206,8 @@ def test_annotation_genomic_unit_with_file(genomic_unit_collection, get_annotati
 
 def test_update_existing_genomic_unit_file_annotation(genomic_unit_collection, get_annotation_json):
     """ Updates an existing file annotation with a new file annotation in place"""
-    genomic_unit = get_annotation_json('NM_001017980.3:c.164G>T', GenomicUnitType.HGVS_VARIANT)
-    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': GenomicUnitType.HGVS_VARIANT}
+    genomic_unit = get_annotation_json('NM_001017980.3:c.164G>T', OmicUnitType.HGVS_VARIANT)
+    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': OmicUnitType.HGVS_VARIANT}
     annotation_unit_value = {"file_id": "fake-image-id-2", "created_date": "1979-01-01 00:00:00"}
     data_set = 'GeneHomology_Multi-SequenceAlignment'
     file_id_old = "fake-image-id-1"
@@ -243,8 +243,8 @@ def test_update_existing_genomic_unit_file_annotation(genomic_unit_collection, g
 
 def test_remove_existing_genomic_unit_file_annotation(genomic_unit_collection, get_annotation_json):
     """ Accepts a request to remove an existing file annotation """
-    genomic_unit_json = get_annotation_json('NM_001017980.3:c.164G>T', GenomicUnitType.HGVS_VARIANT)
-    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': GenomicUnitType.HGVS_VARIANT}
+    genomic_unit_json = get_annotation_json('NM_001017980.3:c.164G>T', OmicUnitType.HGVS_VARIANT)
+    incoming_genomic_unit = {'unit': 'NM_001017980.3:c.164G>T', 'type': OmicUnitType.HGVS_VARIANT}
     data_set = 'GeneHomology_Multi-SequenceAlignment'
     file_id = "fake-image-id-1"
 
@@ -283,7 +283,7 @@ def variant_with_datasets_annotation_unit(request, get_annotation_unit, get_anno
     annotation_unit = get_annotation_unit('NM_001017980.3:c.164G>T', dataset)
     annotation_unit.version = calculated_version
 
-    variant_in_database_json = get_annotation_json("NM_001017980.3:c.164G>T", GenomicUnitType.HGVS_VARIANT)
+    variant_in_database_json = get_annotation_json("NM_001017980.3:c.164G>T", OmicUnitType.HGVS_VARIANT)
 
     if dataset == 'transcript_id':
         variant_in_database_json['transcripts'] = []

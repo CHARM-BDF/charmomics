@@ -46,15 +46,13 @@ fi
 
 IFS=$'\n' read -d '' -r -a VARIANTS < "$BASE_VARIANT_FILEPATH"
 
-echo "$BASE_URL/api/annotation/variant/$variant"
-
 for variant in "${VARIANTS[@]}"
 do
 
     echo "Starting annotations for variant symbol $variant..."
 
     curl -s -X "POST" \
-        "$BASE_URL/api/annotation/variant/$variant" \
+        "$BASE_URL/api/annotation/?type=hgvs_variant&name=$variant" \
         -H "accept: application/json" \
         > /dev/null
 

@@ -8,13 +8,15 @@ from src.core.annotation import AnnotationService
 from src.repository.annotation_manifest_collection import AnnotationManifestCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
 
+from src.enums import OmicUnitType
+
 
 def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annotation_config_collection):
     """Verifies annotations are queued according to the specific genomic units"""
     annotation_service = AnnotationService(annotation_config_collection)
     mock_queue = Mock()
     annotation_service.queue_annotation_tasks(genomic_units_to_annotate, mock_queue)
-    assert mock_queue.put.call_count == 29
+    assert mock_queue.put.call_count == 32
 
     actual_queued_genomic_units = [put_call.args[0].genomic_unit['unit'] for put_call in mock_queue.put.call_args_list]
 
@@ -23,16 +25,18 @@ def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annota
 
 def test_processing_annotation_tasks(process_annotation_tasks):
     """Verifies that each item on the annotation queue is read and executed"""
-    assert process_annotation_tasks['http'].call_count == 18
+
+    assert process_annotation_tasks['http'].call_count == 21
     assert process_annotation_tasks['none'].call_count == 0
     assert process_annotation_tasks['forge'].call_count == 6
     assert process_annotation_tasks['subprocess'].call_count == 2
 
-    assert process_annotation_tasks['extract'].call_count == 29
+    assert process_annotation_tasks['extract'].call_count == 32
 
     assert process_annotation_tasks['version'].call_count == 4
 
-    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 23
+    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_annotation_value.call_count == 26
+    assert process_annotation_tasks['genomic_unit_collection'].find_genomic_unit_without_cache.call_count == 1
     process_annotation_tasks['genomic_unit_collection'].annotate_genomic_unit.assert_called()
 
 
@@ -67,6 +71,11 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
         'value': '9000',
     }]
 
+    mock_omic_unit = {
+        "unit": "VMA21",
+        "type": OmicUnitType.GENE,
+    }
+
     with (
         patch("src.core.annotation_task.AnnotationTaskInterface.extract",
               return_value=mock_extract_result) as extract_task_annotate,
@@ -88,8 +97,9 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
         mock_genomic_unit_collection.annotation_exist.return_value = False
 
         AnnotationService.process_tasks(
-            annotation_queue, mock_annotation_manifest_collection, mock_genomic_unit_collection
+            annotation_queue, mock_genomic_unit_collection, mock_annotation_manifest_collection, mock_omic_unit
         )
+
         yield {
             'extract': extract_task_annotate, 'version': version_task_annotate, 'http': http_task_annotate,
             'none': none_task_annotate, 'forge': forge_task_annotate, 'subprocess': subprocess_task_annotate,

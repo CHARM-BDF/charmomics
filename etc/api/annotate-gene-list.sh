@@ -46,15 +46,13 @@ fi
 
 IFS=$'\n' read -d '' -r -a GENES < "$BASE_GENE_FILEPATH"
 
-echo "$BASE_URL/api/annotation/gene/$gene"
-
 for gene in "${GENES[@]}"
 do
 
     echo "Starting annotations for gene symbol $gene..."
 
     curl -s -X "POST" \
-        "$BASE_URL/api/annotation/gene/$gene" \
+        "$BASE_URL/api/annotation/?type=gene&name=$gene" \
         -H "accept: application/json" \
         > /dev/null
 
