@@ -14,7 +14,7 @@ from src.core.annotation_task import (
     JsonFileAnnotationTask
 )
 from src.core.annotation_unit import AnnotationUnit
-from src.enums import OmicUnitType
+from src.enums import GenomicUnitType
 
 
 def test_http_annotation_task_build_url(http_annotation_transcript_id):
@@ -244,7 +244,7 @@ def fixture_gene_genomic_unit_vma21():
     return {
         "unit": "VMA21",
         "Entrez Gene Id": "45614",
-        "genomic_unit_type": OmicUnitType.GENE,
+        "genomic_unit_type": GenomicUnitType.GENE,
     }
 
 
@@ -254,7 +254,7 @@ def fixture_gene_genomic_unit_mgmt():
 
     return {
         "unit": "MGMT",
-        "genomic_unit_type": OmicUnitType.GENE,
+        "genomic_unit_type": GenomicUnitType.GENE,
     }
 
 
@@ -279,7 +279,7 @@ def fixture_genomic_unit():
 
     return {
         "unit": "NM_170707.3:c.745C>T",
-        "genomic_unit_type": OmicUnitType.HGVS_VARIANT,
+        "genomic_unit_type": GenomicUnitType.HGVS_VARIANT,
     }
 
 

@@ -10,7 +10,7 @@ from pymongo import ReturnDocument
 from .genomic_unit_collection_for_transcripts import GenomicUnitCollectionForTranscripts
 
 from src.core.annotation_unit import AnnotationUnit
-from src.enums import OmicUnitType
+from src.enums import GenomicUnitType, ReportUnitType
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +176,7 @@ class GenomicUnitCollection:
 
     def find_genomic_unit_without_cache(self, genomic_unit):
         """ Returns the given genomic unit from the genomic unit collection without the caches datasets """
-
+        logger.info("find_genomic_unit_without_cache called")
         find_query = {genomic_unit['type'].value: genomic_unit['unit']}
 
         result = self.collection.find_one(find_query, {"_id": 0})
@@ -285,7 +285,10 @@ class GenomicUnitCollection:
         """
         Takes a genomic_unit and adds it to the collection if it doesn't already exist (exact match).
         """
-        type_to_save = OmicUnitType.string_types() & genomic_unit.keys()
+
+        unit_types = [*GenomicUnitType.string_types(), *ReportUnitType.string_types()]
+
+        type_to_save = unit_types & genomic_unit.keys()
 
         if len(type_to_save) != 1:
             logger.error(

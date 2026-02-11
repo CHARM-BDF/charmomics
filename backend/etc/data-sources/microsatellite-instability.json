@@ -1,0 +1,91 @@
+{
+    "diagnostic_test": "microsatellite-instability",
+    "microsatellite-instability": {
+        "microsatellite-instability-high": {
+            "definition": "Multiple microsatellite loci show instability",
+            "implication": "Indicates defective mismatch repair (MMR) system.",
+            "clinical_relevance": [
+                "Suggests potential Mismatch Repair associated disease. Eg. Lynch Syndrome (especially in colorectal, endometrial, and other cancers).",
+                "May predict better response to immunotherapy (e.g., checkpoint inhibitors like pembrolizumab).",
+                "May influence treatment choices and prognosis."
+            ],
+            "report_language": [
+                "MSI-High",
+                "MSI-H",
+                "High-level MSI",
+                "High",
+                "High-MSI",
+                "Microsatellite instability detected",
+                "Mismatch repair deficient (dMMR)",
+                "MSI positive",
+                "MSI-positive"
+            ],
+            "underlying_results": {
+                "pcr-based-test": "MSI-High: Instability in >= 2 of 5 markers",
+                "ngs-based-test": "MSI score is often reported as a percentage or score (e.g., from 0 to 1 or 0 to 100%). >= 0.20 (or >= 20%) is considered MSI-High"
+            }
+        },
+        "microsatellite-instability-low": {
+            "definition": "Only 1 of several tested microsatellite loci is unstable.",
+            "implication": "Generally considered not clinically significant on its own.",
+            "clinical_relevance": [
+                "Usually treated as microsatellite stable (MSS).",
+                "Rarely linked to mismatch repair defects.",
+                "May be considered borderline in some contexts, but often doesn’t affect treatment."
+            ],
+            "report_language": [
+                "MSI-Low",
+                "MSI-L",
+                "Low-level MSI",
+                "Low",
+                "Microsatellite instability - low",
+                "Indeterminate MSI - sometimes used if data is borderline or not clearly MSI-H or MSS"
+            ],
+            "underlying_result": {
+                "pcr-based-tests": "MSI-Low: Instability in 1 of 5 markers",
+                "ngs-based-test": "MSI score is often reported as a percentage or score (e.g., from 0 to 1 or 0 to 100%). 0.10-0.19 (or ~10-19%) - MSI-Low"
+            }
+        },
+        "microsatellite-instability-stable": {
+            "definition": "No instability detected at tested loci.",
+            "implication": "Normal DNA mismatch repair function.",
+            "clinical_relevance": [
+                "Does not support Lynch syndrome.",
+                "Less likely to benefit from immunotherapy.",
+                "Suggests that other pathways (e.g., chromosomal instability) may be driving tumorigenesis."
+            ],
+            "report_language": [
+                "Microsatellite stable",
+                "MSS",
+                "No microsatellite instability detected",
+                "Mismatch repair proficient (pMMR)",
+                "MSI negative"
+            ],
+            "underlying_result": {
+                "pcr-based-tests": "MSS: No unstable markers",
+                "ngs-based-test": "MSI score is often reported as a percentage or score (e.g., from 0 to 1 or 0 to 100%). <0.10 (or <10%) - Microsatellite Stable"
+            }
+        },
+        "microsatellite-instability-indeterminate": {
+            "definition": "Status cannot be confidently classified as MSI-High, MSI-Low, or MSS due to borderline, inconclusive, or technically insufficient results.",
+            "implication": "Further testing or repeat analysis required; this category does not provide actionable diagnostic or treatment guidance on its own.",
+            "clinical_relevance": [
+                "May arise from poor sample quality, low tumor content, or ambiguous molecular results.",
+                "Should prompt re-evaluation using alternate methods (e.g., IHC for MMR proteins, repeat MSI testing, or alternative NGS panels).",
+                "In some cases, clinical judgment may guide treatment decisions pending further clarification."
+            ],
+            "report_language": [
+                "MSI-indeterminate",
+                "Borderline MSI",
+                "Equivocal MSI result",
+                "Uninterpretable MSI",
+                "Ambiguous MSI"
+
+            ],
+            "underlying_result": {
+                "pcr-based-tests": "Inconclusive due to poor amplification or insufficient loci evaluated. Results that do not meet clear thresholds for MSI-H, MSI-L, or MSS.",
+                "ngs-based-test": "MSI score is often reported as a percentage or score (e.g., from 0 to 1 or 0 to 100%). MSI score in the range of 0.10–0.19 (10–19%) when not clearly meeting MSI-Low criteria. Low confidence or quality flags from variant calling pipeline or insufficient coverage."
+            }
+        }
+    }
+}

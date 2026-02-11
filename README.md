@@ -79,6 +79,7 @@ The script will:
   - [Deployment and Usage](#deployment-and-usage)
     - [Deploying With Docker Compose](#deploying-with-docker-compose)
       - [Accessing A Locally Deployed CHARMomics](#accessing-a-locally-deployed-charmomics)
+    - [Available Annotations for CHARMomics](#available-annotations-for-charmomics)
     - [Static Analysis](#static-analysis)
   - [Contributing](#contributing)
 
@@ -111,6 +112,11 @@ To access the locally deployed CHARMomics application after running `docker comp
 visit the [https://local.charmomics.cgds/charmomics/api/heart-beat](https://local.charmomics.cgds/charmomics/api/heart-beat)
 URL in your browser to ensure the endpoints are working properly.
 <!-- markdown-link-check-enable-->
+
+#### Available Annotations for CHARMomics
+
+Please see the annotation [Catalog](catalog.md) for available annotations and examples of what the data is available,
+how to pull via cURL, what the data types are, and an example of what the expected data would look like.
 
 ### Static Analysis
 

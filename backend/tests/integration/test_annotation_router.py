@@ -6,7 +6,8 @@ def test_annotate_gene_omic_unit(
     annotations_manifest_collection_json
 ):
     """
-    Tests the endpoint that queues a gene omic unit and recieves a response with annotations
+    Tests the endpoint that queues gene annotation tasks and recieves a response with a gene unit from the genomic unit 
+    collection
     """
     expected = {"status": 200, "queue_call_count": 8, "annotation_count": 6}
 
@@ -28,7 +29,8 @@ def test_annotate_hgvs_variant_omic_unit(
     annotations_config_collection_json, annotations_manifest_collection_json
 ):
     """
-    Tests the endpoint that queues a hgvs_variant omic unit and recieves a response with annotations
+    Tests the endpoint that queues hgvs_variant annotations and recieves a response with a hgvs_variant unit from the
+    genomic unit collection
     """
 
     expected = {"status": 200, "queue_call_count": 4, "annotation_count": 2, "transcript_count": 2}

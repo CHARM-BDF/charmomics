@@ -1,0 +1,125 @@
+[
+    {
+        "gene_symbol": "MLH1",
+        "mmr_immunohistochemistry": {
+            "test_name": "Mismatch Repair Immunohistochemistry (IHC)",
+            "definition": "Immunostaining of tumor tissue to evaluate expression of key mismatch repair proteins: MLH1, MSH2, MSH6, and PMS2.",
+            "testing": "Tests reporting presence/absence of defect",
+            "implication": "Loss of expression of one or more proteins suggests defective mismatch repair (dMMR).",
+            "clinical_relevance": "Often used in parallel with MSI testing or as a screening tool for Lynch syndrome. Can help resolve indeterminate MSI results or cases with low tumor content.",
+            "report_language": [
+                "Loss of MLH1 and PMS2 expression is consistent with MMR-deficiency",
+                "Intact MMR protein expression suggests MMR-proficient (pMMR)."
+            ],
+            "underlying_result": "All four proteins show retained (normal) expression."
+        },
+        "mmr_germline": {
+            "test_name": "Germline MMR Gene Testing (Hereditary Cancer Panel)",
+            "definition": "Sequencing of MLH1, MSH2, MSH6, PMS2, and EPCAM to identify germline mutations causing Lynch syndrome.",
+            "implication": "Positive results confirm inherited cancer predisposition.",
+            "clinical_relevance": "Required for definitive diagnosis of cancer syndromes. Guides family counseling and surveillance recommendations.",
+            "report_language": [
+                "Pathogenic variant in [add specific gene] detected is consistent with Lynch syndrome.",
+                "No pathogenic variant detected does not rule out all causes of MSI-H/dMMR.",
+                "Variants of Uncertain Significance (VUS) detected may require further study or family testing."
+            ],
+            "underlying_result": "Individual variant calls and classifications for these 4 genes (sometimes other combinations also)"
+        }
+    },
+    {
+        "gene_symbol": "MSH2",
+        "mmr_immunohistochemistry": {
+            "test_name": "Mismatch Repair Immunohistochemistry (IHC)",
+            "definition": "Immunostaining of tumor tissue to evaluate expression of key mismatch repair proteins: MLH1, MSH2, MSH6, and PMS2.",
+            "testing": "Tests reporting presence/absence of defect",
+            "implication": "Loss of expression of one or more proteins suggests defective mismatch repair (dMMR).",
+            "clinical_relevance": "Often used in parallel with MSI testing or as a screening tool for Lynch syndrome. Can help resolve indeterminate MSI results or cases with low tumor content.",
+            "report_language": [
+                "Loss of MLH1 and PMS2 expression is consistent with MMR-deficiency",
+                "Intact MMR protein expression suggests MMR-proficient (pMMR)."
+            ],
+            "underlying_result": "All four proteins show retained (normal) expression."
+        },
+        "mmr_germline": {
+            "test_name": "Germline MMR Gene Testing (Hereditary Cancer Panel)",
+            "definition": "Sequencing of MLH1, MSH2, MSH6, PMS2, and EPCAM to identify germline mutations causing Lynch syndrome.",
+            "implication": "Positive results confirm inherited cancer predisposition.",
+            "clinical_relevance": "Required for definitive diagnosis of cancer syndromes. Guides family counseling and surveillance recommendations.",
+            "report_language": [
+                "Pathogenic variant in [add specific gene] detected is consistent with Lynch syndrome.",
+                "No pathogenic variant detected does not rule out all causes of MSI-H/dMMR.",
+                "Variants of Uncertain Significance (VUS) detected may require further study or family testing."
+            ],
+            "underlying_result": "Individual variant calls and classifications for these 4 genes (sometimes other combinations also)"
+        }
+    },
+    {
+        "gene_symbol": "MSH6",
+        "mmr_immunohistochemistry": {
+            "test_name": "Mismatch Repair Immunohistochemistry (IHC)",
+            "definition": "Immunostaining of tumor tissue to evaluate expression of key mismatch repair proteins: MLH1, MSH2, MSH6, and PMS2.",
+            "testing": "Tests reporting presence/absence of defect",
+            "implication": "Loss of expression of one or more proteins suggests defective mismatch repair (dMMR).",
+            "clinical_relevance": "Often used in parallel with MSI testing or as a screening tool for Lynch syndrome. Can help resolve indeterminate MSI results or cases with low tumor content.",
+            "report_language": [
+                "Loss of MLH1 and PMS2 expression is consistent with MMR-deficiency",
+                "Intact MMR protein expression suggests MMR-proficient (pMMR)."
+            ],
+            "underlying_result": "All four proteins show retained (normal) expression."
+        },
+        "mmr_germline": {
+            "test_name": "Germline MMR Gene Testing (Hereditary Cancer Panel)",
+            "definition": "Sequencing of MLH1, MSH2, MSH6, PMS2, and EPCAM to identify germline mutations causing Lynch syndrome.",
+            "implication": "Positive results confirm inherited cancer predisposition.",
+            "clinical_relevance": "Required for definitive diagnosis of cancer syndromes. Guides family counseling and surveillance recommendations.",
+            "report_language": [
+                "Pathogenic variant in [add specific gene] detected is consistent with Lynch syndrome.",
+                "No pathogenic variant detected does not rule out all causes of MSI-H/dMMR.",
+                "Variants of Uncertain Significance (VUS) detected may require further study or family testing."
+            ],
+            "underlying_result": "Individual variant calls and classifications for these 4 genes (sometimes other combinations also)"
+        }
+    },
+    {
+        "gene_symbol": "PMS2",
+        "mmr_immunohistochemistry": {
+            "test_name": "Mismatch Repair Immunohistochemistry (IHC)",
+            "definition": "Immunostaining of tumor tissue to evaluate expression of key mismatch repair proteins: MLH1, MSH2, MSH6, and PMS2.",
+            "testing": "Tests reporting presence/absence of defect",
+            "implication": "Loss of expression of one or more proteins suggests defective mismatch repair (dMMR).",
+            "clinical_relevance": "Often used in parallel with MSI testing or as a screening tool for Lynch syndrome. Can help resolve indeterminate MSI results or cases with low tumor content.",
+            "report_language": [
+                "Loss of MLH1 and PMS2 expression is consistent with MMR-deficiency",
+                "Intact MMR protein expression suggests MMR-proficient (pMMR)."
+            ],
+            "underlying_result": "All four proteins show retained (normal) expression."
+        },
+        "mmr_germline": {
+            "test_name": "Germline MMR Gene Testing (Hereditary Cancer Panel)",
+            "definition": "Sequencing of MLH1, MSH2, MSH6, PMS2, and EPCAM to identify germline mutations causing Lynch syndrome.",
+            "implication": "Positive results confirm inherited cancer predisposition.",
+            "clinical_relevance": "Required for definitive diagnosis of cancer syndromes. Guides family counseling and surveillance recommendations.",
+            "report_language": [
+                "Pathogenic variant in [add specific gene] detected is consistent with Lynch syndrome.",
+                "No pathogenic variant detected does not rule out all causes of MSI-H/dMMR.",
+                "Variants of Uncertain Significance (VUS) detected may require further study or family testing."
+            ],
+            "underlying_result": "Individual variant calls and classifications for these 4 genes (sometimes other combinations also)"
+        }
+    },
+    {
+        "gene_symbol": "EPCAM",
+        "mmr_germline": {
+            "test_name": "Germline MMR Gene Testing (Hereditary Cancer Panel)",
+            "definition": "Sequencing of MLH1, MSH2, MSH6, PMS2, and EPCAM to identify germline mutations causing Lynch syndrome.",
+            "implication": "Positive results confirm inherited cancer predisposition.",
+            "clinical_relevance": "Required for definitive diagnosis of cancer syndromes. Guides family counseling and surveillance recommendations.",
+            "report_language": [
+                "Pathogenic variant in [add specific gene] detected is consistent with Lynch syndrome.",
+                "No pathogenic variant detected does not rule out all causes of MSI-H/dMMR.",
+                "Variants of Uncertain Significance (VUS) detected may require further study or family testing."
+            ],
+            "underlying_result": "Individual variant calls and classifications for these 4 genes (sometimes other combinations also)"
+        }
+    }
+]

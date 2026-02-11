@@ -3,9 +3,9 @@ on: [push, pull_request, workflow_dispatch]
 
 env:
   MARKDOWNLINT_CONFIG: etc/static-analysis/markdownlint.json
-  HADOLINT_DOCKER: hadolint/hadolint:v2.12.0
-  SHELLCHECK_DOCKER: koalaman/shellcheck:v0.9.0
-  MARKDOWN_DOCKER: ghcr.io/igorshubovych/markdownlint-cli:v0.37.0
+  HADOLINT_DOCKER: hadolint/hadolint:v2.14.0
+  SHELLCHECK_DOCKER: koalaman/shellcheck:v0.11.0
+  MARKDOWN_DOCKER: ghcr.io/igorshubovych/markdownlint-cli:v0.47.0
 
 jobs:
   docker-shell-markdown-static-analysis:

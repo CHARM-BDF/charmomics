@@ -2,12 +2,32 @@
 
 # CHANGELOG
 
-## CHARMomics v0.3 - In Progress
+## CHARMomics v0.2.1
+
+- A new `Diagnostic Tests` endpoint that serves up a number of diagnostic tests
+  - New diagnostic tests include: Microsatellite Instability, Mismatch Repair Immunohistochemistry, and Mismatch Repair
+    Germline.
+  - Querying the diagnostic test endpoint will provided the comprehensive list of diagnostic test result
+    interpretations, but querying a gene symbol, still provide that gene's diagnostic test result interpretation.
+  - New Enum types were created for the diagnostic testing endpoint, will display the tests in the Swagger docs for drop
+    down selection.
+- Added a `catalog.md` for displaying what omics annotations are available along with examples of what those annotations
+  look like.
+  - Added an **Available Annotations for CHARMomics** section in the general `README.md` to point users to the
+    `catalog.md`
+- Added a new annotation method to queue a single annotation task. This allows a genomic unit to be created with a
+  single annotation that matches on the genomic unit type and the dataset name.
+  - Example: Allows Microsatellite Instability (MSI) to be considered a diagnostic test unit type and contain only the
+    MSI annotations.
+- Performed an audit on package versions used by CHARMomics.
+  - Up-ticked python packages to remove deprecation warnings when running newer versions of Python
+  - Up-ticked the versions for the `common-static-analysis.yml` for the Hadolint, Shellchecker, and Markdown
+- Changed the language from `Omic` back to `Genomic` throughout the project.
 
 ### Features
 
 - Consolidating the four `/annotation` endpoints in to a single endpoint
-  - The new endpoint delineates different omic units using a query parameter
+  - The new endpoint delineates different genomic units using a query parameter
 
 ### Chores
 

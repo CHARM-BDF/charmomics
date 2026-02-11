@@ -125,7 +125,7 @@
       ],
       "versioning_type": "rosalution"
    },
-      {
+   {
       "data_set":"methylation",
       "data_source":"curated_by_worthey",
       "annotation_source_type":"json_file",
@@ -134,6 +134,16 @@
       "attribute":".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation",
       "versioning_type":"manual",
       "version":"curated_07-29-2025"
+   },
+   {
+      "data_set": "microsatellite_instability",
+      "data_source": "curated_by_worthey",
+      "annotation_source_type": "json_file",
+      "filepath": "etc/data-sources/microsatellite-instability.json",
+      "genomic_unit_type": "diagnostic_test",
+      "attribute": "{\"microsatellite-instability\": .\"microsatellite-instability\"}",
+      "versioning_type": "manual",
+      "version": "curated_01-26-2026"
    },
    {
       "data_set": "HPO_GENE_CALL_CACHE",

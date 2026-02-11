@@ -89,5 +89,11 @@ def fixture_gene_annotations_json():
 
 @pytest.fixture(name="variant_nm001017980_3_c_164g_t_annotations_json")
 def fixture_hgvs_variant_json():
-    """JSON for the annotations of the Gene VMA21"""
+    """JSON for the annotations of the variant NM001017980_3_c_164G_T """
     return read_test_fixture("annotations-NM001017980_3_c_164G_T.json")
+
+
+@pytest.fixture(name="diagnostic_test_microsatellite_instability_json")
+def fixture_diagnostic_msi_json():
+    """ JSON for the entry of a diagnostic test in the genomic unit collection for microsatellite instability """
+    return read_test_fixture("annotations-MSI.json")

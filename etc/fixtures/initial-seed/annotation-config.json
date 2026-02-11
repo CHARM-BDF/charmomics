@@ -40,19 +40,125 @@
     "version_attribute": ".releases[]"
   },
   {
-    "data_set": "Ensembl Gene Id",
-    "data_source": "HGNC_GeneNames",
-    "genomic_unit_type": "gene",
+    "data_set": "Ensembl_Gene_Id",
+    "data_source": "Ensembl",
+    "genomic_unit_type": "hgvs_variant",
     "annotation_source_type": "forge",
     "base_string_cache": true,
-    "base_string": "{HGNC_GENE_NAMES_CALL_CACHE}",
-    "attribute": ".\"Ensembl Gene Id\" | { \"Ensembl Gene Id\": .ensembl_gene_id }",
+    "base_string": "{ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE}",
+    "attribute": ".Ensembl_Gene_Id | .[] | select ( .type == \"gene\") | { \"Ensembl_Gene_Id\": .id }",
     "dependencies": [
-      "HGNC_GENE_NAMES_CALL_CACHE"
+      "ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE"
     ],
     "versioning_type": "rest",
-    "version_url": "https://rest.genenames.org/info",
-    "version_attribute": ".lastModified | split(\"T\")[0]"
+    "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
+    "version_attribute": ".releases[]"
+  },
+  {
+    "data_set": "ensembl_protein_id",
+    "data_source": "Uniprot",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string_cache": true,
+    "base_string": "{UNIPROT_PROTEIN_IDS_SEARCH_CACHE}",
+    "attribute": ".ensembl_protein_id | .results[] | .uniProtKBCrossReferences[] | select ( (.properties[].value | contains(\"{Ensembl_Gene_Id}\"))) | select( .id | contains(\"{Ensembl_Transcript_Id}\")) | .properties[] | select ( .key == \"ProteinId\" ) | { ensembl_protein_id: .value }",
+    "dependencies": [
+      "UNIPROT_PROTEIN_IDS_SEARCH_CACHE",
+      "Ensembl_Gene_Id",
+      "Ensembl_Transcript_Id"
+    ],
+    "versioning_type": "date"
+  },
+  {
+    "data_set": "ensembl_protein_id_without_version",
+    "data_source": "Rosalution",
+    "annotation_source_type": "forge",
+    "genomic_unit_type": "hgvs_variant",
+    "base_string": "{ensembl_protein_id}",
+    "attribute": ".ensembl_protein_id_without_version | split(\".\") | { \"ensembl_protein_id_without_version\": .[0] }",
+    "dependencies": [
+      "ensembl_protein_id"
+    ],
+    "versioning_type": "rosalution"
+  },
+  {
+    "data_set": "uniprot_isoform_id",
+    "data_source": "Uniprot",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string_cache": true,
+    "base_string": "{UNIPROT_PROTEIN_IDS_SEARCH_CACHE}",
+    "attribute": ".uniprot_isoform_id | .results[] | .uniProtKBCrossReferences[] | select ( (.properties[].value | contains(\"{Ensembl_Gene_Id}\"))) | select( .id | contains(\"{Ensembl_Transcript_Id}\")) | { uniprot_isoform_id: .isoformId }",
+    "dependencies": [
+      "UNIPROT_PROTEIN_IDS_SEARCH_CACHE",
+      "Ensembl_Gene_Id",
+      "Ensembl_Transcript_Id"
+    ],
+    "versioning_type": "date"
+  },
+  {
+    "data_set": "uniprot_protein_linkout",
+    "data_source": "Rosalution",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string": "https://www.uniprot.org/uniprotkb/{uniprot_id}/entry",
+    "attribute": "{ \"uniprot_protein_linkout\": .uniprot_protein_linkout }",
+    "dependencies": [
+      "uniprot_id"
+    ],
+    "versioning_type": "rosalution"
+  },
+  {
+    "data_set": "interpro_domain_protein_linkout",
+    "data_source": "Rosalution",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string": "https://www.ebi.ac.uk/interpro/protein/UniProt/{uniprot_id}/?isoform={uniprot_isoform_id}",
+    "attribute": "{ \"interpro_domain_protein_linkout\": .interpro_domain_protein_linkout }",
+    "dependencies": [
+      "uniprot_id",
+      "uniprot_isoform_id"
+    ],
+    "versioning_type": "rosalution"
+  },
+  {
+    "data_set": "alphafold_protein_linkout",
+    "data_source": "Rosalution",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string": "https://alphafold.ebi.ac.uk/entry/{uniprot_id}",
+    "attribute": "{ \"alphafold_protein_linkout\": .alphafold_protein_linkout }",
+    "dependencies": [
+      "uniprot_id"
+    ],
+    "versioning_type": "rosalution"
+  },
+  {
+    "data_set": "paxdb_protein_abundance_linkout",
+    "data_source": "Rosalution",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string": "https://pax-db.org/protein/9606/{ensembl_protein_id_without_version}",
+    "attribute": "{ \"paxdb_protein_abundance_linkout\": .paxdb_protein_abundance_linkout }",
+    "dependencies": [
+      "ensembl_protein_id_without_version"
+    ],
+    "versioning_type": "rosalution"
+  },
+  {
+    "data_set": "uniprot_id",
+    "data_source": "Uniprot",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "forge",
+    "base_string_cache": true,
+    "base_string": "{UNIPROT_PROTEIN_IDS_SEARCH_CACHE}",
+    "attribute": ".uniprot_id | .results[] | select ( (.uniProtKBCrossReferences[].id  | contains(\"{Ensembl_Transcript_Id}\"))) | { uniprot_id: .primaryAccession }",
+    "dependencies": [
+      "UNIPROT_PROTEIN_IDS_SEARCH_CACHE",
+      "Ensembl_Gene_Id",
+      "Ensembl_Transcript_Id"
+    ],
+    "versioning_type": "date"
   },
   {
     "data_set": "HGNC_ID",
@@ -255,10 +361,10 @@
     "data_source": "Rosalution",
     "genomic_unit_type": "gene",
     "annotation_source_type": "forge",
-    "base_string": "https://gnomad.broadinstitute.org/gene/{Ensembl Gene Id}?dataset=gnomad_r2_1",
+    "base_string": "https://gnomad.broadinstitute.org/gene/{Ensembl_Gene_Id}?dataset=gnomad_r2_1",
     "attribute": "{ \"gnomAD_gene_url\": .gnomAD_gene_url }",
     "dependencies": [
-      "Ensembl Gene Id"
+      "Ensembl_Gene_Id"
     ],
     "versioning_type": "rosalution"
   },
@@ -788,11 +894,12 @@
     "data_set": "Ensembl_Transcript_Id",
     "data_source": "Ensembl",
     "genomic_unit_type": "hgvs_variant",
-    "annotation_source_type": "http",
-    "url": "https://rest.ensembl.org/xrefs/symbol/homo_sapiens/{transcript_without_version}?content-type=application/json;object_type=transcript",
-    "attribute": "{ \"Ensembl_Transcript_Id\": .[0].id }",
+    "annotation_source_type": "forge",
+    "base_string_cache": true,
+    "base_string": "{ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE}",
+    "attribute": ".Ensembl_Transcript_Id | .[] | select ( .type == \"transcript\") | { \"Ensembl_Transcript_Id\": .id }",
     "dependencies": [
-      "transcript_without_version"
+      "ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE"
     ],
     "versioning_type": "rest",
     "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
@@ -887,6 +994,77 @@
     "versioning_type": "rest",
     "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
     "version_attribute": ".releases[]"
+  },
+    {
+    "data_set": "methylation",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/methylation.json",
+    "genomic_unit_type": "gene",
+    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"methylation\": .methylation }",
+    "versioning_type": "manual",
+    "version": "curated_07-29-2025"
+  },
+  {
+    "data_set": "mismatch_repair_immunohistochemistry",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/mismatch-repair.json",
+    "genomic_unit_type": "gene",
+    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"mmr_immunohistochemistry\": .mmr_immunohistochemistry }",
+    "versioning_type": "manual",
+    "version": "curated_01-15-2026"
+  },
+  {
+    "data_set": "mismatch_repair_germline",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/mismatch-repair.json",
+    "genomic_unit_type": "gene",
+    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"mmr_germline\": .mmr_germline }",
+    "versioning_type": "manual",
+    "version": "curated_01-15-2026"
+  },
+
+    {
+    "data_set": "methylation",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/methylation.json",
+    "genomic_unit_type": "diagnostic_test",
+    "attribute": "{ \"methylation\": . }",
+    "versioning_type": "manual",
+    "version": "curated_07-29-2025"
+  },
+  {
+    "data_set": "mismatch_repair_immunohistochemistry",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/mismatch-repair.json",
+    "genomic_unit_type": "diagnostic_test",
+    "attribute": "{ \"mmr_immunohistochemistry\": . }",
+    "versioning_type": "manual",
+    "version": "curated_01-15-2026"
+  },
+  {
+    "data_set": "mismatch_repair_germline",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/mismatch-repair.json",
+    "genomic_unit_type": "diagnostic_test",
+    "attribute": "{ \"mmr_germline\": . }",
+    "versioning_type": "manual",
+    "version": "curated_01-15-2026"
+  },
+  {
+    "data_set": "microsatellite_instability",
+    "data_source": "curated_by_worthey",
+    "annotation_source_type": "json_file",
+    "filepath": "etc/data-sources/microsatellite-instability.json",
+    "genomic_unit_type": "diagnostic_test",
+    "attribute": "{\"microsatellite-instability\": .\"microsatellite-instability\"}",
+    "versioning_type": "manual",
+    "version": "curated_01-26-2026"
   },
   {
     "data_set": "ENSEMBL_VARIANT_HGVS_VARIANT_CALL_CACHE",
@@ -986,13 +1164,31 @@
     "cache": true
   },
   {
-    "data_set": "methylation",
-    "data_source": "curated_by_worthey",
-    "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/methylation.json",
-    "genomic_unit_type": "gene",
-    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"methylation\": .methylation }",
-    "versioning_type": "manual",
-    "version": "curated_07-29-2025"
+    "data_set": "ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE",
+    "data_source": "Ensembl",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "http",
+    "url": "https://rest.ensembl.org/xrefs/symbol/homo_sapiens/{transcript_without_version}?content-type=application/json",
+    "attribute": "{ENSEMBL_VARIANT_TRANSCRIPT_IDS_CALL_CACHE: .}",
+    "dependencies": [
+      "transcript_without_version"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
+    "version_attribute": ".releases[]",
+    "cache": true
+  },
+  {
+    "data_set": "UNIPROT_PROTEIN_IDS_SEARCH_CACHE",
+    "data_source": "Uniprot",
+    "genomic_unit_type": "hgvs_variant",
+    "annotation_source_type": "http",
+    "url": "https://rest.uniprot.org/uniprotkb/search?query=xref:{transcript_without_version}&fields=xref_ensembl,version,date_modified,date_created&sort=accession%20desc&size=50",
+    "attribute": "{UNIPROT_PROTEIN_IDS_SEARCH_CACHE: .}",
+    "dependencies": [
+      "transcript_without_version"
+    ],
+    "versioning_type": "date",
+    "cache": true
   }
 ]

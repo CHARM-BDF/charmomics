@@ -7,7 +7,7 @@ import pytest
 
 from src.core.annotation import AnnotationService
 from src.core.annotation_unit import AnnotationUnit
-from src.enums import OmicUnitType
+from src.enums import GenomicUnitType, ReportUnitType, DiagnosticTestType
 from src.repository.annotation_config_collection import AnnotationConfigCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
 from src.repository.annotation_manifest_collection import AnnotationManifestCollection
@@ -60,10 +60,16 @@ def fixture_annotation_config_collection(annotation_config_collection_json):
 def fixture_genomic_units_to_annotate():
     """ Mock units to annotate, can handle a list of units """
 
-    return [{'unit': "LMNA", 'type': OmicUnitType.GENE}, {'unit': "VMA21", 'type': OmicUnitType.GENE},
+    return [{'unit': "LMNA", 'type': GenomicUnitType.GENE}, {'unit': "VMA21", 'type': GenomicUnitType.GENE},
             {'unit': "MGMT",
-             'type': OmicUnitType.GENE}, {'unit': "NM_001017980.3:c.164G>T", 'type': OmicUnitType.HGVS_VARIANT},
-            {'unit': "NM_170707.3:c.745C>T", 'type': OmicUnitType.HGVS_VARIANT}]
+             'type': GenomicUnitType.GENE}, {'unit': "NM_001017980.3:c.164G>T", 'type': GenomicUnitType.HGVS_VARIANT},
+            {'unit': "NM_170707.3:c.745C>T", 'type': GenomicUnitType.HGVS_VARIANT}]
+
+
+@pytest.fixture(name="diagnostic_test_to_annotate")
+def fixture_diagnostic_test_to_annotate():
+    """ Provides a diagnostic test annotation for microsatellite instability """
+    return {'unit': DiagnosticTestType.MICROSATELLITE_INSTABILITY.value, 'type': ReportUnitType.DIAGNOSTIC_TEST}
 
 
 # TODO: Carry over from Rosalution tests, no analysis in charmomics, at least yet
@@ -84,8 +90,8 @@ def get_standard_annotation_unit(annotation_config_collection_json, genomic_unit
     the genomic unit to create an AnnotationUnit.
 
     {
-      'VMA21': OmicUnitType.GENE,
-      'NM_001017980.3:c.164G>T': OmicUnitType.HGVS_VARIANT
+      'VMA21': GenomicUnitType.GENE,
+      'NM_001017980.3:c.164G>T': GenomicUnitType.HGVS_VARIANT
     }
     """
 

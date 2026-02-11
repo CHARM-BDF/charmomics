@@ -8,7 +8,23 @@ from src.core.annotation import AnnotationService
 from src.repository.annotation_manifest_collection import AnnotationManifestCollection
 from src.repository.genomic_unit_collection import GenomicUnitCollection
 
-from src.enums import OmicUnitType
+from src.enums import GenomicUnitType
+
+
+def test_queueing_a_single_annotation_for_genomic_units(diagnostic_test_to_annotate, annotation_config_collection):
+    """ Verifies annotation task is queued to a specific genomic unit """
+
+    annotation_service = AnnotationService(annotation_config_collection)
+
+    mock_queue = Mock()
+
+    annotation_service.queue_annotation_task(diagnostic_test_to_annotate, mock_queue)
+
+    assert mock_queue.put.call_count == 1
+
+    assert "microsatellite_instability" in [
+        put_call.args[0].genomic_unit['unit'] for put_call in mock_queue.put.call_args_list
+    ]
 
 
 def test_queuing_annotations_for_genomic_units(genomic_units_to_annotate, annotation_config_collection):
@@ -73,7 +89,7 @@ def fixture_extract_and_annotate(annotation_queue, get_dataset_manifest_config):
 
     mock_omic_unit = {
         "unit": "VMA21",
-        "type": OmicUnitType.GENE,
+        "type": GenomicUnitType.GENE,
     }
 
     with (

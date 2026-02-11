@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends
 
 from src.core.annotation import AnnotationService
 from src.dependencies import database, annotation_queue
-from src.enums import OmicUnitType
+from src.enums import GenomicUnitType
 
 logger = logging.getLogger(__name__)
 
@@ -16,9 +16,9 @@ router = APIRouter(prefix="/annotation", tags=["annotation"], dependencies=[Depe
 
 @router.post("/")
 def annotate_omic_unit(
-    type: OmicUnitType, name: str, repositories=Depends(database), annotation_task_queue=Depends(annotation_queue)
+    type: GenomicUnitType, name: str, repositories=Depends(database), annotation_task_queue=Depends(annotation_queue)
 ):
-    """ Initiates annotations for a given omic unit and returns the results when finished """
+    """ Initiates annotations for a given genomic unit and returns the results when finished """
 
     omic_unit = {'unit': name, 'type': type}
 
@@ -27,14 +27,14 @@ def annotate_omic_unit(
     if not omic_unit_exist:
         new_genomic_unit = None
 
-        if omic_unit['type'] is OmicUnitType.GENE:
+        if omic_unit['type'] is GenomicUnitType.GENE:
             new_genomic_unit = {"gene_symbol": omic_unit['unit'], "gene": omic_unit['unit'], "annotations": []}
-        if omic_unit['type'] is OmicUnitType.HGVS_VARIANT:
+        if omic_unit['type'] is GenomicUnitType.HGVS_VARIANT:
             new_genomic_unit = {"hgvs_variant": omic_unit['unit'], 'transcripts': [], 'annotations': []}
 
         repositories['genomic_unit'].create_genomic_unit(new_genomic_unit)
 
-    if omic_unit['type'] is OmicUnitType.HGVS_VARIANT:
+    if omic_unit['type'] is GenomicUnitType.HGVS_VARIANT:
         transcript = omic_unit['unit'].split(':')[0]
         transcript_without_version = re.sub(r'\..*', '', transcript)
         omic_unit['genomic_build'] = 'hg19'
