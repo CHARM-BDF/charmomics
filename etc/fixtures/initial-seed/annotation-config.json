@@ -995,7 +995,7 @@
     "version_url": "https://rest.ensembl.org/info/data/?content-type=application/json",
     "version_attribute": ".releases[]"
   },
-    {
+  {
     "data_set": "methylation",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
@@ -1025,8 +1025,7 @@
     "versioning_type": "manual",
     "version": "curated_01-15-2026"
   },
-
-    {
+  {
     "data_set": "methylation",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
@@ -1065,6 +1064,62 @@
     "attribute": "{\"microsatellite-instability\": .\"microsatellite-instability\"}",
     "versioning_type": "manual",
     "version": "curated_01-26-2026"
+  },
+  {
+    "data_set": "pairwise_gene_to_gene_interaction",
+    "data_source": "Monarch",
+    "genomic_unit_type": "gene",
+    "annotation_source_type": "http",
+    "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3APairwiseGeneToGeneInteraction&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
+    "attribute": "{\"pairwise_gene_to_gene_interaction\": [.items[] | { \"pairwise_gene\": .object_label, \"publications\": [.publications_links[]], \"evidence\": [.has_evidence_links[]] }]}",
+    "dependencies": [
+      "HGNC_ID"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://api-v3.monarchinitiative.org/v3/api/version",
+    "version_attribute": ".monarch_kg_version"
+  },
+  {
+    "data_set": "gene_to_expression_site_association",
+    "data_source": "Monarch",
+    "genomic_unit_type": "gene",
+    "annotation_source_type": "http",
+    "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3AGeneToExpressionSiteAssociation&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
+    "attribute": "{\"gene_to_expression_site_association\": [.items[] | ( .object + \": \" + .object_label)]}",
+    "dependencies": [
+      "HGNC_ID"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://api-v3.monarchinitiative.org/v3/api/version",
+    "version_attribute": ".monarch_kg_version"
+  },
+  {
+    "data_set": "gene_to_gene_homology_association",
+    "data_source": "Monarch",
+    "genomic_unit_type": "gene",
+    "annotation_source_type": "http",
+    "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3AGeneToGeneHomologyAssociation&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
+    "attribute": " { \"gene_to_gene_homology_association\": [.items[] | { \"taxon\": .object_taxon_label, \"gene_symbol\": .object_label, \"evidence\": [.has_evidence_links[]] }]}",
+    "dependencies": [
+      "HGNC_ID"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://api-v3.monarchinitiative.org/v3/api/version",
+    "version_attribute": ".monarch_kg_version"
+  },
+  {
+    "data_set": "gene_to_pathway_association",
+    "data_source": "Monarch",
+    "genomic_unit_type": "gene",
+    "annotation_source_type": "http",
+    "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3AGeneToPathwayAssociation&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
+    "attribute": "{ \"gene_to_pathway_association\": [.items[] | (.object + \": \" + .object_label)]}",
+    "dependencies": [
+      "HGNC_ID"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://api-v3.monarchinitiative.org/v3/api/version",
+    "version_attribute": ".monarch_kg_version"
   },
   {
     "data_set": "ENSEMBL_VARIANT_HGVS_VARIANT_CALL_CACHE",

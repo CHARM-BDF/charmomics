@@ -2,6 +2,15 @@
 
 # CHANGELOG
 
+## CHARMomics v0.2.2
+
+- Added Monarch Initiative KG external database annotations for Genes. An annotation API call with a gene symbol may
+  provide these annotations if available:
+  - Pairwise gene to gene interactions with evidence from pubmed or obolibrary.
+  - Gene to expression site using UBERON codes.
+  - Gene to gene homology association provided by PANTHER.
+  - Gene to pathway association using Reactome.
+
 ## CHARMomics v0.2.1
 
 - A new `Diagnostic Tests` endpoint that serves up a number of diagnostic tests

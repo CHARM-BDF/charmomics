@@ -73,6 +73,15 @@ Ensembl Gene ID  | String    | "203547"
 Entrez Gene ID   | String    | "2475"
 HPO NCBI Gene ID | String    | "NCBIGene:2475"
 
+### Monarch Initiative
+
+Dataset                             | Data Type  | Example
+------------------------------------|------------|--------
+pairwise_gene_to_gene_interaction   | JSON Array | [{ "pairwise_gene": "AKT1", "publications": [{ "id": "PMID:19299511", "url": "http://identifiers.org/pubmed/19299511" }], "evidence": [{ "id": "ECO:0000005", "url": "http://purl.obolibrary.org/obo/ECO_0000005" }]}, ... , { "pairwise_gene": "RPS6KB1", "publications": [{ "id": "PMID:22544753", "url": "http://identifiers.org/pubmed/22544753" }], "evidence": [{ "id": "ECO:0000005", "url": "http://purl.obolibrary.org/obo/ECO_0000005" }]}]
+gene_to_expression_site_association | JSON Array | ["UBERON:0000991: gonad", "UBERON:0014890: right hemisphere of cerebellum", "UBERON:0004533: left testis", "UBERON:0004534: right testis", "UBERON:0001388: gastrocnemius", "UBERON:0002810: right frontal lobe", "UBERON:0001383: muscle of leg", "UBERON:0002245: cerebellar hemisphere", "UBERON:0002129: cerebellar cortex", "UBERON:0000473: testis"]
+gene_to_gene_homology_association   | JSON Array | [{ "taxon": "NCBITaxon:10090", "gene_symbol": "Mtor", "evidence": [{ "id": "PANTHER.FAMILY:PTHR11139", "url": "http://identifiers.org/panther.family/PTHR11139" }]}, ... , { "taxon": "Canis lupus familiaris", "gene_symbol": "MTOR", "evidence": [{ "id": "PANTHER.FAMILY:PTHR11139", "url": "http://identifiers.org/panther.family/PTHR11139" }]}]
+gene_to_pathway_association         | JSON Array | ["Reactome:R-HSA-1632852: Macroautophagy", "Reactome:R-HSA-5628897: TP53 Regulates Metabolic Genes", "Reactome:R-HSA-6804757: Regulation of TP53 Degradation", ... , "Reactome:R-HSA-165159: MTOR signalling", "Reactome:R-HSA-380972: Energy dependent regulation of mTOR by LKB1-AMPK" ]
+
 ### Rosalution/CHARMomics
 
 Dataset                                     | Data Type  | Example
