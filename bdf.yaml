@@ -1,0 +1,75 @@
+
+version: v0.1.0
+
+tool:
+  name: CHARMomics
+  repo_url: https://github.com/CHARM-BDF/charmomics
+  tool_homepage: https://github.com/CHARM-BDF/charmomics
+  documentation_url: https://github.com/CHARM-BDF/charmomics/blob/main/README.md
+  tool_type: WebApp
+
+llm:
+  usesLlm: true
+  modelsSupported:
+    - openai
+  modelsRequired:
+    - openai
+  bringOwnKey: false
+
+input:
+  - name: omics/molecular unstructured 1
+    dataCategory: omics-molecular
+    dataClass: unstructured-text
+    dataType: genomics
+    format: 
+      - txt
+    dataStandard:
+      - gene symbols and HGVS notation
+    proprietary: false
+    source: http://rest.ensembl.org/vep/human/hgvs/
+
+output:
+  - name: omics/molecular structured 1
+    dataCategory: omics-molecular
+    dataClass: structured
+    dataType: genomics
+    format:
+      - json
+    dataStandard:
+      - custom schema
+    proprietary: false
+    source: http://rest.ensembl.org/vep/human/hgvs/
+
+collaborations: []
+
+funding:
+  source: ARPA-H
+  agreement: Not specified
+  link: https://arpa-h.gov/
+
+domains:
+  - genomic research
+
+maturity:
+  beginning_maturity: 1
+  current_maturity: 3
+
+license:
+  license_type: MIT
+  link: https://github.com/CHARM-BDF/CHARM-README/blob/main/license.txt
+
+credit:
+  - name: UAB Team
+    role: Developer
+    org: University of Alabama at Birmingham
+    url: https://www.uab.edu/medicine/pmi/
+
+target_users:
+  primary_user:
+    user_type: researcher
+    technical_literacy_level: 
+      - intermediate
+    biomedical_literacy_level: 
+      - intermediate
+
+media: []
