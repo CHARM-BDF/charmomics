@@ -1,0 +1,16 @@
+#!/bin/bash
+#
+#SBATCH --job-name=ditto_gunzip
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --mem=2G
+#SBATCH --partition=short
+#SBATCH --time=04:00:00
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
+#SBATCH --array=0-23
+
+ARGS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+
+./gunzip_tsv.sh ${ARGS[$SLURM_ARRAY_TASK_ID]}
