@@ -40,6 +40,22 @@
     "version_attribute": ".releases[]"
   },
   {
+    "data_set": "Ensembl Gene Id",
+    "data_source": "HGNC_GeneNames",
+    "genomic_unit_type": "gene",
+    "annotation_source_type": "forge",
+    "base_string_cache": true,
+    "base_string": "{HGNC_GENE_NAMES_CALL_CACHE}",
+    "attribute": ".\"Ensembl Gene Id\" | { \"Ensembl Gene Id\": .ensembl_gene_id }",
+    "dependencies": [
+      "HGNC_GENE_NAMES_CALL_CACHE"
+    ],
+    "versioning_type": "rest",
+    "version_url": "https://rest.genenames.org/info",
+    "version_attribute": ".lastModified | split(\"T\")[0]"
+  },
+
+  {
     "data_set": "Ensembl_Gene_Id",
     "data_source": "Ensembl",
     "genomic_unit_type": "hgvs_variant",
@@ -214,10 +230,10 @@
     "genomic_unit_type": "gene",
     "annotation_source_type": "forge",
     "base_string_cache": true,
-    "base_string": "{ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".\"Rat Gene Identifier\"[] | { \"name_key\": .name_key, \"name\": .name, \"primaryKey\": .primaryKey, \"searchKey\": \"{gene} (Rno)\" } | . + { \"searchKey\": .searchKey | ascii_downcase, \"name_key\": .name_key | ascii_downcase } |  select( .name_key == .searchKey) | { \"Rat Gene Identifier\": .primaryKey }",
+    "base_string": "{AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE}",
+    "attribute": ".\"Rat Gene Identifier\"[] | .geneToGeneOrthologyGenerated.objectGene | select(.taxon.name == \"Rattus norvegicus\") | {\"Rat Gene Identifier\": .primaryExternalId}",
     "dependencies": [
-      "ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE"
+      "AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE"
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
@@ -229,10 +245,10 @@
     "genomic_unit_type": "gene",
     "annotation_source_type": "forge",
     "base_string_cache": true,
-    "base_string": "{ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".\"Mouse Gene Identifier\"[] | { \"name_key\": .name_key, \"name\": .name, \"primaryKey\": .primaryKey, \"searchKey\": \"{gene} (Mmu)\" } | . + { \"searchKey\": .searchKey | ascii_downcase, \"name_key\": .name_key | ascii_downcase } |  select( .name_key == .searchKey) | { \"Mouse Gene Identifier\": .primaryKey }",
+    "base_string": "{AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE}",
+    "attribute": ".\"Mouse Gene Identifier\"[] | .geneToGeneOrthologyGenerated.objectGene | select(.taxon.name == \"Mus musculus\") | {\"Mouse Gene Identifier\": .primaryExternalId}",
     "dependencies": [
-      "ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE"
+      "AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE"
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
@@ -244,10 +260,10 @@
     "genomic_unit_type": "gene",
     "annotation_source_type": "forge",
     "base_string_cache": true,
-    "base_string": "{ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".\"Zebrafish Gene Identifier\"[] | { \"name_key\": .name_key, \"name\": .name, \"primaryKey\": .primaryKey, \"searchKey\": \"{gene} (Dre)\" } | . + { \"searchKey\": .searchKey | ascii_downcase, \"name_key\": .name_key | ascii_downcase } |  select( .name_key == .searchKey) | { \"Zebrafish Gene Identifier\": .primaryKey }",
+    "base_string": "{AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE}",
+    "attribute": ".\"Zebrafish Gene Identifier\"[] | .geneToGeneOrthologyGenerated.objectGene | select(.taxon.name == \"Danio rerio\") | {\"Zebrafish Gene Identifier\": .primaryExternalId}",
     "dependencies": [
-      "ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE"
+      "AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE"
     ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
@@ -359,7 +375,7 @@
   {
     "data_set": "gnomAD_gene_url",
     "data_source": "Rosalution",
-    "genomic_unit_type": "gene",
+    "genomic_unit_type": "",
     "annotation_source_type": "forge",
     "base_string": "https://gnomad.broadinstitute.org/gene/{Ensembl_Gene_Id}?dataset=gnomad_r2_1",
     "attribute": "{ \"gnomAD_gene_url\": .gnomAD_gene_url }",
@@ -449,7 +465,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{RAT_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Rat_Alliance_Genome_Automated_Summary | { Rat_Alliance_Genome_Automated_Summary: .automatedGeneSynopsis }",
+    "attribute": ".Rat_Alliance_Genome_Automated_Summary | .gene.relatedNotes[] | select( .noteType.name == \"automated_gene_description\" ) | { \"Rat_Alliance_Genome_Automated_Summary\": .freeText }",
     "dependencies": [
       "RAT_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -464,7 +480,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{RAT_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Rat_Alliance_Genome_Automated_Summary | { Rat_Alliance_Genome_RGD_Summary: .geneSynopsis}",
+    "attribute": ".Rat_Alliance_Genome_RGD_Summary | .gene.relatedNotes[] | select( .noteType.name == \"MOD_provided_gene_description\" ) | { \"Rat_Alliance_Genome_RGD_Summary\": .freeText }",
     "dependencies": [
       "RAT_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -493,7 +509,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Mouse_Alliance_Genome_Automated_Summary | { Mouse_Alliance_Genome_Automated_Summary: .automatedGeneSynopsis }",
+    "attribute": ".Mouse_Alliance_Genome_Automated_Summary | .gene.relatedNotes[] | select( .noteType.name == \"automated_gene_description\" ) | { \"Mouse_Alliance_Genome_Automated_Summary\": .freeText }",
     "dependencies": [
       "MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -508,7 +524,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Mouse_Alliance_Genome_MGI_Summary | { Mouse_Alliance_Genome_MGI_Summary: .geneSynopsis }",
+    "attribute": ".Mouse_Alliance_Genome_MGI_Summary | .gene.relatedNotes[] | select( .noteType.name == \"MOD_provided_gene_description\" ) | { \"Mouse_Alliance_Genome_MGI_Summary\": .freeText }",
     "dependencies": [
       "MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -537,7 +553,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Zebrafish_Alliance_Genome_Automated_Summary | { Zebrafish_Alliance_Genome_Automated_Summary: .automatedGeneSynopsis }",
+    "attribute": ".Zebrafish_Alliance_Genome_Automated_Summary | .gene.relatedNotes[] | select( .noteType.name == \"automated_gene_description\" ) | { \"Zebrafish_Alliance_Genome_Automated_Summary\": .freeText }",
     "dependencies": [
       "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -552,7 +568,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Zebrafish_Alliance_Genome_ZFIN_Summary | { Zebrafish_Alliance_Genome_ZFIN_Summary: .geneSynopsis }",
+    "attribute": ".Zebrafish_Alliance_Genome_ZFIN_Summary | .gene.relatedNotes[] | select( .noteType.name == \"MOD_provided_gene_description\" ) | { \"Zebrafish_Alliance_Genome_ZFIN_Summary\": .freeText }",
     "dependencies": [
       "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -765,7 +781,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{RAT_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Rat_Rat_Genome_Database_url | { Rat_Rat_Genome_Database_url: .modCrossRefCompleteUrl }",
+    "attribute": ".Rat_Rat_Genome_Database_url | .gene.dataProviderCrossReference | {\"referencedCurie\": .referencedCurie, \"urlTemplate\": .resourceDescriptorPage.urlTemplate } | .urlTemplate |= sub(\"RGD:\\\\[%s]\"; .referencedCurie) | {\"Rat_Rat_Genome_Database_url\": .urlTemplate + .referencedCurie}",
     "dependencies": [
       "RAT_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -792,7 +808,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Mouse_Mouse_Genome_Database_url | { Mouse_Mouse_Genome_Database_url: .modCrossRefCompleteUrl }",
+    "attribute": ".Mouse_Mouse_Genome_Database_url | .gene.dataProviderCrossReference | {\"referencedCurie\": .referencedCurie, \"urlTemplate\": .resourceDescriptorPage.urlTemplate } | .urlTemplate |= sub(\"MGI:\\\\[%s]\"; .referencedCurie) | {\"Mouse_Mouse_Genome_Database_url\": .urlTemplate + .referencedCurie}",
     "dependencies": [
       "MOUSE_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -819,7 +835,7 @@
     "annotation_source_type": "forge",
     "base_string_cache": true,
     "base_string": "{ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE}",
-    "attribute": ".Zebrafish_Zebrafish_Information_Network_url | { Zebrafish_Zebrafish_Information_Network_url: .modCrossRefCompleteUrl }",
+    "attribute": ".Zebrafish_Zebrafish_Information_Network_url | .gene.dataProviderCrossReference | {\"referencedCurie\": .referencedCurie, \"urlTemplate\": .resourceDescriptorPage.urlTemplate } | .urlTemplate |= sub(\"\\\\[%s]\"; .referencedCurie) | {\"Zebrafish_Zebrafish_Information_Network_url\": .urlTemplate + .referencedCurie}",
     "dependencies": [
       "ZEBRAFISH_SUMMARY_ALLIANCE_GENOME_CACHE"
     ],
@@ -996,20 +1012,10 @@
     "version_attribute": ".releases[]"
   },
   {
-    "data_set": "methylation",
-    "data_source": "curated_by_worthey",
-    "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/methylation.json",
-    "genomic_unit_type": "gene",
-    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"methylation\": .methylation }",
-    "versioning_type": "manual",
-    "version": "curated_07-29-2025"
-  },
-  {
     "data_set": "mismatch_repair_immunohistochemistry",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/mismatch-repair.json",
+    "filepath": "etc/annotations/mmr/mismatch-repair.json",
     "genomic_unit_type": "gene",
     "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"mmr_immunohistochemistry\": .mmr_immunohistochemistry }",
     "versioning_type": "manual",
@@ -1019,7 +1025,7 @@
     "data_set": "mismatch_repair_germline",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/mismatch-repair.json",
+    "filepath": "etc/annotations/mmr/mismatch-repair.json",
     "genomic_unit_type": "gene",
     "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"mmr_germline\": .mmr_germline }",
     "versioning_type": "manual",
@@ -1029,37 +1035,17 @@
     "data_set": "methylation",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/methylation.json",
+    "filepath": "etc/annotations/methylation/methylation.json",
     "genomic_unit_type": "diagnostic_test",
-    "attribute": "{ \"methylation\": . }",
+    "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | { \"methylation\": .methylation }",
     "versioning_type": "manual",
     "version": "curated_07-29-2025"
-  },
-  {
-    "data_set": "mismatch_repair_immunohistochemistry",
-    "data_source": "curated_by_worthey",
-    "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/mismatch-repair.json",
-    "genomic_unit_type": "diagnostic_test",
-    "attribute": "{ \"mmr_immunohistochemistry\": . }",
-    "versioning_type": "manual",
-    "version": "curated_01-15-2026"
-  },
-  {
-    "data_set": "mismatch_repair_germline",
-    "data_source": "curated_by_worthey",
-    "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/mismatch-repair.json",
-    "genomic_unit_type": "diagnostic_test",
-    "attribute": "{ \"mmr_germline\": . }",
-    "versioning_type": "manual",
-    "version": "curated_01-15-2026"
   },
   {
     "data_set": "microsatellite_instability",
     "data_source": "curated_by_worthey",
     "annotation_source_type": "json_file",
-    "filepath": "etc/data-sources/microsatellite-instability.json",
+    "filepath": "etc/annotations/msi/microsatellite-instability.json",
     "genomic_unit_type": "diagnostic_test",
     "attribute": "{\"microsatellite-instability\": .\"microsatellite-instability\"}",
     "versioning_type": "manual",
@@ -1128,20 +1114,6 @@
     "annotation_source_type": "http",
     "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3AGeneToPhenotypicFeatureAssociation&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
     "attribute": "{\"gene_to_phenotypic_feature_association\": [.items[] | { \"phenotype\": .object_label, \"phenotype_id\": .object, \"predicate\": .predicate, \"disease_context\": .disease_context_qualifier_label, \"evidence_count\": .evidence_count, \"publications\": [.publications_links[]?] }]}",
-    "dependencies": [
-      "HGNC_ID"
-    ],
-    "versioning_type": "rest",
-    "version_url": "https://api-v3.monarchinitiative.org/v3/api/version",
-    "version_attribute": ".monarch_kg_version"
-  },
-  {
-    "data_set": "gene_to_disease_association",
-    "data_source": "Monarch",
-    "genomic_unit_type": "gene",
-    "annotation_source_type": "http",
-    "url": "https://api-v3.monarchinitiative.org/v3/api/association?category=biolink%3AGeneToDiseaseAssociation&subject={HGNC_ID}&direct=false&compact=false&format=json&limit=500&offset=0",
-    "attribute": "{\"gene_to_disease_association\": [.items[] | { \"disease\": .object_label, \"disease_id\": .object, \"predicate\": .predicate, \"evidence_count\": .evidence_count, \"knowledge_level\": .knowledge_level, \"publications\": [.publications_links[]?] }]}",
     "dependencies": [
       "HGNC_ID"
     ],
@@ -1424,12 +1396,15 @@
     "cache": true
   },
   {
-    "data_set": "ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE",
+    "data_set": "AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE",
     "data_source": "Alliance Genome",
     "genomic_unit_type": "gene",
     "annotation_source_type": "http",
-    "url": "https://www.alliancegenome.org/api/search_autocomplete?q={gene}",
-    "attribute": "{ ANIMAL_MODEL_IDS_VIA_AUTOCOMPLETE_ALLIANCE_GENOME_CACHE: .results}",
+    "url": "https://www.alliancegenome.org/api/gene/{HGNC_ID}/orthologs?filter.stringency=stringent&limit=20&page=1",
+    "attribute": "{ AG_ANIMAL_MODEL_ORTHOLOG_IDS_CACHE: .results}",
+    "dependencies": [
+      "HGNC_ID"
+    ],
     "versioning_type": "rest",
     "version_url": "https://www.alliancegenome.org/api/releaseInfo",
     "version_attribute": ".releaseVersion",

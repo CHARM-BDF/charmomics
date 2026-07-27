@@ -11,7 +11,7 @@ CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--log-le
 # Production Build Stage
 FROM python:3.11-slim-bookworm AS production-stage
 WORKDIR /app
-COPY ./etc/data-sources /app/etc/data-sources
+COPY ./etc/annotations /app/etc/annotations
 COPY logging.conf /app/logging.conf
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
