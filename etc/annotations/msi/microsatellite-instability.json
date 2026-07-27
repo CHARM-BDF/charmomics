@@ -1,6 +1,212 @@
 {
     "diagnostic_test": "microsatellite-instability",
     "microsatellite-instability": {
+        "locus": [
+            {
+                "name": "BAT-25",
+                "location": "chr4q12",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "tests": ["Bethesda/NCI 5 marker panel", "Mononucleotide pentaplex", "Mono Updated 5 marker panel", "Promega MSI Analysis System v1.2"]
+            },
+            {
+                "name": "BAT-26",
+                "location": "chr2p16.3-p21",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "nearest_gene": "MSH2 region (2p16-p21)",
+                "tests": ["Bethesda/NCI 5 marker panel", "Mononucleotide pentaplex", "Mono Updated 5 marker panel", "Promega MSI Analysis System v1.2"]
+            },
+            {
+                "name": "BAT-40",
+                "location": "chr1p13.1",
+                "repeat_type": "Mononucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Custom", "Older Backup"],
+                "comments": "Often used as supplemental marker for MSI-L/borderline cases; panel-specific."
+            },
+            {
+                "name": "BAT-52",
+                "location": "chrX",
+                "repeat_type": "Long mononucleotide",
+                "role": "Supplemental (LMR/expanded) MSI-call marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Long mononucleotide", "Extended mononucleotide"],
+                "comments": "Expanded/LMR markers; panel-specific cutoffs and validation required."
+            },
+            {
+                "name": "BAT-56",
+                "location": "chrX",
+                "repeat_type": "Long mononucleotide ",
+                "role": "Supplemental (LMR/expanded) MSI-call marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Long mononucleotide"],
+                "comments": "Expanded/LMR markers; panel-specific cutoffs and validation required."
+            },
+            {
+                "name": "BAT-59",
+                "location": "chr12",
+                "repeat_type": "Long mononucleotide ",
+                "role": "Supplemental (LMR/expanded) MSI-call marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Long mononucleotide", "Extended mononucleotide"],
+                "comments": "Expanded/LMR markers; panel-specific cutoffs and validation required."
+            },
+            {
+                "name": "BAT-60",
+                "location": "chromosome not shown",
+                "repeat_type": "Long mononucleotide",
+                "role": "Supplemental (LMR/expanded) MSI-call marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Long mononucleotide"],
+                "comments": "Expanded/LMR markers; panel-specific cutoffs and validation required."
+            },
+            {
+                "name": "BAT-62",
+                "location": "",
+                "repeat_type": "Long mononucleotide",
+                "role": "Supplemental (LMR/expanded) MSI-call marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "tests": ["Extended mononucleotide"],
+                "comments": "Expanded/LMR markers; panel-specific cutoffs and validation required."
+            },
+            {
+                "name": "CAT25",
+                "location": "chr7q34",
+                "repeat_type": "Mononucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Lab-dependent (often tumor-only)",
+                "nearest_gene": "CASP2-associated poly(T) repeat",
+                "tests": ["Custom"]
+            },
+            {
+                "name": "D10S197",
+                "location": "chr10p11-p12",
+                "repeat_type": "Dinucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Custom", "Older Backup"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D13S153",
+                "location": "chr13q14.1",
+                "repeat_type": "Dinucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Custom", "Older Backup"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D17S250",
+                "location": "chr17q11.2-q12",
+                "repeat_type": "Dinucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Bethesda/NCI 5 marker panel"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D18S35",
+                "location": "chr18q21.1-q22",
+                "repeat_type": "Dinucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Custom"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D18S58",
+                "location": "chr18q22–q23",
+                "repeat_type": "Dinucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Custom"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D2S123",
+                "location": "chr2p16",
+                "repeat_type": "Dinucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Typically requires matched normal",
+                "tests": ["Bethesda/NCI 5 marker panel"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "D5S346",
+                "location": "chr5q21/22",
+                "repeat_type": "Dinucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Typically requires matched normal",
+                "nearest_gene": "APC (5q21-q22)",
+                "tests": ["Bethesda/NCI 5 marker panel"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "MONO-27",
+                "location": "chr2p21",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "tests": ["Mono Updated 5 marker panel", "Promega MSI Analysis System v1.2"]
+            },
+            {
+                "name": "MYCL1",
+                "location": "chr1p34.3",
+                "repeat_type": "Dinucleotide",
+                "role": "Follow-up / supplemental marker",
+                "suitability": "Typically requires matched normal",
+                "nearest_gene": "MYCL1 locus STR marker (1p34)",
+                "tests": ["Custom", "Older Backup"],
+                "comments": "Dinucleotide markers can show stutter; interpretation often benefits from matched normal."
+            },
+            {
+                "name": "NR-21",
+                "location": "chr14q11.2",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "tests": ["Mononucleotide pentaplex", "Mono Updated 5 marker panel", "Promega MSI Analysis System v1.2"]
+            },
+            {
+                "name": "NR-24",
+                "location": "chr2q11.2",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "tests": ["Mononucleotide pentaplex", "Promega MSI Analysis System v1.2"]
+            },
+            {
+                "name": "NR-27",
+                "location": "chr11q22",
+                "repeat_type": "Mononucleotide",
+                "role": "Primary MSI-call marker",
+                "suitability": "Often tumor-only (quasi-monomorphic)",
+                "tests": ["Mononucleotide pentaplex"]
+            },
+            {
+                "name": "PentaC",
+                "location": "chr21q22.3",
+                "repeat_type": "Pentanucleotide",
+                "role": "Identity/QC (not MSI call)",
+                "suitability": "N/A",
+                "tests": ["Promega MSI Analysis System v1.2"],
+                "comments": "Identity controls; do not use to classify MSI."
+            }
+            {
+                "name": "PentaD",
+                "location": "chr9p12-p13.3",
+                "repeat_type": "Pentanucleotide",
+                "role": "Identity/QC (not MSI call)",
+                "suitability": "N/A",
+                "tests": ["Promega MSI Analysis System v1.2"],
+                "comments": "Identity controls; do not use to classify MSI."
+            }
+        ],
         "microsatellite-instability-high": {
             "definition": "Multiple microsatellite loci show instability",
             "implication": "Indicates defective mismatch repair (MMR) system.",
