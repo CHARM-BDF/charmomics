@@ -37,7 +37,7 @@ if command -v bcftools &> /dev/null; then
         fi
 
         echo -n " $i "
-        bcftools view -r 1 -i 'INFO/CLNSIG="Pathogenic" | INFO/CLNSIG="Likely_pathogenic"' "./$DATA_DIR/external/clinvar.vcf.gz" -o "$DATA_DIR/interim/clinvar_chrom_plp/clinvar_chr${i}_plp.tsv"
+        bcftools view -r $i -i 'INFO/CLNSIG="Pathogenic" | INFO/CLNSIG="Likely_pathogenic"' "./$DATA_DIR/external/clinvar.vcf.gz" -o "$DATA_DIR/interim/clinvar_chrom_plp/clinvar_chr${i}_plp.tsv"
         
     done
 else

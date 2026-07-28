@@ -21,12 +21,8 @@ def parse_tsv_to_dict(file_path, ditto_meta):
     last_row = None
 
     with open(file_path, 'r') as gene_file:
-        
         csv_reader = csv.DictReader(gene_file, delimiter='\t', fieldnames=ditto_tsv_fieldnames)
-
         first_row = next(csv_reader) 
-
-        # print(first_row)
     
     with open(file_path, 'rb') as f:
         try:
@@ -69,8 +65,6 @@ def parse_tsv_to_dict(file_path, ditto_meta):
     }
 
     ditto_meta.setdefault(chrom_key, {}).setdefault(gene_key, (temp_dict))
-
-    # print(temp_dict)
 
     return
 
@@ -183,19 +177,16 @@ def saveMetaDict(metadata_file, meta_dict):
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(meta_dict, ditto_meta_file, indent=4)
 
-def fetchDittoVariants(meta_dict):
+def fetchDittoVariants(ditto_base_path, meta_dict):
     chrom = meta_dict['chrom']
     gene = meta_dict['gene']
 
-    ditto_path = f"/Volumes/SATA-512GB/workspace/ditto/tabix/{chrom}/DITTO_{chrom}_{gene}.tsv.gz"
+    ditto_path = ditto_base_path + f"/tabix/{chrom}/DITTO_{chrom}_{gene}.tsv.gz"
 
     low = meta_dict['metadata']['low']
     high = meta_dict['metadata']['high']
 
     pos = low
-
-    # while pos <= high:
-    #     pos = pos + 1
 
     tabix_command = f'tabix {ditto_path} {chrom}:{low}-{high}'
     print(tabix_command)
@@ -223,14 +214,17 @@ def fetchDittoVariants(meta_dict):
 
     return
 
-def worker(meta_dict):
-    # logger.info(meta_dict)
+def worker(package):
+    ditto_base_path, meta_dict = package
+
+    print(ditto_base_path)
+    print(meta_dict)
 
     if meta_dict['clinvar']:
         print("CLINVAR BABY!!")
 
     if not meta_dict['clinvar']:
-        fetchDittoVariants(meta_dict)
+        fetchDittoVariants(ditto_base_path, meta_dict)
 
     dictStats(meta_dict)    
 
@@ -244,8 +238,7 @@ def metadata(metadata_file, ditto_file_paths):
     for ditto_path in ditto_file_paths:
         if 'UNKNOWN' in ditto_path:
             continue
-        # print()
-        # print(ditto_path)
+
         parse_tsv_to_dict(ditto_path, ditto_meta_dict)
 
     with open(metadata_file, 'w') as ditto_meta_file:
@@ -296,13 +289,13 @@ def savePartialMetaDict(metadata_file, meta_dict):
         json.dump(ditto_meta_dict, ditto_meta_file, indent=4)
 
 # Step 3 - Perform statistics on Ditto
-def statistics(metadata_file, chromosome):
+def statistics(ditto_base_path, metadata_file, chromosome):
     with open(metadata_file, 'r') as ditto_meta_file:
             meta_dict = json.load(ditto_meta_file)
 
-    with concurrent.futures.ProcessPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
         try:
-            jobs = executor.map(worker, [meta_dict[chromosome][gene] for gene in meta_dict[chromosome].keys()])
+            jobs = executor.map(worker, [(ditto_base_path, meta_dict[chromosome][gene]) for gene in meta_dict[chromosome].keys()])
 
             for job in jobs:
                 logger.info(f"MAIN :: Cleanup, deleting job... {job}")
@@ -332,7 +325,7 @@ def main(args):
 
     # 0: Setup
     print("Step 0: Ditto filter setup")
-    ditto_full_path = f'{ditto_base_path}/{chromosome}/'
+    ditto_full_path = f'{ditto_base_path}/raw/{chromosome}/'
     ditto_file_paths = [ditto_full_path + file for file in os.listdir(ditto_full_path)]
 
     # Ensure the meta data file is created
@@ -352,7 +345,7 @@ def main(args):
     
     # 3: Perform statistics
     print("Step 3: Perform statistics on DITTO")
-    statistics(metadata_file, chromosome)
+    statistics(ditto_base_path, metadata_file, chromosome)
 
     return
 

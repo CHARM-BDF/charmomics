@@ -27,7 +27,6 @@ def worker(tuple):
             tabix_result = subprocess.run(tabix_command, stdout=subprocess.PIPE).stdout.decode('utf-8').split('\n')
         except Exception as e:
             logger.info(f"WORKER :: EXCEPTION :: {e}")
-
         
         dict_result = {}
         csv_reader = csv.DictReader(tabix_result, delimiter='\t', fieldnames=fieldnames)
@@ -38,6 +37,7 @@ def worker(tuple):
 
         for key, records in dict_result.items():
             queue.put((key, records, batch["chromosome"]))
+    
     except Exception as e:
         logger.info(f"WORKER :: EXCEPTION :: {e}")
 
@@ -62,9 +62,9 @@ def listener(index, queue):
             file_name = f"DITTO_{gene}.tsv"
 
             write_file_path = f'/Volumes/NVME-2TB/Work/ditto/gene/{chromosome}/{file_name}'
-            # write_file_path = f'/Volumes/SATA-512GB/ditto-genes/{chromosome}/{file_name}'
 
             logger.info(f"LISTENER {index} :: Writing to {file_name}...")
+            
             try:
                 with open(write_file_path, 'a', newline='') as tsvfile:
                     fcntl.lockf(tsvfile.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -75,19 +75,13 @@ def listener(index, queue):
             except (OSError, BlockingIOError):
                 logger.info(f"LISTENER {index} :: {file_name} is already locked by another process")
                 queue.put(item)
+    
     except Exception as e:
         logger.info(f"LISTENER {index} :: EXCEPTION :: {e}")
 
     return
 
 def main():
-    ## VARIABLES ##
-    batch_size = 7500
-    max_queue_size = 10
-    num_processes = 10
-    num_listener = 8
-    num_workers = 5
-    
     # chromosome_list = {
     #     'chr1': 248946422, 'chr2': 242183529, 'chr3': 198235559, 'chr4': 190204555, 'chr5': 181478259,
     #     'chr6': 170745979, 'chr7': 159335973, 'chr8': 145078636, 'chr9': 138334717, 'chr10': 133787422,
@@ -97,6 +91,13 @@ def main():
     # }
 
     chromosome_list = { 'chrX': 156030895 }
+
+    ## VARIABLES ##
+    batch_size = 7500
+    max_queue_size = 10
+    num_processes = 10
+    num_listener = 8
+    num_workers = 5
 
     ## Batching ##    
     batch_num = 0
@@ -130,15 +131,6 @@ def main():
         p.start()
         listeners.append(p)
 
-
-    # Workers
-    # workers = []
-
-    # for index in range(num_workers):
-    #     p = mp.Process(target=worker, args=((queue, batch_list[index]),))
-    #     p.start()
-    #     workers.append(p)
-
     with mp.Pool(processes=8) as pool:
         pool.map_async(worker, batch_list)
 
@@ -147,21 +139,7 @@ def main():
     
     [p.join() for p in listeners]
 
-    # Listener pool #
-
-    # # Worker pool #
-    # with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers) as executor:
-    #     try:
-    #         jobs = {executor.submit(worker,(queue, batch)): batch for batch in batch_list}
-
-    #         for job in concurrent.futures.as_completed(jobs):
-    #             logger.info(f"MAIN :: Cleanup, deleting job... {job}")
-    #             jobs.pop(job)
-    #             gc.collect()
-    #     except Exception as e:
-    #         logger.info(f"MAIN :: EXCEPTION :: {e}")
-
-    # Program is done, stop queue and listeners #
+    logger.info("Program is done, stop queue and listeners")
 
 if __name__ == '__main__':
     main()
