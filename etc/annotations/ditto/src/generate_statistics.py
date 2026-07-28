@@ -89,8 +89,8 @@ def variant_type(ref, alt):
 
     return 'SNV'
 
-def fetchDittoScores(meta_dict, chrom, gene, pos, ref, alt, type):
-    ditto_path = f"/Volumes/SATA-512GB/workspace/ditto/tabix/chr{chrom}/DITTO_chr{chrom}_{gene}.tsv.gz"
+def fetchDittoScores(ditto_base_path, meta_dict, chrom, gene, pos, ref, alt, type):
+    ditto_path = ditto_base_path + f"/tabix/chr{chrom}/DITTO_chr{chrom}_{gene}.tsv.gz"
 
     if type == "INS":
             pos = str(int(pos) + 1)
@@ -155,7 +155,7 @@ def dictStats(meta_dict):
 
     if meta_dict['stats']['std_dev'] == 0.0:
         meta_dict['stats']['leftover_count'] = 1
-        del meta_dict['variants']
+        meta_dict['variants'] = {}
         return
 
     scores_keep = []
@@ -169,7 +169,7 @@ def dictStats(meta_dict):
 
     meta_dict['stats']['leftover_count'] = len(scores_keep)
     
-    del meta_dict['variants']
+    meta_dict['variants'] = {}
 
     return
 
@@ -245,7 +245,7 @@ def metadata(metadata_file, ditto_file_paths):
         json.dump(ditto_meta_dict, ditto_meta_file, indent=4)
 
 # Step 2: Match ClinVar to Ditto and get statistics
-def clinvar(metadata_file, clinvar_base_path, chromosome):
+def clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome):
     clinvar_plp_path = clinvar_base_path + f'clinvar_{chromosome}_plp.tsv'
 
     with open(clinvar_plp_path, mode='r') as clinvar_plp_file:
@@ -270,7 +270,7 @@ def clinvar(metadata_file, clinvar_base_path, chromosome):
 
         print(f"{record['CHROM']}-{record['POS']}-{record['REF']}-{record['ALT']} :: {gene} :: {type}")
 
-        fetchDittoScores(meta_dict, record['CHROM'], gene, record['POS'], record['REF'], record['ALT'], type)
+        fetchDittoScores(ditto_base_path, meta_dict, record['CHROM'], gene, record['POS'], record['REF'], record['ALT'], type)
         
     # Save the result
     saveMetaDict(metadata_file, meta_dict)
@@ -341,7 +341,7 @@ def main(args):
 
     print("Step 2: Fetching scores for ClinVar Path/Likely Path variants and running statistics")
     # 2: Match ClinVar to Ditto and get statistics
-    clinvar(metadata_file, clinvar_base_path, chromosome)
+    clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome)
     
     # 3: Perform statistics
     print("Step 3: Perform statistics on DITTO")
