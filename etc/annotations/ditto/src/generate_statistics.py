@@ -69,7 +69,7 @@ def parse_tsv_to_dict(file_path, ditto_meta):
     return
 
 def findGeneByPosition(meta_dict, chrom, pos):
-    ## Find with DITTO file to query
+    """ Find with DITTO gene file to query using the metadata range """
     
     for gene in meta_dict[chrom].keys():
         if meta_dict[chrom][gene]['metadata']['low'] <= int(pos) <= meta_dict[chrom][gene]['metadata']['high']:
@@ -78,7 +78,7 @@ def findGeneByPosition(meta_dict, chrom, pos):
     return None
 
 def variant_type(ref, alt):
-    """ Determines the variant type """
+    """ Determines the variant type: SNV; INS; DEL; INDEL """
 
     if len(ref) == 1 and len(alt) > 1:
         return 'INS'
@@ -90,6 +90,7 @@ def variant_type(ref, alt):
     return 'SNV'
 
 def fetchDittoScores(ditto_base_path, meta_dict, chrom, gene, pos, ref, alt, type):
+    """ """
     ditto_path = ditto_base_path + f"/tabix/chr{chrom}/DITTO_chr{chrom}_{gene}.tsv.gz"
 
     if type == "INS":
@@ -174,10 +175,12 @@ def dictStats(meta_dict):
     return
 
 def saveMetaDict(metadata_file, meta_dict):
+    """ """
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(meta_dict, ditto_meta_file, indent=4)
 
 def fetchDittoVariants(ditto_base_path, meta_dict):
+    """ """
     chrom = meta_dict['chrom']
     gene = meta_dict['gene']
 
@@ -215,6 +218,7 @@ def fetchDittoVariants(ditto_base_path, meta_dict):
     return
 
 def worker(package):
+    """ """
     ditto_base_path, meta_dict = package
 
     print(ditto_base_path)
@@ -222,6 +226,7 @@ def worker(package):
 
     if meta_dict['clinvar']:
         print("CLINVAR BABY!!")
+        meta_dict['variants'] = {}
 
     if not meta_dict['clinvar']:
         fetchDittoVariants(ditto_base_path, meta_dict)
@@ -232,6 +237,7 @@ def worker(package):
 
 # Step 1: Gather metadata information on Ditto gene files
 def metadata(metadata_file, ditto_file_paths):
+    """ """
     with open(metadata_file, 'r') as ditto_meta_file:
             ditto_meta_dict = json.load(ditto_meta_file)
 
@@ -246,6 +252,7 @@ def metadata(metadata_file, ditto_file_paths):
 
 # Step 2: Match ClinVar to Ditto and get statistics
 def clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome):
+    """ """
     clinvar_plp_path = clinvar_base_path + f'clinvar_{chromosome}_plp.tsv'
 
     with open(clinvar_plp_path, mode='r') as clinvar_plp_file:
@@ -259,11 +266,14 @@ def clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome):
         )
     
     with open(metadata_file, 'r') as ditto_meta_file:
-            meta_dict = json.load(ditto_meta_file)
+        meta_dict = json.load(ditto_meta_file)
 
     for record in csv_reader:
         type = variant_type(record['REF'], record['ALT'])
         gene = findGeneByPosition(meta_dict, "chr" + record['CHROM'], record['POS'])
+
+        if not gene:
+            continue
 
         if not meta_dict:
             continue
@@ -276,6 +286,7 @@ def clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome):
     saveMetaDict(metadata_file, meta_dict)
 
 def savePartialMetaDict(metadata_file, meta_dict):
+    """ """
     print(f"SAVING PARTIAL DICT TO FILE!! :: {meta_dict['gene']}")
     with open(metadata_file, 'r') as ditto_meta_file:
         ditto_meta_dict = json.load(ditto_meta_file)
@@ -290,6 +301,7 @@ def savePartialMetaDict(metadata_file, meta_dict):
 
 # Step 3 - Perform statistics on Ditto
 def statistics(ditto_base_path, metadata_file, chromosome):
+    """ """
     with open(metadata_file, 'r') as ditto_meta_file:
             meta_dict = json.load(ditto_meta_file)
 
@@ -311,8 +323,8 @@ def statistics(ditto_base_path, metadata_file, chromosome):
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(meta_dict, ditto_meta_file, indent=4)
 
-
 def main(args):
+    """ """
 
     ## ARGS ##
     ditto_base_path = args.ditto
@@ -322,7 +334,6 @@ def main(args):
     chromosome = f"chr{args.chromosome}"
 
     ## Steps ##
-
     # 0: Setup
     print("Step 0: Ditto filter setup")
     ditto_full_path = f'{ditto_base_path}/raw/{chromosome}/'
@@ -338,9 +349,9 @@ def main(args):
     # 1: Gather metadata information on Ditto gene files
     print("Step 1: Gathering Metadata")
     metadata(metadata_file, ditto_file_paths)
-
-    print("Step 2: Fetching scores for ClinVar Path/Likely Path variants and running statistics")
+    
     # 2: Match ClinVar to Ditto and get statistics
+    print("Step 2: Fetching scores for ClinVar Path/Likely Path variants and running statistics")
     clinvar(ditto_base_path, metadata_file, clinvar_base_path, chromosome)
     
     # 3: Perform statistics
@@ -350,6 +361,7 @@ def main(args):
     return
 
 if __name__ == "__main__":
+    """ """
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-d', '--ditto')
