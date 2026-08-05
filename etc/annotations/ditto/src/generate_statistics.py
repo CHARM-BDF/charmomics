@@ -337,9 +337,10 @@ def main(args):
     ## ARGS ##
     ditto_base_path = args.ditto
     clinvar_base_path = args.clinvar
-    metadata_file = args.output
 
     chromosome = f"chr{args.chromosome}"
+
+    metadata_file = args.output + f"ditto_meta_data_{chromosome}.json"
 
     ## Steps ##
     # 0: Setup
@@ -375,7 +376,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', '--ditto')
     parser.add_argument('-chr', '--chromosome')
     parser.add_argument('-cl', '--clinvar', default='./data/interim/clinvar_chrom_plp/')
-    parser.add_argument('-o', '--output', default='./data/results/ditto_meta_data.json')
+    parser.add_argument('-o', '--output', default='./data/results/')
 
     args = parser.parse_args()
     
