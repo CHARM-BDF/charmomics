@@ -367,6 +367,8 @@ def main(args):
     logger.info("[ MAIN ] :: Step 3 :: Perform statistics on DITTO")
     statistics(ditto_base_path, metadata_file, chromosome)
 
+    logger.info("[ MAIN ] :: Done!")
+
     return
 
 if __name__ == "__main__":
