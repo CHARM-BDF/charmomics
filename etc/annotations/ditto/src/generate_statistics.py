@@ -162,6 +162,8 @@ def metadata(metadata_file, ditto_file_paths):
     logger.info(f"[Step 1]: Save ditto gene metadata to {metadata_file}")
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(ditto_meta_dict, ditto_meta_file, indent=4)
+    
+    logger.info("[Step 1]: Done!")
 
 ## Step 2: Match ClinVar to precomputed Ditto scores ##
 
@@ -277,6 +279,8 @@ def clinvar_match(ditto_base_path, metadata_file, clinvar_base_path, chromosome)
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(meta_dict, ditto_meta_file, indent=4)
     
+    logger.info(f"[Step 2]: Done!")
+
     return
 
 ## Step 3 - Perform statistics on Ditto ##
@@ -328,8 +332,11 @@ def statistics(ditto_base_path, metadata_file, chromosome):
         except Exception as e:
             logger.info(f"[Step 3]: EXCEPTION :: {e}")
 
+    logger.info(f"[Step 3]: Saving meta dict to {metadata_file}...")
     with open(metadata_file, 'w') as ditto_meta_file:
         json.dump(meta_dict, ditto_meta_file, indent=4)
+
+    logger.info(f"[Step 3]: Done!")
 
 def main(args):
     """ """
