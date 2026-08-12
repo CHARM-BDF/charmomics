@@ -36,7 +36,7 @@ def ditto_filter(meta_dict, work_dict):
     for key, value in work_dict['variants'].items():
         if meta_dict['stats']['std_dev'] == 0.0:
             work_dict['keep'].append(key)
-        else
+        else:
             z = (value - meta_dict['stats']['mean']) / meta_dict['stats']['std_dev']
             if z >= -2:
                 work_dict['keep'].append(key)
