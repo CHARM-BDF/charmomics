@@ -2,9 +2,9 @@
 
 CHROMOSOME="chr$1"
 
-SOURCE_PATH="/home/jscherer/Documents/ditto/genes/zipped/$CHROMOSOME/"
+SOURCE_PATH="/Volumes/SATA-512GB/workspace/ditto/dittodb/$CHROMOSOME/"
 
-DESTINATION_PATH="/home/jscherer/Documents/ditto/genes/raw/$CHROMOSOME/"
+DESTINATION_PATH="/Volumes/SATA-512GB/workspace/ditto/dittodb/$CHROMOSOME/"
 
 mkdir -p $DESTINATION_PATH
 

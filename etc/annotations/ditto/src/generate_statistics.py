@@ -14,41 +14,96 @@ logging.config.fileConfig('logging.conf')
 logger = logging.getLogger()
 
 ## Helper Functions ##
-def dictStats(meta_dict):
+def dictStats(gene, variants):
     """  """
 
-    meta_dict['stats']['samples'] = len(meta_dict['variants'].keys())
+    logger.info("Hello??")
+    data_points = variants
+
+    samples = len(data_points)
     
-    for hash in meta_dict['variants'].keys():
-        meta_dict['stats']['sum'] += float(meta_dict['variants'][hash]['ditto'])
+    sum = 0.0
 
-    meta_dict['stats']['mean'] = meta_dict['stats']['sum'] / meta_dict['stats']['samples']
+    for data_point in data_points.values():
+        value = float(data_point['ditto'])
+        sum += value
 
-    for hash in meta_dict['variants'].keys():
-        score = float(meta_dict['variants'][hash]['ditto'])
-        meta_dict['stats']['std_dev'] += math.pow((score - meta_dict['stats']['mean']), 2)
+    mean = sum / samples
+    std_dev = 0.0
+
+    for data_point in data_points.values():
+        value = float(data_point['ditto'])
+        std_dev += pow((value - mean), 2)
+
+    std_dev = math.sqrt(std_dev / samples)
+
+    match_count = samples
+
+    stats = {
+        'samples': samples,
+        'sum': sum,
+        'mean': mean,
+        'std_dev': std_dev,
+        'match_count': match_count
+    }
+
+    if std_dev == 0.0:
+        return stats
+
+    for data_point in data_points.values():
+        value = float(data_point['ditto'])
+        
+        z = (value - mean) / std_dev
+        
+        if z < -2:
+            print(f"Data point: {value}; Z Score: {z} ")
+            match_count -= 1
     
-    meta_dict['stats']['std_dev'] = math.sqrt(meta_dict['stats']['std_dev'] / meta_dict['stats']['samples'])
+    stats['match_count'] = match_count
 
-    if meta_dict['stats']['std_dev'] == 0.0:
-        meta_dict['stats']['leftover_count'] = 1
-        meta_dict['variants'] = {}
-        return
+    logger.info(f"")
+    logger.info(f"Gene: {gene}")
+    logger.info(f"=================================")
+    logger.info(f"Samples:            {samples}")
+    logger.info(f"Sum:                {sum}")
+    logger.info(f"Mean:               {mean}")
+    logger.info(f"Standard Deviation: {std_dev}")
+    logger.info(f"Match Count:        {match_count}")
 
-    scores_keep = []
+    return stats
 
-    for hash in meta_dict['variants'].keys():
-        score = float(meta_dict['variants'][hash]['ditto'])
-        z = (score - meta_dict['stats']['mean']) / meta_dict['stats']['std_dev']
-
-        if z >= -4:
-            scores_keep.append(score)
-
-    meta_dict['stats']['leftover_count'] = len(scores_keep)
+    # meta_dict['stats']['samples'] = len(meta_dict['variants'].keys())
     
-    meta_dict['variants'] = {}
+    # for hash in meta_dict['variants'].keys():
+    #     meta_dict['stats']['sum'] += float(meta_dict['variants'][hash]['ditto'])
 
-    return
+    # meta_dict['stats']['mean'] = meta_dict['stats']['sum'] / meta_dict['stats']['samples']
+
+    # for hash in meta_dict['variants'].keys():
+    #     score = float(meta_dict['variants'][hash]['ditto'])
+    #     meta_dict['stats']['std_dev'] += math.pow((score - meta_dict['stats']['mean']), 2)
+    
+    # meta_dict['stats']['std_dev'] = math.sqrt(meta_dict['stats']['std_dev'] / meta_dict['stats']['samples'])
+
+    # if meta_dict['stats']['std_dev'] == 0.0:
+    #     meta_dict['stats']['leftover_count'] = 1
+    #     meta_dict['variants'] = {}
+    #     return
+
+    # scores_keep = []
+
+    # for hash in meta_dict['variants'].keys():
+    #     score = float(meta_dict['variants'][hash]['ditto'])
+    #     z = (score - meta_dict['stats']['mean']) / meta_dict['stats']['std_dev']
+
+    #     if z >= -2:
+    #         scores_keep.append(score)
+
+    # meta_dict['stats']['leftover_count'] = len(scores_keep)
+    
+    # meta_dict['variants'] = {}
+
+    # return
 
 def fetchDittoVariants(ditto_base_path, meta_dict):
     """ """
@@ -131,13 +186,7 @@ def create_gene_metadata_entry(file_path, ditto_meta):
             'high': int(last_row['pos']),
             'range': int(last_row['pos']) - int(first_row['pos'])
         },
-        'stats': {
-            'samples': 0,
-            'sum': 0,
-            'mean': 0.0,
-            'std_dev': 0.0,
-            'leftover_count': 0
-        },
+        'stats': {},
         'variants': {}
     }
 
@@ -286,8 +335,6 @@ def clinvar_match(ditto_base_path, metadata_file, clinvar_base_path, chromosome)
 ## Step 3 - Perform statistics on Ditto ##
 
 # Step 3 - Helper Functions
-
-
 def worker(package):
     """ """
     
@@ -299,11 +346,17 @@ def worker(package):
     if not meta_dict['clinvar']:
         fetchDittoVariants(ditto_base_path, meta_dict)
 
-    dictStats(meta_dict)
+    logger.info(len(meta_dict['variants']))
+
+    try:
+        meta_dict['stats'] = dictStats(meta_dict['gene'], meta_dict['variants'])
+    except Exception as e:
+            logger.info(f"[Step 3]: EXCEPTION :: {e}")
 
     if meta_dict['clinvar']:
         logger.info(f"[Step 3]: [{process_name}] :: ClinVar Baby!!")
-        meta_dict['variants'] = {}
+        
+    meta_dict['variants'] = {}
 
     logger.info(f"[Step 3]: [{process_name}] :: {meta_dict}")
 
