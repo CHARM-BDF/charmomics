@@ -7,6 +7,7 @@ import logging.config
 import math
 import multiprocessing as mp
 import os
+from statistics import quantiles
 import subprocess
 
 # Logging
@@ -14,10 +15,9 @@ logging.config.fileConfig('logging.conf')
 logger = logging.getLogger()
 
 ## Helper Functions ##
-def dictStats(gene, variants):
+def statisticsStandardDeviation(gene, variants):
     """  """
 
-    logger.info("Hello??")
     data_points = variants
 
     samples = len(data_points)
@@ -56,7 +56,7 @@ def dictStats(gene, variants):
         z = (value - mean) / std_dev
         
         if z < -2:
-            print(f"Data point: {value}; Z Score: {z} ")
+            # print(f"Data point: {value}; Z Score: {z} ")
             match_count -= 1
     
     stats['match_count'] = match_count
@@ -72,38 +72,34 @@ def dictStats(gene, variants):
 
     return stats
 
-    # meta_dict['stats']['samples'] = len(meta_dict['variants'].keys())
+def statisticsQuartiles(gene, variants):
+    """  """
+
+    data_points = [float(variant['ditto']) for variant in variants.values()]
     
-    # for hash in meta_dict['variants'].keys():
-    #     meta_dict['stats']['sum'] += float(meta_dict['variants'][hash]['ditto'])
+    quartiles = quantiles(data_points, n=4)
 
-    # meta_dict['stats']['mean'] = meta_dict['stats']['sum'] / meta_dict['stats']['samples']
+    samples = len(data_points)
+    q1 = quartiles[0]
+    q2 = quartiles[1]
+    q3 = quartiles[2]
 
-    # for hash in meta_dict['variants'].keys():
-    #     score = float(meta_dict['variants'][hash]['ditto'])
-    #     meta_dict['stats']['std_dev'] += math.pow((score - meta_dict['stats']['mean']), 2)
+    logger.info(f"")
+    logger.info(f"Gene: {gene}")
+    logger.info(f"=================================")
+    logger.info(f"Samples:            {samples}")
+    logger.info(f"Q1:                 {q1}")
+    logger.info(f"Q2:                 {q2}")
+    logger.info(f"Q3:                 {q3}")
     
-    # meta_dict['stats']['std_dev'] = math.sqrt(meta_dict['stats']['std_dev'] / meta_dict['stats']['samples'])
+    stats = {
+        'samples': samples,
+        'first_quartile': q1,
+        'second_quartile': q2,
+        'third_quartile': q3
+    }
 
-    # if meta_dict['stats']['std_dev'] == 0.0:
-    #     meta_dict['stats']['leftover_count'] = 1
-    #     meta_dict['variants'] = {}
-    #     return
-
-    # scores_keep = []
-
-    # for hash in meta_dict['variants'].keys():
-    #     score = float(meta_dict['variants'][hash]['ditto'])
-    #     z = (score - meta_dict['stats']['mean']) / meta_dict['stats']['std_dev']
-
-    #     if z >= -2:
-    #         scores_keep.append(score)
-
-    # meta_dict['stats']['leftover_count'] = len(scores_keep)
-    
-    # meta_dict['variants'] = {}
-
-    # return
+    return stats
 
 def fetchDittoVariants(ditto_base_path, meta_dict):
     """ """
@@ -349,7 +345,8 @@ def worker(package):
     logger.info(len(meta_dict['variants']))
 
     try:
-        meta_dict['stats'] = dictStats(meta_dict['gene'], meta_dict['variants'])
+        meta_dict['stats']['standard_deviation'] = statisticsStandardDeviation(meta_dict['gene'], meta_dict['variants'])
+        meta_dict['stats']['quartiles'] = statisticsQuartiles(meta_dict['gene'], meta_dict['variants'])
     except Exception as e:
             logger.info(f"[Step 3]: EXCEPTION :: {e}")
 
@@ -370,7 +367,7 @@ def statistics(ditto_base_path, metadata_file, chromosome):
             meta_dict = json.load(ditto_meta_file)
 
     logger.info(f"[Step 3]: Starting multiprocess Ditto variant fetcher")
-    with concurrent.futures.ProcessPoolExecutor(max_workers=8) as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=12) as executor:
         try:
             jobs = executor.map(worker, [(ditto_base_path, meta_dict[chromosome][gene]) for gene in meta_dict[chromosome].keys()])
 

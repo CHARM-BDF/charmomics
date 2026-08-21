@@ -43,8 +43,31 @@ def ditto_filter(meta_dict, work_dict):
 
     return
 
-def write(input_file_path, output_file_path, meta_dict, work_dict):
-    logger.info(f"WORKER :: {meta_dict['chrom']}:{meta_dict['gene']} :: Originally {len(work_dict['variants'])} and writing out {len(work_dict['keep'])} variants...")
+def load_rvis(path):
+    rvis_dict = {}
+
+    rvis_file = f"{path}/UKB_RVIS_Scores.csv"
+    
+    with open(rvis_file, 'r') as file:
+        rvis_fieldnames = ["gene", "afr_y", "asj_y", "eas_y", "nfe_y", "sas_y", "mutability", "rvis_afr", "rvis_eas", "rvis_asj", "rvis_nfe", "rvis_sas"]
+        csv_reader = csv.DictReader(file, delimiter=',', fieldnames=rvis_fieldnames)
+
+        next(csv_reader)
+
+        for row in csv_reader:
+            rvis_dict[row['gene']] = row
+
+    return rvis_dict
+
+def write(input_file_path, output_file_path, meta_dict, work_dict, rvis_dict):
+    gene = meta_dict['gene']
+
+    rvis = rvis_dict.get(gene, None)
+    
+    if rvis:
+        logger.info(f"WORKER :: {meta_dict['chrom']} : {meta_dict['gene'].ljust(13, " ")} :: Originally {str(len(work_dict['variants'].items())).ljust(8, " ")} and writing out {str(len(work_dict['keep'])).ljust(8, " ")} variants... A difference of {str(len(work_dict['variants']) - len(work_dict['keep'])).ljust(8, " ")} variants :: Clinvar {meta_dict['clinvar']} :: [rvis] afr: {rvis['rvis_afr']}, eas: {rvis['rvis_eas']}, asj: {rvis['rvis_asj']}, nfe: {rvis['rvis_nfe']}, sas: {rvis['rvis_sas']} ")
+    else:
+        logger.info(f"WORKER :: {meta_dict['chrom']} : {meta_dict['gene'].ljust(13, " ")} :: Originally {str(len(work_dict['variants'].items())).ljust(8, " ")} and writing out {str(len(work_dict['keep'])).ljust(8, " ")} variants... A difference of {str(len(work_dict['variants']) - len(work_dict['keep'])).ljust(8, " ")} variants :: Clinvar {meta_dict['clinvar']}")
 
     with open(input_file_path, 'r') as gene_file:
         ditto_tsv_fieldnames = ["chrom", "pos", "ref", "alt", "transcript", "gene", "classification", "ditto" ]
@@ -62,7 +85,7 @@ def write(input_file_path, output_file_path, meta_dict, work_dict):
 
     return
 
-def worker(input_path, output_path, meta_dict):
+def worker(input_path, output_path, meta_dict, rvis_dict):
 
     # DITTO_chrY_ABCB7
     file = f"DITTO_{meta_dict['chrom']}_{meta_dict['gene']}"
@@ -77,13 +100,13 @@ def worker(input_path, output_path, meta_dict):
 
     work_dict = { 'keep': [], 'variants': {} }
 
-    logger.info(f"[WORKER] :: Input File {input_file_path} -:- Output File {output_file_path}")
+    # logger.info(f"[WORKER] :: Input File {input_file_path} -:- Output File {output_file_path}")
 
     try:
         read_ditto_tsv(input_file_path, work_dict)
         ditto_filter(meta_dict, work_dict)
         work_dict['keep'] = set(work_dict['keep'])
-        write(input_file_path, output_file_path, meta_dict, work_dict)
+        write(input_file_path, output_file_path, meta_dict, work_dict, rvis_dict)
     except Exception as e:
             logger.info(f"WORKER :: EXCEPTION :: {e}")
 
@@ -96,13 +119,17 @@ def main(args):
     chromosome = f"chr{args.chromosome}"
 
     input_path = args.ditto.removesuffix('/') + f"/raw/{chromosome}/"
-    metadata_file = args.meta + f'ditto_meta_data_{chromosome}.json'
+    interim_path = args.interim.removesuffix('/')
     output_path = args.output.removesuffix('/') + f"/{chromosome}/"
     
+    metadata_file = args.meta.removesuffix('/') + f'/ditto_meta_data_{chromosome}.json'
+
     logger.info(chromosome)
     logger.info(input_path)
     logger.info(metadata_file)
     logger.info(output_path)
+
+    rvis_dict = load_rvis(interim_path)
 
     with open(metadata_file, 'r') as file:
         metadata = json.load(file)
@@ -111,12 +138,12 @@ def main(args):
     #     logger.info(key)
 
     # meta_dict =  {'gene': 'RNU1-107P', 'chrom': 'chrY', 'clinvar': False, 'metadata': {'low': 25721342, 'high': 25725495, 'range': 4153}, 'stats': {'samples': 12466, 'sum': 5.554448487348328, 'mean': 0.00044556782346769834, 'std_dev': 0.0007371403903963966, 'leftover_count': 12466}, 'variants': {}}
-    # worker(input_path, output_path, meta_dict)
+    # worker(input_path, output_path, meta_dict, rvis_dict)
 
     with concurrent.futures.ProcessPoolExecutor(max_workers=6) as executor:
         try:
             jobs = {
-                executor.submit(worker, input_path, output_path, meta_dict): meta_dict for meta_dict in metadata[chromosome].values()
+                executor.submit(worker, input_path, output_path, meta_dict, rvis_dict): meta_dict for meta_dict in metadata[chromosome].values()
             }
 
             for job in concurrent.futures.as_completed(jobs):
@@ -132,6 +159,7 @@ if __name__ == '__main__':
     
     parser.add_argument('-chr', '--chromosome')
     parser.add_argument('-d', '--ditto')
+    parser.add_argument('-i', '--interim', default="./data/interim/")
     parser.add_argument('-m', '--meta', default="./data/results/")
     parser.add_argument('-o', '--output', default="./data/results/filtered/")
 

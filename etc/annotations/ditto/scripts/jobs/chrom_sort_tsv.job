@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+#SBATCH --job-name=ditto_chrom_sort
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16G
+#SBATCH --partition=short
+#SBATCH --time=6:00:00
+#SBATCH --output=%x_%j.out
+#SBATCH --error=%x_%j.err
+#SBATCH --array=0-23
+
+ARGS=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+
+BASE_PATH="/data/project/worthey_lab/projects/experimental_pipelines/james/ditto/chromosome/filtered"
+
+sort -n -t$'\t' -k2,2 "$BASE_PATH/ditto_filtered_chr${ARGS[$SLURM_ARRAY_TASK_ID]}.tsv" > "$BASE_PATH/ditto_filtered_chr${ARGS[$SLURM_ARRAY_TASK_ID]}.tsv_sorted"
