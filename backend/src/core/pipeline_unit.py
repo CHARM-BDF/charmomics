@@ -1,11 +1,12 @@
 class PipelineUnit:
-    def __init__(self):
+    def __init__(self, attributes):
+        self.attributes = attributes
         self.tasks = []
     
     def execute_current_task(self):
         task = self.tasks.pop(0)
         try:
-            task.execute()
+            task.execute(self.attributes)
             print()
         except Exception as e:
             print(e)

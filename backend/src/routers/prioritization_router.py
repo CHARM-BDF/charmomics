@@ -23,19 +23,32 @@ def variant_prioritization(
 ):
     """  """
 
-    vcf_sample_path = Path(f"./etc/data/raw/{sample}/{sample}.vcf")
+    raw_path = Path(f"./etc/data/raw/{sample}/")
+    interim_path = Path(f"./etc/data/interim/{sample}/")
+    results_path = Path(f"./etc/data/result/{sample}/")
 
-    vcf_sample_path.parent.mkdir(parents=True, exist_ok=True)
+    raw_path.parent.mkdir(parents=True, exist_ok=True)
+    interim_path.mkdir(parents=True, exist_ok=True)
+    results_path.mkdir(parents=True, exist_ok=True)
 
-    with open(vcf_sample_path, "wb") as file:
+    vcf_sample_file = Path(f"{raw_path}/{sample}.vcf")
+
+    attributes = {
+        'sample': sample,
+        'raw_path': raw_path,
+        'interim_path': interim_path,
+        'results_path': results_path
+    }
+
+    with open(vcf_sample_file, "wb") as file:
         file.write(vcf_file)
 
     queue = Queue()
 
     pipeline_json = json.load(open('./etc/pipeline.json'))
-
+    
     pipeline = PipelineService(queue)
-    pipeline.queue_pipeline_tasks(pipeline_json)
+    pipeline.queue_pipeline_tasks(pipeline_json, attributes)
     pipeline.process_tasks()
 
-    return "Hello World"
+    return "Done!"

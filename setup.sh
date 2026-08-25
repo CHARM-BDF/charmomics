@@ -34,22 +34,21 @@ download_datasets() {
     DATA_DIR='./backend/etc/data/'
 
     # Make directories
-    mkdir -p "$DATA_DIR" "$DATA_DIR/external" "$DATA_DIR/interim" "$DATA_DIR/processed"
+    mkdir -p "$DATA_DIR" "$DATA_DIR/external" "$DATA_DIR/interim" "$DATA_DIR/raw"
 
-    # NCBI
-    NCBI_BASE="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/000/001/405/GCA_000001405.15_GRCh38/seqs_for_alignment_pipelines.ucsc_ids"
-    
-    echo "[NCBI]: Downloading 'GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz'"
-    curl -fSL --progress-bar  --retry 3 "$NCBI_BASE/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz" -o "$DATA_DIR/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz"
+    CGDS_LTS_BASE="https://s3.lts.rc.uab.edu/cgds-public/charmomics"
+
+    # NCBI data
+    echo "[NCBI]: Downloading 'GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
+    curl --progress-bar  --retry 3 -o "$DATA_DIR/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna" "$CGDS_LTS_BASE/bcftools/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 
     echo "[NCBI]: Downloading 'GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai'"
-    curl -fSL --progress-bar  --retry 3 "$NCBI_BASE/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai" -o "$DATA_DIR/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai"
+    curl --progress-bar  --retry 3 -o "$DATA_DIR/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai" "$CGDS_LTS_BASE/bcftools/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai"
 
-    # Gnomad
-    ECHTVAR_GNOMAD_BASE="https://surfdrive.surf.nl/files/index.php/s/nJPDxM3b9C7hkM2/download"
-
+    # Gnomad data
     echo "[ECHTVAR]: Downloading 'gnomad.v3.1.2.echtvar.v2.zip'"
-    curl -fSL --progress-bar  --retry 3 "$ECHTVAR_GNOMAD_BASE" -o "$DATA_DIR/external/gnomad.v3.1.2.echtvar.v2.zip"
+    curl --progress-bar --retry 3 -o "$DATA_DIR/external/gnomad.v3.1.2.echtvar.v2.zip" "$CGDS_LTS_BASE/echtvar/gnomad.v3.1.2.echtvar.v2.zip"
+
 }
 
 clean() {

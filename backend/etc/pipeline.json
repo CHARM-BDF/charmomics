@@ -9,10 +9,20 @@
     },
     {
         "type":"subprocess",
-        "command": ["bcftools", "norm", "-m-", "-w", "10000", "-f", "./etc/data/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna", "-cwx", "-Ob", "./etc/data/raw/LW002226/LW002226.vcf", "-o", "./etc/data/interim/LW002226/LW002226.bcftools.vcf"]
+        "command": "bcftools norm -m- -w 10000 -f ./etc/data/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna -cwx -Ob {raw_path}/{sample}.vcf -o {interim_path}/{sample}.bcftools.vcf",
+        "dependencies": [
+            "raw_path",
+            "interim_path",
+            "sample"
+        ]
     },
     {
         "type": "subprocess",
-        "command": ["echtvar", "anno", "-e", "./etc/data/external/gnomad.v3.1.2.echtvar.v2.zip", "-i", "gnomad_popmax_af < 0.07", "./etc/data/interim/LW002226/LW002226.bcftools.vcf", "./etc/data/interim/LW002226/LW002226.bcftools.echtvar.vcf"]
+        "command": "echtvar anno -e ./etc/data/external/gnomad.v3.1.2.echtvar.v2.zip -i 'gnomad_popmax_af < 0.07' {interim_path}/{sample}.bcftools.vcf {interim_path}/{sample}.bcftools.echtvar.vcf",
+        "dependencies": [
+            "raw_path",
+            "interim_path",
+            "sample"
+        ]
     }
 ]

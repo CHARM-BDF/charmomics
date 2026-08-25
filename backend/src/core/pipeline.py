@@ -10,9 +10,9 @@ class PipelineService():
         
         return
     
-    def queue_pipeline_tasks(self, json):
+    def queue_pipeline_tasks(self, json, attributes):
         """  """
-        pipeline_unit = PipelineUnit()
+        pipeline_unit = PipelineUnit(attributes)
 
         for task in json:
             new_task = PipelineTaskFactory.create_pipeline_task(task)
