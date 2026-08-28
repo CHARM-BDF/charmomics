@@ -9,7 +9,7 @@
     },
     {
         "type":"subprocess",
-        "command": "bcftools norm -m- -w 10000 -f ./etc/data/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna -cwx -Ob {raw_path}/{sample}.vcf -o {interim_path}/{sample}.bcftools.vcf",
+        "command": "bcftools norm -m- -w 10000 -f ./etc/data/external/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna -cwx -Ob {raw_path}/{sample}.vcf.gz -o {interim_path}/{sample}.bcftools.vcf",
         "dependencies": [
             "raw_path",
             "interim_path",
