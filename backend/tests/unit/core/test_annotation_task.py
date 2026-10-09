@@ -102,7 +102,7 @@ def test_annotation_extraction_for_genomic_unit(http_annotation_task_gene, hpo_a
 def test_annotation_extraction_value_error_exception(http_annotation_task_gene, hpo_annotation_response):
     """
     Verifying annotation failure does not cause crash in application during extraction. Removes the expected value
-    in the json to force jq parse error to more closelyemulate the failure instead of mocking the jq response to fail.
+    in the json to force jq parse error to more closely emulate the failure instead of mocking the jq response to fail.
     """
 
     del hpo_annotation_response['diseaseAssoc']
@@ -208,7 +208,7 @@ def test_annoate_json_file_gene_methylation(json_file_annotation_task):
 
     actual_annotation = json_file_annotation_task.annotate()
 
-    assert len(actual_annotation) == 7
+    assert len(actual_annotation) == 3
 
 
 def test_extraction_json_file_gene_methylation(json_file_annotation_task):
@@ -349,9 +349,10 @@ def fixture_methylation_dataset():
 
     return {
         "data_set": "methylation", "data_source": "curated_by_worthey", "annotation_source_type": "json_file",
-        "filepath": "etc/data-sources/methylation.json", "genomic_unit_type": "gene",
-        "attribute": ".[] | select(.gene_symbol | match(\"{gene}\")) | .methylation", "versioning_type": "manual",
-        "version": "curated_07-29-2025"
+        "filepath": "./etc/annotations/methylation/methylation.json", "genomic_unit_type": "gene", "attribute":
+            "if any(.gene_symbols[] == \"{gene}\"; .) then {\"methylation\": { \"result_interpretation\": \
+            .methylation.result_interpretation, \"cancer\": .methylation.cancer.\"{gene}\" }} else null end",
+        "versioning_type": "manual", "version": "curated_10-08-2025"
     }
 
 

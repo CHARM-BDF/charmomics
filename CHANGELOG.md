@@ -2,6 +2,20 @@
 
 # CHANGELOG
 
+## CHARMomics v0.2.3
+
+- Added UniProt as an annotation source for proteomics.
+  - Ex. Protein Subcellular Location Topologies.
+- Added ProtVar as an annotation source for proteomics.
+  - Ex. Variant in Pocket Confidence Level Predictions
+- Added additional Monarch Initiative KG datasets:
+  - Gene to phenotypic feature association.
+  - Gene to disease association.
+- Updated the Microsatellite Instability data source to include locus information and a number of tests for that detect
+  microsatellite instability at that locus.
+- A number of fixes for the updated Alliance Genome API to correct pulling existing animal modeling information.
+- Changed the diagnostic tests to be consolidated and annotate with the gene and diagnostic endpoints
+
 ## CHARMomics v0.2.2
 
 - Added Monarch Initiative KG external database annotations for Genes. An annotation API call with a gene symbol may

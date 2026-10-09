@@ -15,7 +15,7 @@ router = APIRouter(prefix="/annotation", tags=["annotation"], dependencies=[Depe
 
 
 @router.post("/")
-def annotate_omic_unit(
+def genomic_annotation(
     type: GenomicUnitType, name: str, repositories=Depends(database), annotation_task_queue=Depends(annotation_queue)
 ):
     """ Initiates annotations for a given genomic unit and returns the results when finished """

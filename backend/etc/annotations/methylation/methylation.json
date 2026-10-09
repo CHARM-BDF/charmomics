@@ -1,0 +1,59 @@
+{
+  "gene_symbols": ["MGMT", "MLH1", "CDKN2A", "WT1", "BRCA1", "CDKN2B", "VHL"],
+  "genomic_unit_type": "diagnostic_test",
+  "methylation": {
+    "result_interpretation": {
+      "hypermethylated": {
+        "interpretation": "High-level methylation of the gene promoter detected.",
+        "clinical_significance": "Strongly associated with silencing of gene expression. Suggests favorable response to alkylating chemotherapy (e.g., temozolomide) and improved prognosis. High confidence in benefit from therapy."
+      },
+      "methylated": {
+        "interpretation": "Gene promoter methylation detected at a moderate level.",
+        "clinical_significance": "Suggests reduced gene expression and likely benefit from alkylating agents. Prognostic and predictive significance is positive, though potentially less strong than in hypermethylated cases."
+      },
+      "unmethylated": {
+        "interpretation": "No significant methylation of the gene promoter detected.",
+        "clinical_significance": "Suggests active gene expression and decreased likelihood of benefit from alkylating chemotherapy. Prognosis may be less favorable."
+      },
+      "indeterminate": {
+        "interpretation": "Methylation levels fall near assay threshold; cannot confidently classify as methylated or unmethylated.",
+        "clinical_significance": "Predictive and prognostic implications uncertain. Repeat testing or alternative assays may be considered."
+      },
+      "inconclusive": {
+        "interpretation": "No result due to insufficient tumor content, poor DNA quality, or technical issues.",
+        "clinical_significance": "Recommend repeat testing if result is needed for treatment planning."
+      }
+    },
+    "cancer": {
+      "MGMT": {
+        "central_nervous_system": "MGMT methylation predicts response to temozolomide",
+        "colorectal": "MGMT methylation may be evaluated for its role in chemosensitivity",
+        "endometrial": "MGMT methylation may be evaluated for its role in chemosensitivity"
+      },
+      "MLH1": {
+        "central_nervous_system": "To evaluate mismatch repair (MMR) deficiency/microsatellite instability",
+        "colorectal": "Promoter hypermethylation is a common cause of sporadic MSI-high tumors",
+        "endometrial": "Promoter hypermethylation is a common cause of sporadic MSI-high tumors",
+        "hereditary": "Hypermethylation indicates a sporadic origin of Lynch-like tumors, ruling out germline mutation"
+      },
+      "CDKN2A": {
+        "central_nervous_system": "Hypermethylation associated with aggressive behavior in some gliomas",
+        "colorectal": "Screened for p16INK4a, may be methylated in some gastrointestinal tumors",
+        "endometrial": "Screened for p16INK4a, may be methylated in some gastrointestinal tumors",
+        "hematologic": "Methylation associated with prognosis in some leukemias and lymphomas"
+      },
+      "WT1": {
+        "hematologic": "Aberrantly methylated in Acute Myeloid Leukemia."
+      },
+      "BRCA1": {
+        "hereditary": "Promoter hypermethylation can be observed in some sporadic triple-negative breast cancers."
+      },
+      "CDKN2B": {
+        "hematologic": "Screened for p15INK4b, frequently methylated in acute lymphoblastic leukemia (ALL)"
+      }, 
+      "VHL": {
+        "hereditary": "Methylation may be evaluated in the context of clear cell renal cell carcinoma."
+      }
+    }
+  }
+}
